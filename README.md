@@ -12,11 +12,10 @@ You will need:
   - Go (tested with version 1.1.2)
   - Make (tested with version 3.81)
 
-
-	$ git clone https://github.com/GroundSix/asink.git
-	$ cd asink
-	$ make
-	$ sudo make install
+    $ git clone https://github.com/GroundSix/asink.git
+    $ cd asink
+    $ make
+    $ sudo make install
 
 ### Usage
 
