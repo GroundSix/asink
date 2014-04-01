@@ -4,14 +4,14 @@ asink
 asink is a tool that allows you to (at the moment) concurrently
 run a command a number of times very quickly.
 
-## Install
+### Install
 
-	$ git clone URL
+	$ git clone https://github.com/GroundSix/asink.git
 	$ cd asink
 	$ make
 	$ sudo make install
 
-## Usage
+### Usage
 
 asink requires one configuration file written in JSON. An example
 looks like this:
