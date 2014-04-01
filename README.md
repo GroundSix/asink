@@ -10,6 +10,7 @@ You will need:
 
   - Git
   - Go (tested with version 1.1.2)
+  
   - Make (tested with version 3.81)
 
 	$ git clone https://github.com/GroundSix/asink.git
