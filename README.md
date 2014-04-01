@@ -6,6 +6,12 @@ run a command a number of times very quickly.
 
 ### Install
 
+You will need:
+
+  - Git
+  - Go (tested with version 1.1.2)
+  - Make (tested with version 3.81)
+
 	$ git clone https://github.com/GroundSix/asink.git
 	$ cd asink
 	$ make
