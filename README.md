@@ -63,4 +63,4 @@ in total.
 
 ### License
 
-[MIT](https://github.com/hazbo/asink/blob/master/LICENSE)
+[MIT](https://github.com/GroundSix/asink/blob/master/LICENSE)
