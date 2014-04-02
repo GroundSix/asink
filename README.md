@@ -12,7 +12,7 @@ You will need:
   - Go (tested with version 1.1.2)
   - Make (tested with version 3.81)
 
-```
+```bash
 $ git clone https://github.com/GroundSix/asink.git
 $ cd asink
 $ make
@@ -36,7 +36,9 @@ looks like this:
 
 Then you simply pass through that file as the param when you run asink
 
-	$ asink config.json
+```bash
+$ asink config.json
+```
 
 You may call this file what you wish. What the example above will do,
 is run two batches of `ls -a` running five times. So the two batches will
