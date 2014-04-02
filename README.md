@@ -60,3 +60,7 @@ So if your config file looked like this:
 
 It will run `php index.php hello` ten times (concurrently) in batches of ten, so one hundred
 in total.
+
+### License
+
+[MIT](https://github.com/hazbo/atap/blob/master/LICENSE)
