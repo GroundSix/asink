@@ -1,6 +1,8 @@
 asink
 =====
 
+[![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
+
 asink is a tool that allows you to (at the moment) concurrently
 run a command a number of times very quickly.
 
@@ -62,6 +64,12 @@ So if your config file looked like this:
 
 It will run `php index.php hello` ten times (concurrently) in batches of ten, so one hundred
 in total.
+
+### Running Tests
+
+```bash
+$ make test
+```
 
 ### License
 
