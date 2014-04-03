@@ -11,7 +11,7 @@ run a command a number of times very quickly.
 You will need:
 
   - Git
-  - Go (tested with version 1.1.2)
+  - Go (tested with versions 1, 1.1 and 1.2)
   - Make (tested with version 3.81)
 
 ```bash
