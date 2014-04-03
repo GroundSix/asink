@@ -1,3 +1,3 @@
 [submodule "vendor/jconfig"]
 	path = vendor/jconfig
-	url = https://github.com/hazbo/jconfig.git
+	url = https://github.com/GroundSix/jconfig.git
