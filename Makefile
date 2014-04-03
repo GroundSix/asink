@@ -7,8 +7,8 @@ dependencies: vendor/
 	git submodule init
 	git submodule update
 
-asink: dependencies asink.go
-	go build -o ${BIN_PATH}
+asink: dependencies main.go
+	go build -o ${BIN_PATH} main.go
 
 install: ${BIN_PATH}
 	@cp ${BIN_PATH} ${INSTALL_PATH}

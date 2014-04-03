@@ -1,23 +1,6 @@
-/**
- * asink v0.1-dev
- *
- * (c) Ground Six
- *
- * @package asink
- * @version 0.1-dev
- * 
- * @author Harry Lawrence <http://github.com/hazbo>
- *
- * License: MIT
- * 
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-package main
+package asink
 
 import (
-    "./vendor/jconfig"
     "fmt"
     "log"
     "os"
@@ -39,24 +22,6 @@ type Command struct {
 }
 
 /**
- * Entry point for asink. Runs the command
- * and follows general instructions as
- * specefied in the JSON configuration
- * file
- */
-func main() {
-    configFile := getConfigFile()
-    if configFile != "" {
-        config := jconfig.LoadConfig(getConfigFile())
-        command := config.GetString("command")
-        counts := config.GetArray("count")
-        args := config.GetArray("args")
-
-        setupCommand(command, counts[0].(float64), counts[1].(float64), args)
-    }
-}
-
-/**
  * Gets the name of your config file
  * from the param passed through when
  * the program is ran
@@ -65,7 +30,7 @@ func main() {
  *
  * @return string file path or empty string
  */
-func getConfigFile() string {
+func GetConfigFile() string {
     if len(os.Args) > 1 {
         filePath := os.Args[1]
         if _, err := os.Stat(filePath); err == nil {
@@ -86,7 +51,7 @@ func getConfigFile() string {
  *
  * @return nil
  */
-func setupCommand(command string, asyncCount float64, relativeCount float64, args []interface{}) {
+func SetupCommand(command string, asyncCount float64, relativeCount float64, args []interface{}) {
     commandChan := make(chan *Command)
     commandStruct := new(Command)
 
