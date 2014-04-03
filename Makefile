@@ -6,6 +6,7 @@ all: asink
 dependencies: vendor/
 	git submodule init
 	git submodule update
+	git submodule foreach git pull origin master
 
 asink: dependencies main.go
 	go build -o ${BIN_PATH} main.go
