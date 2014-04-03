@@ -51,7 +51,7 @@ func GetConfigFile() string {
  *
  * @return nil
  */
-func SetupCommand(command string, asyncCount float64, relativeCount float64, args []interface{}) {
+func SetupCommand(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
     commandChan := make(chan *Command)
     commandStruct := new(Command)
 
@@ -77,6 +77,8 @@ func SetupCommand(command string, asyncCount float64, relativeCount float64, arg
 
     close(commandChan)
     wg.Wait()
+
+ 	return true
 }
 
 /**

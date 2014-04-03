@@ -18,5 +18,9 @@ uninstall:
 	@rm -f ${INSTALL_PATH}
 	@echo "Uninstalled asink"
 
-clean: ${BIN_PATH}
-	rm ${BIN_PATH}
+test: asink_test.go
+	go test asink_test.go
+
+clean:
+	@echo "Deleting ${BIN_PATH}."
+	rm -f ${BIN_PATH}
