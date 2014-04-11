@@ -40,6 +40,14 @@ func GetConfigFile() string {
     return ""
 }
 
+func ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) {
+    argsInterface := make([]interface{}, len(args))
+    for i, v := range args {
+        argsInterface[i] = interface{}(v)
+    }
+    Execute(command, float64(asyncCount), float64(relativeCount), argsInterface)
+}
+
 /**
  * Creates the command channel and sets
  * up everything ready for execution
