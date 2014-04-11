@@ -35,6 +35,6 @@ func main() {
         counts := config.GetArray("count")
         args := config.GetArray("args")
 
-        asink.SetupCommand(command, counts[0].(float64), counts[1].(float64), args)
+        asink.Execute(command, counts[0].(float64), counts[1].(float64), args)
     }
 }
