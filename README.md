@@ -3,7 +3,7 @@ asink
 
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 
-asink is a tool that allows you to (at the moment) concurrently
+asink is a tool that allows you to concurrently
 run a command a number of times very quickly.
 
 ### Install
