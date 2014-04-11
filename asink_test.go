@@ -5,6 +5,15 @@ import (
     "./asink"
 )
 
+func TestExecuteCommand(t *testing.T) {
+    command := "echo"
+    args    := []string{"test"}
+
+    if (asink.ExecuteCommand(command, args, 2, 2) != true) {
+        t.Error("Expected bool (true)")
+    }
+}
+
 func TestExecute(t *testing.T) {
     command       := "echo"
     asyncCount    := float64(2)
