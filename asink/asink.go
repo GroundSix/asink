@@ -40,12 +40,12 @@ func GetConfigFile() string {
     return ""
 }
 
-func ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) {
+func ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) bool {
     argsInterface := make([]interface{}, len(args))
     for i, v := range args {
         argsInterface[i] = interface{}(v)
     }
-    Execute(command, float64(asyncCount), float64(relativeCount), argsInterface)
+    return Execute(command, float64(asyncCount), float64(relativeCount), argsInterface)
 }
 
 /**
