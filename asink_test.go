@@ -5,7 +5,7 @@ import (
     "./asink"
 )
 
-func TestSetupCommand(t *testing.T) {
+func TestExecute(t *testing.T) {
     command       := "echo"
     asyncCount    := float64(2)
     relativeCount := float64(2)
@@ -16,7 +16,7 @@ func TestSetupCommand(t *testing.T) {
         argsInterface[i] = interface{}(v)
     }
 
-    if (asink.SetupCommand(command, asyncCount, relativeCount, argsInterface) != true) {
+    if (asink.Execute(command, asyncCount, relativeCount, argsInterface) != true) {
         t.Error("Expected bool (true)")
     }
 }

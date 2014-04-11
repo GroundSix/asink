@@ -51,7 +51,7 @@ func GetConfigFile() string {
  *
  * @return nil
  */
-func SetupCommand(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
+func Execute(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
     commandChan := make(chan *Command)
     commandStruct := new(Command)
 
@@ -71,7 +71,7 @@ func SetupCommand(command string, asyncCount float64, relativeCount float64, arg
 
     for i := 0; i != int(asyncCount); i++ {
         wg.Add(1)
-        go executeCommand(commandChan, &wg)
+        go runConcurrently(commandChan, &wg)
         commandChan <- commandStruct
     }
 
@@ -91,7 +91,7 @@ func SetupCommand(command string, asyncCount float64, relativeCount float64, arg
  *
  * @return nil
  */
-func executeCommand(command chan *Command, wg *sync.WaitGroup) {
+func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
     defer wg.Done()
 
     commandData := <-command
