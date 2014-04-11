@@ -40,6 +40,19 @@ func GetConfigFile() string {
     return ""
 }
 
+/**
+ * An alias function that nicely
+ * interfaces the Execute function
+ * to make it easier to use in external Go
+ * programs
+ *
+ * @param string the command name
+ * @param []string command arguments
+ * @param int number of async iterations
+ * @param int number of sync iterations
+ *
+ * @return bool
+ */
 func ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) bool {
     argsInterface := make([]interface{}, len(args))
     for i, v := range args {
@@ -57,7 +70,7 @@ func ExecuteCommand(command string, args []string, asyncCount int, relativeCount
  * @param float64 number of sync iterations
  * @param []interface{} command arguments
  *
- * @return nil
+ * @return bool
  */
 func Execute(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
     commandChan := make(chan *Command)
