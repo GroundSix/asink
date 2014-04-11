@@ -4,9 +4,13 @@ asink
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 
 asink is a tool that allows you to concurrently
-run a command a number of times very quickly.
+run a command a number of times very quickly. It
+can be used independently as a tool or within
+your own Go programs.
 
-### Install
+### Standalone Usage
+
+#### Install
 
 You will need:
 
@@ -21,7 +25,7 @@ $ make
 $ sudo make install
 ```
 
-### Usage
+#### Configuration
 
 asink requires one configuration file written in JSON. An example
 looks like this:
@@ -64,6 +68,37 @@ So if your config file looked like this:
 
 It will run `php index.php hello` ten times (concurrently) in batches of ten, so one hundred
 in total.
+
+### Integrating asink
+
+You may integrate asink into your own Go programs like so:
+
+```bash
+$ go get github.com/groundsix/asink/asink
+```
+
+#### Example
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/groundsix/asink/asink"
+)
+
+func main() {
+	command := "ls"
+	args 	:= []string{"-la"}
+
+	asyncCount := 2
+	syncCount  := 2
+
+	if (asink.ExecuteCommand(command, args, asyncCount, syncCount) == true) {
+		fmt.Println("Done!")
+	}
+}
+```
 
 ### Running Tests
 
