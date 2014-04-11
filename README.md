@@ -32,11 +32,11 @@ looks like this:
 
 ```json
 {
-	"command" : "ls",
-	"args" : [
-		"-a"
-	],
-	"count" : [2, 5]
+    "command" : "ls",
+    "args" : [
+        "-a"
+    ],
+    "count" : [2, 5]
 }
 ```
 
@@ -57,12 +57,12 @@ So if your config file looked like this:
 
 ```json
 {
-	"command" : "php",
-	"args" : [
-		"index.php",
-		"hello"
-	],
-	"count" : [10, 10]
+    "command" : "php",
+    "args" : [
+        "index.php",
+        "hello"
+    ],
+    "count" : [10, 10]
 }
 ```
 
@@ -83,20 +83,20 @@ $ go get github.com/groundsix/asink/asink
 package main
 
 import (
-	"fmt"
-	"github.com/groundsix/asink/asink"
+    "fmt"
+    "github.com/groundsix/asink/asink"
 )
 
 func main() {
-	command := "ls"
-	args 	:= []string{"-la"}
+    command := "ls"
+    args    := []string{"-la"}
 
-	asyncCount := 2
-	syncCount  := 2
+    asyncCount := 2
+    syncCount  := 2
 
-	if (asink.ExecuteCommand(command, args, asyncCount, syncCount) == true) {
-		fmt.Println("Done!")
-	}
+    if (asink.ExecuteCommand(command, args, asyncCount, syncCount) == true) {
+        fmt.Println("Done!")
+    }
 }
 ```
 
