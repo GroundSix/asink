@@ -30,11 +30,14 @@ import (
 func main() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        config := jconfig.LoadConfig(configFile)
-        command := config.GetString("command")
-        counts := config.GetArray("count")
-        args := config.GetArray("args")
+        Asink := asink.New()
 
-        asink.Execute(command, counts[0].(float64), counts[1].(float64), args)
+        config  := jconfig.LoadConfig(configFile)
+        command := config.GetString("command")
+        counts  := config.GetArray("count")
+        args    := config.GetArray("args")
+
+        Asink.SetOutput(config.GetBool("output"))
+        Asink.Execute(command, counts[0].(float64), counts[1].(float64), args)
     }
 }

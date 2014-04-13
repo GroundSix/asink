@@ -6,15 +6,19 @@ import (
 )
 
 func TestExecuteCommand(t *testing.T) {
+    Asink := asink.New()
+
     command := "echo"
     args    := []string{"test"}
 
-    if (asink.ExecuteCommand(command, args, 2, 2) != true) {
+    if (Asink.ExecuteCommand(command, args, 2, 2) != true) {
         t.Error("Expected bool (true)")
     }
 }
 
 func TestExecute(t *testing.T) {
+    Asink := asink.New()
+    
     command       := "echo"
     asyncCount    := float64(2)
     relativeCount := float64(2)
@@ -25,7 +29,7 @@ func TestExecute(t *testing.T) {
         argsInterface[i] = interface{}(v)
     }
 
-    if (asink.Execute(command, asyncCount, relativeCount, argsInterface) != true) {
+    if (Asink.Execute(command, asyncCount, relativeCount, argsInterface) != true) {
         t.Error("Expected bool (true)")
     }
 }

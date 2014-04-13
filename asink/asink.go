@@ -1,9 +1,24 @@
+/**
+ * asink v0.1-dev
+ *
+ * (c) Ground Six
+ *
+ * @package asink
+ * @version 0.1-dev
+ * 
+ * @author Harry Lawrence <http://github.com/hazbo>
+ *
+ * License: MIT
+ * 
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 package asink
 
 import (
     "fmt"
     "log"
-    "os"
     "os/exec"
     "sync"
 )
@@ -19,25 +34,34 @@ type Command struct {
     asyncCount    float64
     relativeCount float64
     args          []string
+    output        bool
 }
 
 /**
- * Gets the name of your config file
- * from the param passed through when
- * the program is ran
+ * Acting as a constructor to
+ * return a new instance of
+ * Command
  *
- * e.g. asink config.json
- *
- * @return string file path or empty string
+ * @return *Command
  */
-func GetConfigFile() string {
-    if len(os.Args) > 1 {
-        filePath := os.Args[1]
-        if _, err := os.Stat(filePath); err == nil {
-            return filePath
-        }
-    }
-    return ""
+func New() *Command {
+    command := new(Command)
+    command.SetOutput(false)
+
+    return command
+}
+
+/**
+ * Allows you to choose whether or
+ * not to show the output for
+ * each command that is ran
+ *
+ * @param bool output switch
+ *
+ * @return nil
+ */
+func (c *Command) SetOutput(output bool) {
+    c.output = output
 }
 
 /**
@@ -53,12 +77,14 @@ func GetConfigFile() string {
  *
  * @return bool
  */
-func ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) bool {
+ 
+func (c *Command) ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) bool {
     argsInterface := make([]interface{}, len(args))
     for i, v := range args {
         argsInterface[i] = interface{}(v)
     }
-    return Execute(command, float64(asyncCount), float64(relativeCount), argsInterface)
+    Asink := new(Command)
+    return Asink.Execute(command, float64(asyncCount), float64(relativeCount), argsInterface)
 }
 
 /**
@@ -72,15 +98,14 @@ func ExecuteCommand(command string, args []string, asyncCount int, relativeCount
  *
  * @return bool
  */
-func Execute(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
+func (c *Command) Execute(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
     commandChan := make(chan *Command)
-    commandStruct := new(Command)
 
     var wg sync.WaitGroup
 
-    commandStruct.name = command
-    commandStruct.asyncCount = asyncCount
-    commandStruct.relativeCount = relativeCount
+    c.name = command
+    c.asyncCount = asyncCount
+    c.relativeCount = relativeCount
 
     argsSlice := make([]string, len(args))
 
@@ -88,12 +113,12 @@ func Execute(command string, asyncCount float64, relativeCount float64, args []i
         argsSlice[i] = s.(string)
     }
 
-    commandStruct.args = argsSlice
+    c.args = argsSlice
 
     for i := 0; i != int(asyncCount); i++ {
         wg.Add(1)
         go runConcurrently(commandChan, &wg)
-        commandChan <- commandStruct
+        commandChan <- c
     }
 
     close(commandChan)
@@ -122,6 +147,8 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
         if err != nil {
             log.Fatal(err)
         }
-        fmt.Printf("%s\n", out)
+        if (commandData.output == true) {
+            fmt.Printf("%s\n", out)
+        }
     }
 }

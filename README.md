@@ -88,17 +88,24 @@ import (
 )
 
 func main() {
+    Asink := asink.New()
+    Asink.SetOutput(true)
+
     command := "ls"
     args    := []string{"-la"}
 
     asyncCount := 2
     syncCount  := 2
 
-    if (asink.ExecuteCommand(command, args, asyncCount, syncCount) == true) {
+    if (Asink.ExecuteCommand(command, args, asyncCount, syncCount) == true) {
         fmt.Println("Done!")
     }
 }
 ```
+
+`SetOutput` allows you to specify whether or not you'd like
+the output of each command to be printed out when ran. By
+default this is set to `false`.
 
 ### Running Tests
 

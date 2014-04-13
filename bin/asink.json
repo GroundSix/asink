@@ -1,0 +1,5 @@
+{
+	"command" : "ls",
+	"args" : ["-la"],
+	"count" : [1, 2]
+}
