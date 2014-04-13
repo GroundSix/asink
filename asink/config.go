@@ -17,7 +17,7 @@
 package asink
 
 import (
-	"os"
+    "os"
 )
 /**
 * Gets the name of your config file
