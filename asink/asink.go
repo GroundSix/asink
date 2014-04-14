@@ -122,7 +122,6 @@ func (c *Command) SetOutput(output bool) {
  *
  * @return bool
  */
- 
 func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int, output bool) bool {
     Asink := new(Command)
     Asink.SetName(name)
