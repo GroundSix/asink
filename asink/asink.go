@@ -51,6 +51,22 @@ func New() *Command {
     return command
 }
 
+func (c *Command) SetName(name string) {
+    c.name = name
+}
+
+func (c *Command) SetArgs(args []string) {
+    c.args = args
+}
+
+func (c *Command) SetAsyncCount(asyncCount int) {
+    c.asyncCount = float64(asyncCount)
+}
+
+func (c *Command) SetRelativeCount(relativeCount int) {
+    c.relativeCount = float64(relativeCount)
+}
+
 /**
  * Allows you to choose whether or
  * not to show the output for
