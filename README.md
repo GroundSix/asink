@@ -91,24 +91,21 @@ import (
 )
 
 func main() {
-    Asink := asink.New()
-    Asink.SetOutput(true)
+    command := asink.New()
 
-    command := "ls"
-    args    := []string{"-la"}
+    command.SetName("ls")
+    command.SetAsyncCount(2)
+    command.SetRelativeCount(2)
+    command.SetArgs([]string{"-la"})
+    command.SetOutput(true)
 
-    asyncCount := 2
-    syncCount  := 2
-
-    if (Asink.ExecuteCommand(command, args, asyncCount, syncCount) == true) {
-        fmt.Println("Done!")
-    }
+    command.Execute()
 }
 ```
 
-`SetOutput` allows you to specify whether or not you'd like
-the output of each command to be printed out when ran. By
-default this is set to `false`.
+See `asink/asink.go` for full API. You may also use `ExecuteCommand`
+function which allows you to just pass all the params through as
+an alternate method.
 
 ### Running Tests
 

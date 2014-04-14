@@ -52,6 +52,50 @@ func New() *Command {
 }
 
 /**
+ * Sets the command name
+ *
+ * @param string command name
+ *
+ * @return nil
+ */
+func (c *Command) SetName(name string) {
+    c.name = name
+}
+
+/**
+ * Sets the command args
+ *
+ * @param []string command args
+ *
+ * @return nil
+ */
+func (c *Command) SetArgs(args []string) {
+    c.args = args
+}
+
+/**
+ * Sets the command async count
+ *
+ * @param int command async count
+ *
+ * @return nil
+ */
+func (c *Command) SetAsyncCount(asyncCount int) {
+    c.asyncCount = float64(asyncCount)
+}
+
+/**
+ * Sets the command relative count
+ *
+ * @param int command relative count
+ *
+ * @return nil
+ */
+func (c *Command) SetRelativeCount(relativeCount int) {
+    c.relativeCount = float64(relativeCount)
+}
+
+/**
  * Allows you to choose whether or
  * not to show the output for
  * each command that is ran
@@ -74,47 +118,34 @@ func (c *Command) SetOutput(output bool) {
  * @param []string command arguments
  * @param int number of async iterations
  * @param int number of sync iterations
+ * @param bool flag to show command output
  *
  * @return bool
  */
-func (c *Command) ExecuteCommand(command string, args []string, asyncCount int, relativeCount int) bool {
-    argsInterface := make([]interface{}, len(args))
-    for i, v := range args {
-        argsInterface[i] = interface{}(v)
-    }
+ 
+func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int, output bool) bool {
     Asink := new(Command)
-    return Asink.Execute(command, float64(asyncCount), float64(relativeCount), argsInterface)
+    Asink.SetName(name)
+    Asink.SetAsyncCount(asyncCount)
+    Asink.SetRelativeCount(relativeCount)
+    Asink.SetArgs(args)
+    Asink.SetOutput(output)
+
+    return Asink.Execute()
 }
 
 /**
  * Creates the command channel and sets
  * up everything ready for execution
  *
- * @param string the command name
- * @param float64 number of async iterations
- * @param float64 number of sync iterations
- * @param []interface{} command arguments
- *
  * @return bool
  */
-func (c *Command) Execute(command string, asyncCount float64, relativeCount float64, args []interface{}) bool {
+func (c *Command) Execute() bool {
     commandChan := make(chan *Command)
 
     var wg sync.WaitGroup
 
-    c.name = command
-    c.asyncCount = asyncCount
-    c.relativeCount = relativeCount
-
-    argsSlice := make([]string, len(args))
-
-    for i, s := range args {
-        argsSlice[i] = s.(string)
-    }
-
-    c.args = argsSlice
-
-    for i := 0; i != int(asyncCount); i++ {
+    for i := 0; i != int(c.asyncCount); i++ {
         wg.Add(1)
         go runConcurrently(commandChan, &wg)
         commandChan <- c

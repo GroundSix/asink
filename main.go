@@ -30,14 +30,66 @@ import (
 func main() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        Asink := asink.New()
-
-        config  := jconfig.LoadConfig(configFile)
-        command := config.GetString("command")
-        counts  := config.GetArray("count")
-        args    := config.GetArray("args")
-
-        Asink.SetOutput(config.GetBool("output"))
-        Asink.Execute(command, counts[0].(float64), counts[1].(float64), args)
+        command := setupAsinkCommand(configFile)
+        command.Execute()
     }
+}
+
+/**
+ * Initially sets up everything from
+ * config file in a new instance of Asink
+ *
+ * @param string path to config file
+ *
+ * @return *asink.Command configured instance of
+ * asink
+ */
+func setupAsinkCommand(configFile string) *asink.Command {
+    command := asink.New()
+    config  := jconfig.LoadConfig(configFile)
+
+    counts := convertCounts(config.GetArray("count"))
+    args   := convertArgs(config.GetArray("args"))
+
+    command.SetName(config.GetString("command"))
+    command.SetAsyncCount(int(counts[0]))
+    command.SetRelativeCount(int(counts[1]))
+    command.SetArgs(args)
+    command.SetOutput(config.GetBool("output"))
+
+    return command
+}
+
+/**
+ * Converts jconfigs []interface into
+ * []string for asink
+ *
+ * @param []interface{} jconfig's array
+ *
+ * @return []string asink's array
+ */
+func convertArgs(args []interface{}) []string {
+    argsSlice := make([]string, len(args))
+    for i, s := range args {
+        argsSlice[i] = s.(string)
+    }
+
+    return argsSlice
+}
+
+/**
+ * Converts jconfigs []interface into
+ * []float64 for asink
+ *
+ * @param []interface{} jconfig's array
+ *
+ * @return []float64 asink's array
+ */
+func convertCounts(counts []interface{}) []float64 {
+    argsSlice := make([]float64, len(counts))
+    for i, s := range counts {
+        argsSlice[i] = s.(float64)
+    }
+    
+    return argsSlice
 }
