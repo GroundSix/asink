@@ -51,18 +51,46 @@ func New() *Command {
     return command
 }
 
+/**
+ * Sets the command name
+ *
+ * @param string command name
+ *
+ * @return nil
+ */
 func (c *Command) SetName(name string) {
     c.name = name
 }
 
+/**
+ * Sets the command args
+ *
+ * @param []string command args
+ *
+ * @return nil
+ */
 func (c *Command) SetArgs(args []string) {
     c.args = args
 }
 
+/**
+ * Sets the command async count
+ *
+ * @param int command async count
+ *
+ * @return nil
+ */
 func (c *Command) SetAsyncCount(asyncCount int) {
     c.asyncCount = float64(asyncCount)
 }
 
+/**
+ * Sets the command relative count
+ *
+ * @param int command relative count
+ *
+ * @return nil
+ */
 func (c *Command) SetRelativeCount(relativeCount int) {
     c.relativeCount = float64(relativeCount)
 }
@@ -90,6 +118,7 @@ func (c *Command) SetOutput(output bool) {
  * @param []string command arguments
  * @param int number of async iterations
  * @param int number of sync iterations
+ * @param bool flag to show command output
  *
  * @return bool
  */

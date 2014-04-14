@@ -35,6 +35,15 @@ func main() {
     }
 }
 
+/**
+ * Initially sets up everything from
+ * config file in a new instance of Asink
+ *
+ * @param string path to config file
+ *
+ * @return *asink.Command configured instance of
+ * asink
+ */
 func setupAsinkCommand(configFile string) *asink.Command {
     command := asink.New()
     config  := jconfig.LoadConfig(configFile)
@@ -51,6 +60,14 @@ func setupAsinkCommand(configFile string) *asink.Command {
     return command
 }
 
+/**
+ * Converts jconfigs []interface into
+ * []string for asink
+ *
+ * @param []interface{} jconfig's array
+ *
+ * @return []string asink's array
+ */
 func convertArgs(args []interface{}) []string {
     argsSlice := make([]string, len(args))
     for i, s := range args {
@@ -60,6 +77,14 @@ func convertArgs(args []interface{}) []string {
     return argsSlice
 }
 
+/**
+ * Converts jconfigs []interface into
+ * []float64 for asink
+ *
+ * @param []interface{} jconfig's array
+ *
+ * @return []float64 asink's array
+ */
 func convertCounts(counts []interface{}) []float64 {
     argsSlice := make([]float64, len(counts))
     for i, s := range counts {
