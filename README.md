@@ -37,7 +37,8 @@ looks like this:
     "args" : [
         "-a"
     ],
-    "count" : [2, 5]
+    "count" : [2, 5],
+    "output" : true
 }
 ```
 
@@ -63,7 +64,8 @@ So if your config file looked like this:
         "index.php",
         "hello"
     ],
-    "count" : [10, 10]
+    "count" : [10, 10],
+    "output" : true
 }
 ```
 
