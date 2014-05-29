@@ -5,11 +5,11 @@
  *
  * @package asink
  * @version 0.1-dev
- * 
+ *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
  * License: MIT
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -17,11 +17,11 @@
 package asink
 
 import (
-    "fmt"
-    "log"
-    "os/exec"
-    "sync"
-    //"../vendor/pb"
+	"../vendor/pb"
+	"fmt"
+	"log"
+	"os/exec"
+	"sync"
 )
 
 /**
@@ -31,11 +31,12 @@ import (
  * @var []string command arguments
  */
 type Command struct {
-    name          string
-    asyncCount    float64
-    relativeCount float64
-    args          []string
-    output        bool
+	name          string
+	asyncCount    float64
+	relativeCount float64
+	args          []string
+	output        bool
+	progress      *pb.ProgressBar
 }
 
 /**
@@ -46,10 +47,10 @@ type Command struct {
  * @return *Command
  */
 func New() *Command {
-    command := new(Command)
-    command.SetOutput(false)
+	command := new(Command)
+	command.SetOutput(false)
 
-    return command
+	return command
 }
 
 /**
@@ -60,7 +61,7 @@ func New() *Command {
  * @return nil
  */
 func (c *Command) SetName(name string) {
-    c.name = name
+	c.name = name
 }
 
 /**
@@ -71,7 +72,7 @@ func (c *Command) SetName(name string) {
  * @return nil
  */
 func (c *Command) SetArgs(args []string) {
-    c.args = args
+	c.args = args
 }
 
 /**
@@ -82,7 +83,7 @@ func (c *Command) SetArgs(args []string) {
  * @return nil
  */
 func (c *Command) SetAsyncCount(asyncCount int) {
-    c.asyncCount = float64(asyncCount)
+	c.asyncCount = float64(asyncCount)
 }
 
 /**
@@ -93,7 +94,7 @@ func (c *Command) SetAsyncCount(asyncCount int) {
  * @return nil
  */
 func (c *Command) SetRelativeCount(relativeCount int) {
-    c.relativeCount = float64(relativeCount)
+	c.relativeCount = float64(relativeCount)
 }
 
 /**
@@ -106,7 +107,7 @@ func (c *Command) SetRelativeCount(relativeCount int) {
  * @return nil
  */
 func (c *Command) SetOutput(output bool) {
-    c.output = output
+	c.output = output
 }
 
 /**
@@ -124,14 +125,14 @@ func (c *Command) SetOutput(output bool) {
  * @return bool
  */
 func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int, output bool) bool {
-    Asink := new(Command)
-    Asink.SetName(name)
-    Asink.SetAsyncCount(asyncCount)
-    Asink.SetRelativeCount(relativeCount)
-    Asink.SetArgs(args)
-    Asink.SetOutput(output)
+	Asink := new(Command)
+	Asink.SetName(name)
+	Asink.SetAsyncCount(asyncCount)
+	Asink.SetRelativeCount(relativeCount)
+	Asink.SetArgs(args)
+	Asink.SetOutput(output)
 
-    return Asink.Execute()
+	return Asink.Execute()
 }
 
 /**
@@ -141,24 +142,24 @@ func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, rel
  * @return bool
  */
 func (c *Command) Execute() bool {
-    commandChan := make(chan *Command)
+	commandChan := make(chan *Command)
 
-    var wg sync.WaitGroup
+	var wg sync.WaitGroup
 
-    for i := 0; i != int(c.asyncCount); i++ {
-        wg.Add(1)
-        go runConcurrently(commandChan, &wg)
-        commandChan <- c
-    }
+	c.showProgressBar(int(c.asyncCount * c.relativeCount))
 
-    close(commandChan)
-    wg.Wait()
+	for i := 0; i != int(c.asyncCount); i++ {
+		wg.Add(1)
+		go runConcurrently(commandChan, &wg)
+		commandChan <- c
+	}
 
-    if (c.output == false) {
-        fmt.Println("falseeee")
-    }
+	close(commandChan)
+	wg.Wait()
 
-    return true
+	c.finishProgressBar()
+
+	return true
 }
 
 /**
@@ -166,25 +167,26 @@ func (c *Command) Execute() bool {
  * of times as specefied in the
  * JSON configuration file
  *
- * @param Command in instance of Command struct
+ * @param *Command an instance of Command struct
  * @param WaitGroup our async wait group for the channel
  *
  * @return nil
  */
 func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
-    defer wg.Done()
+	defer wg.Done()
 
-    commandData := <-command
+	commandData := <-command
 
-    for c := 0; c != int(commandData.relativeCount); c++ {
-        out, err := exec.Command(commandData.name, commandData.args...).Output()
-        if err != nil {
-            log.Fatal(err)
-        }
-        if (commandData.output == true) {
-            fmt.Printf("%s\n", out)
-        }
-    }
+	for c := 0; c != int(commandData.relativeCount); c++ {
+		out, err := exec.Command(commandData.name, commandData.args...).Output()
+		if err != nil {
+			log.Fatal(err)
+		}
+		if commandData.output == true {
+			fmt.Printf("%s\n", out)
+		}
+		commandData.incrementProgressBar()
+	}
 }
 
 /**
@@ -192,10 +194,38 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
  * is executing and output has been set
  * to false
  *
- * @param int number of command runs
+ * @param int number of times command will
+ * run
  *
  * @return nil
  */
-func showProgressBar(count int) {
-    
+func (c *Command) showProgressBar(count int) {
+	if c.output == false {
+		c.progress = pb.StartNew(count)
+	}
+}
+
+/**
+ * Increments the progress bar by one
+ * if output is set to false
+ *
+ * @return nil
+ */
+func (c *Command) incrementProgressBar() {
+	if c.output == false {
+		c.progress.Increment()
+	}
+}
+
+/**
+ * Lets the user know that the task(s)
+ * are finished and stops the progress
+ * bar from incrementing
+ *
+ * @return nil
+ */
+func (c *Command) finishProgressBar() {
+	if c.output == false {
+		c.progress.FinishPrint("Finished.")
+	}
 }
