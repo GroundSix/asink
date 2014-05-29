@@ -1,3 +1,6 @@
 [submodule "vendor/jconfig"]
 	path = vendor/jconfig
 	url = https://github.com/GroundSix/jconfig.git
+[submodule "vendor/pb"]
+	path = vendor/pb
+	url = https://github.com/gopac/pb.git

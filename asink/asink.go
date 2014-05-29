@@ -21,6 +21,7 @@ import (
     "log"
     "os/exec"
     "sync"
+    //"../vendor/pb"
 )
 
 /**
@@ -153,6 +154,10 @@ func (c *Command) Execute() bool {
     close(commandChan)
     wg.Wait()
 
+    if (c.output == false) {
+        fmt.Println("falseeee")
+    }
+
     return true
 }
 
@@ -180,4 +185,17 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
             fmt.Printf("%s\n", out)
         }
     }
+}
+
+/**
+ * Shows the progress bar when command
+ * is executing and output has been set
+ * to false
+ *
+ * @param int number of command runs
+ *
+ * @return nil
+ */
+func showProgressBar(count int) {
+    
 }
