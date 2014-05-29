@@ -9,6 +9,8 @@ run a command a number of times very quickly. It
 can be used independently as a tool or within
 your own Go programs.
 
+![v0.0.1](https://raw.githubusercontent.com/GroundSix/asink/master/screenshots/example.gif)
+
 ### Standalone Usage
 
 #### Install
