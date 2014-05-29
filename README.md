@@ -1,5 +1,4 @@
-asink
-=====
+![asink](https://raw.githubusercontent.com/GroundSix/asink/master/images/asink.png)
 
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/GroundSix/asink/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
@@ -10,6 +9,8 @@ can be used independently as a tool or within
 your own Go programs.
 
 ![v0.0.1](https://raw.githubusercontent.com/GroundSix/asink/master/screenshots/example.gif)
+
+* * *
 
 ### Standalone Usage
 
