@@ -122,4 +122,4 @@ $ make test
 
 * * *
 
-![Ground Six](https://raw.githubusercontent.com/GroundSix/asink/master/images/groundsix.jpg)
+![Ground Six](https://raw.githubusercontent.com/GroundSix/asink/master/images/groundsix.jpg) created at GroundSix
