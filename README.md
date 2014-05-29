@@ -8,7 +8,7 @@ run a command a number of times very quickly. It
 can be used independently as a tool or within
 your own Go programs.
 
-![v0.0.1](https://raw.githubusercontent.com/GroundSix/asink/master/screenshots/example.gif)
+![example](https://raw.githubusercontent.com/GroundSix/asink/master/images/screenshots/example.gif)
 
 * * *
 
@@ -119,3 +119,7 @@ $ make test
 ### License
 
 [MIT](https://github.com/GroundSix/asink/blob/master/LICENSE)
+
+* * *
+
+![Ground Six](https://raw.githubusercontent.com/GroundSix/asink/master/images/groundsix.jpg)
