@@ -18,8 +18,14 @@ package main
 
 import (
     "./asink"
+    "./vendor/pb"
     "./vendor/jconfig"
 )
+
+/**
+ * @var *pb.ProgressBar asink's progress indicator
+ */
+var progressBar *pb.ProgressBar = nil
 
 /**
  * Entry point for asink. Runs the command
@@ -31,8 +37,45 @@ func main() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
         command := setupAsinkCommand(configFile)
+
+        command.ListenForInit(createProgressBar)
+        command.ListenForProgress(incrementProgressBar)
+        command.ListenForFinish(endProgressBar)
         command.Execute()
     }
+}
+
+/**
+ * Creates the progress bar on the
+ * listen init event
+ *
+ * @param int number of commands
+ *
+ * @return nil
+ */
+func createProgressBar(count int) {
+    progressBar = pb.StartNew(count)
+}
+
+/**
+ * Increments the progress bar
+ * by one on the listen progress
+ * event
+ *
+ * @return nil
+ */
+func incrementProgressBar() {
+    progressBar.Increment()
+}
+
+/**
+ * Stops the progress bar on the
+ * listen finish event
+ *
+ * @return nil
+ */
+func endProgressBar() {
+    progressBar.FinishPrint("Finished.")
 }
 
 /**
@@ -51,11 +94,11 @@ func setupAsinkCommand(configFile string) *asink.Command {
     counts := convertCounts(config.GetArray("count"))
     args := convertArgs(config.GetArray("args"))
 
-    command.SetName(config.GetString("command"))
-    command.SetAsyncCount(int(counts[0]))
-    command.SetRelativeCount(int(counts[1]))
-    command.SetArgs(args)
-    command.SetOutput(config.GetBool("output"))
+    command.Name = config.GetString("command")
+    command.AsyncCount = counts[0]
+    command.RelativeCount = counts[1]
+    command.Args = args
+    command.Output = config.GetBool("output")
 
     return command
 }

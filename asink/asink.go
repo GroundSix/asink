@@ -17,7 +17,6 @@
 package asink
 
 import (
-    "../vendor/pb"
     "fmt"
     "log"
     "os/exec"
@@ -31,12 +30,15 @@ import (
  * @var []string command arguments
  */
 type Command struct {
-    name          string
-    asyncCount    float64
-    relativeCount float64
-    args          []string
-    output        bool
-    progress      *pb.ProgressBar
+    Name          string
+    AsyncCount    float64
+    RelativeCount float64
+    Args          []string
+    Output        bool
+
+    progressInit  func(count int)
+    progressAdd   func()
+    progressEnd   func()
 }
 
 /**
@@ -48,66 +50,50 @@ type Command struct {
  */
 func New() *Command {
     command := new(Command)
-    command.SetOutput(false)
+    command.Output = false
+    command.progressInit = func(count int){}
+    command.progressAdd  = func(){}
+    command.progressEnd  = func(){}
 
     return command
 }
 
 /**
- * Sets the command name
+ * An optional callback public function
+ * that gets called on job creation
  *
- * @param string command name
+ * @param func(count int) callback function
  *
  * @return nil
  */
-func (c *Command) SetName(name string) {
-    c.name = name
+func (c *Command) ListenForInit(callback func(count int)) {
+    c.progressInit = callback
 }
 
 /**
- * Sets the command args
+ * An optional callback public function
+ * that gets called everytime a job
+ * has finished
  *
- * @param []string command args
+ * @param func() callback function
  *
  * @return nil
  */
-func (c *Command) SetArgs(args []string) {
-    c.args = args
+func (c *Command) ListenForProgress(callback func()) {
+    c.progressAdd = callback
 }
 
 /**
- * Sets the command async count
+ * An optional callback public function
+ * that gets called when all jobs have
+ * been finished
  *
- * @param int command async count
- *
- * @return nil
- */
-func (c *Command) SetAsyncCount(asyncCount int) {
-    c.asyncCount = float64(asyncCount)
-}
-
-/**
- * Sets the command relative count
- *
- * @param int command relative count
+ * @param func() callback function
  *
  * @return nil
  */
-func (c *Command) SetRelativeCount(relativeCount int) {
-    c.relativeCount = float64(relativeCount)
-}
-
-/**
- * Allows you to choose whether or
- * not to show the output for
- * each command that is ran
- *
- * @param bool output switch
- *
- * @return nil
- */
-func (c *Command) SetOutput(output bool) {
-    c.output = output
+func (c *Command) ListenForFinish(callback func()) {
+    c.progressEnd = callback
 }
 
 /**
@@ -126,11 +112,16 @@ func (c *Command) SetOutput(output bool) {
  */
 func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int, output bool) bool {
     Asink := new(Command)
-    Asink.SetName(name)
-    Asink.SetAsyncCount(asyncCount)
-    Asink.SetRelativeCount(relativeCount)
-    Asink.SetArgs(args)
-    Asink.SetOutput(output)
+    Asink.Name = name
+    Asink.AsyncCount = float64(asyncCount)
+    Asink.RelativeCount = float64(relativeCount)
+    Asink.Args = args
+    Asink.Output = output
+
+    // Default all callbacks
+    Asink.ListenForInit(func(count int){})
+    Asink.ListenForProgress(func(){})
+    Asink.ListenForFinish(func(){})
 
     return Asink.Execute()
 }
@@ -146,9 +137,9 @@ func (c *Command) Execute() bool {
 
     var wg sync.WaitGroup
 
-    c.showProgressBar(int(c.asyncCount * c.relativeCount))
+    c.progressInit(int(c.AsyncCount * c.RelativeCount))
 
-    for i := 0; i != int(c.asyncCount); i++ {
+    for i := 0; i != int(c.AsyncCount); i++ {
         wg.Add(1)
         go runConcurrently(commandChan, &wg)
         commandChan <- c
@@ -157,7 +148,7 @@ func (c *Command) Execute() bool {
     close(commandChan)
     wg.Wait()
 
-    c.finishProgressBar()
+    c.progressEnd()
 
     return true
 }
@@ -177,55 +168,14 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
 
     commandData := <-command
 
-    for c := 0; c != int(commandData.relativeCount); c++ {
-        out, err := exec.Command(commandData.name, commandData.args...).Output()
+    for c := 0; c != int(commandData.RelativeCount); c++ {
+        out, err := exec.Command(commandData.Name, commandData.Args...).Output()
         if err != nil {
             log.Fatal(err)
         }
-        if commandData.output == true {
+        if commandData.Output == true {
             fmt.Printf("%s\n", out)
         }
-        commandData.incrementProgressBar()
-    }
-}
-
-/**
- * Shows the progress bar when command
- * is executing and output has been set
- * to false
- *
- * @param int number of times command will
- * run
- *
- * @return nil
- */
-func (c *Command) showProgressBar(count int) {
-    if c.output == false {
-        c.progress = pb.StartNew(count)
-    }
-}
-
-/**
- * Increments the progress bar by one
- * if output is set to false
- *
- * @return nil
- */
-func (c *Command) incrementProgressBar() {
-    if c.output == false {
-        c.progress.Increment()
-    }
-}
-
-/**
- * Lets the user know that the task(s)
- * are finished and stops the progress
- * bar from incrementing
- *
- * @return nil
- */
-func (c *Command) finishProgressBar() {
-    if c.output == false {
-        c.progress.FinishPrint("Finished.")
+        commandData.progressAdd()
     }
 }

@@ -19,10 +19,28 @@ func TestExecuteCommand(t *testing.T) {
 func TestExecute(t *testing.T) {
     Asink := asink.New()
 
-    Asink.SetName("echo")
-    Asink.SetAsyncCount(2)
-    Asink.SetRelativeCount(2)
-    Asink.SetArgs([]string{"test"})
+    Asink.Name = "echo"
+    Asink.AsyncCount = 2
+    Asink.RelativeCount = 2
+    Asink.Args = []string{"test"}
+
+    if (Asink.Execute() != true) {
+        t.Error("Expected bool (true)")
+    }
+}
+
+func TestExecuteWithCallbacks(t *testing.T) {
+    Asink := asink.New()
+
+    Asink.Name = "echo"
+    Asink.AsyncCount = 2
+    Asink.RelativeCount = 2
+    Asink.Args = []string{"test"}
+
+    // Set callback functions
+    Asink.ListenForInit(func(count int){})
+    Asink.ListenForProgress(func(){})
+    Asink.ListenForFinish(func(){})
 
     if (Asink.Execute() != true) {
         t.Error("Expected bool (true)")
