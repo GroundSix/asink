@@ -50,7 +50,9 @@ type Command struct {
 func New() *Command {
     command := new(Command)
     command.SetOutput(false)
-
+    command.progressInit = func(count int){}
+    command.progressAdd  = func(){}
+    command.progressEnd  = func(){}
     return command
 }
 
@@ -170,6 +172,11 @@ func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, rel
     Asink.SetRelativeCount(relativeCount)
     Asink.SetArgs(args)
     Asink.SetOutput(output)
+
+    // Default all callbacks
+    Asink.ListenForInit(func(count int){})
+    Asink.ListenForProgress(func(){})
+    Asink.ListenForFinish(func(){})
 
     return Asink.Execute()
 }
