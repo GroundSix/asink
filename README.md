@@ -89,7 +89,6 @@ $ go get github.com/groundsix/asink/asink
 package main
 
 import (
-    "fmt"
     "github.com/groundsix/asink/asink"
 )
 
