@@ -96,11 +96,11 @@ import (
 func main() {
     command := asink.New()
 
-    command.SetName("ls")
-    command.SetAsyncCount(2)
-    command.SetRelativeCount(2)
-    command.SetArgs([]string{"-la"})
-    command.SetOutput(true)
+    command.Name          = "ls"
+    command.AsyncCount    = 2
+    command.RelativeCount = 2
+    command.Args          = []string{"-la"}
+    command.Output        = true
 
     command.Execute()
 }

@@ -93,11 +93,11 @@ func setupAsinkCommand(configFile string) *asink.Command {
     counts := convertCounts(config.GetArray("count"))
     args := convertArgs(config.GetArray("args"))
 
-    command.SetName(config.GetString("command"))
-    command.SetAsyncCount(int(counts[0]))
-    command.SetRelativeCount(int(counts[1]))
-    command.SetArgs(args)
-    command.SetOutput(config.GetBool("output"))
+    command.Name = config.GetString("command")
+    command.AsyncCount = counts[0]
+    command.RelativeCount = counts[1]
+    command.Args = args
+    command.Output = config.GetBool("output")
 
     return command
 }
