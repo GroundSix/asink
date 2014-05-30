@@ -30,11 +30,12 @@ import (
  * @var []string command arguments
  */
 type Command struct {
-    name          string
-    asyncCount    float64
-    relativeCount float64
-    args          []string
-    output        bool
+    Name          string
+    AsyncCount    float64
+    RelativeCount float64
+    Args          []string
+    Output        bool
+
     progressInit  func(count int)
     progressAdd   func()
     progressEnd   func()
@@ -49,68 +50,11 @@ type Command struct {
  */
 func New() *Command {
     command := new(Command)
-    command.SetOutput(false)
+    command.Output = false
     command.progressInit = func(count int){}
     command.progressAdd  = func(){}
     command.progressEnd  = func(){}
     return command
-}
-
-/**
- * Sets the command name
- *
- * @param string command name
- *
- * @return nil
- */
-func (c *Command) SetName(name string) {
-    c.name = name
-}
-
-/**
- * Sets the command args
- *
- * @param []string command args
- *
- * @return nil
- */
-func (c *Command) SetArgs(args []string) {
-    c.args = args
-}
-
-/**
- * Sets the command async count
- *
- * @param int command async count
- *
- * @return nil
- */
-func (c *Command) SetAsyncCount(asyncCount int) {
-    c.asyncCount = float64(asyncCount)
-}
-
-/**
- * Sets the command relative count
- *
- * @param int command relative count
- *
- * @return nil
- */
-func (c *Command) SetRelativeCount(relativeCount int) {
-    c.relativeCount = float64(relativeCount)
-}
-
-/**
- * Allows you to choose whether or
- * not to show the output for
- * each command that is ran
- *
- * @param bool output switch
- *
- * @return nil
- */
-func (c *Command) SetOutput(output bool) {
-    c.output = output
 }
 
 /**
@@ -167,11 +111,11 @@ func (c *Command) ListenForFinish(callback func()) {
  */
 func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int, output bool) bool {
     Asink := new(Command)
-    Asink.SetName(name)
-    Asink.SetAsyncCount(asyncCount)
-    Asink.SetRelativeCount(relativeCount)
-    Asink.SetArgs(args)
-    Asink.SetOutput(output)
+    Asink.Name = name
+    Asink.AsyncCount = float64(asyncCount)
+    Asink.RelativeCount = float64(relativeCount)
+    Asink.Args = args
+    Asink.Output = output
 
     // Default all callbacks
     Asink.ListenForInit(func(count int){})
@@ -192,9 +136,9 @@ func (c *Command) Execute() bool {
 
     var wg sync.WaitGroup
 
-    c.progressInit(int(c.asyncCount * c.relativeCount))
+    c.progressInit(int(c.AsyncCount * c.RelativeCount))
 
-    for i := 0; i != int(c.asyncCount); i++ {
+    for i := 0; i != int(c.AsyncCount); i++ {
         wg.Add(1)
         go runConcurrently(commandChan, &wg)
         commandChan <- c
@@ -223,12 +167,12 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
 
     commandData := <-command
 
-    for c := 0; c != int(commandData.relativeCount); c++ {
-        out, err := exec.Command(commandData.name, commandData.args...).Output()
+    for c := 0; c != int(commandData.RelativeCount); c++ {
+        out, err := exec.Command(commandData.Name, commandData.Args...).Output()
         if err != nil {
             log.Fatal(err)
         }
-        if commandData.output == true {
+        if commandData.Output == true {
             fmt.Printf("%s\n", out)
         }
         commandData.progressAdd()
