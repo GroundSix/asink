@@ -4,3 +4,6 @@
 [submodule "vendor/pb"]
 	path = vendor/pb
 	url = https://github.com/gopac/pb.git
+[submodule "vendor/jsonq"]
+	path = vendor/jsonq
+	url = https://github.com/GroundSix/jsonq.git

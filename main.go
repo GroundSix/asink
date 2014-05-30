@@ -4,7 +4,7 @@
  * (c) Ground Six
  *
  * @package asink
- * @version 0.1-dev
+ * @version 0.0.2-dev
  *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
@@ -17,8 +17,8 @@
 package main
 
 import (
-	"./asink"
-	"./vendor/jconfig"
+    "./asink"
+    "./vendor/jconfig"
 )
 
 /**
@@ -28,11 +28,11 @@ import (
  * file
  */
 func main() {
-	configFile := asink.GetConfigFile()
-	if configFile != "" {
-		command := setupAsinkCommand(configFile)
-		command.Execute()
-	}
+    configFile := asink.GetConfigFile()
+    if configFile != "" {
+        command := setupAsinkCommand(configFile)
+        command.Execute()
+    }
 }
 
 /**
@@ -45,19 +45,19 @@ func main() {
  * asink
  */
 func setupAsinkCommand(configFile string) *asink.Command {
-	command := asink.New()
-	config := jconfig.LoadConfig(configFile)
+    command := asink.New()
+    config := jconfig.LoadConfig(configFile)
 
-	counts := convertCounts(config.GetArray("count"))
-	args := convertArgs(config.GetArray("args"))
+    counts := convertCounts(config.GetArray("count"))
+    args := convertArgs(config.GetArray("args"))
 
-	command.SetName(config.GetString("command"))
-	command.SetAsyncCount(int(counts[0]))
-	command.SetRelativeCount(int(counts[1]))
-	command.SetArgs(args)
-	command.SetOutput(config.GetBool("output"))
+    command.SetName(config.GetString("command"))
+    command.SetAsyncCount(int(counts[0]))
+    command.SetRelativeCount(int(counts[1]))
+    command.SetArgs(args)
+    command.SetOutput(config.GetBool("output"))
 
-	return command
+    return command
 }
 
 /**
@@ -69,12 +69,12 @@ func setupAsinkCommand(configFile string) *asink.Command {
  * @return []string asink's array
  */
 func convertArgs(args []interface{}) []string {
-	argsSlice := make([]string, len(args))
-	for i, s := range args {
-		argsSlice[i] = s.(string)
-	}
+    argsSlice := make([]string, len(args))
+    for i, s := range args {
+        argsSlice[i] = s.(string)
+    }
 
-	return argsSlice
+    return argsSlice
 }
 
 /**
@@ -86,10 +86,10 @@ func convertArgs(args []interface{}) []string {
  * @return []float64 asink's array
  */
 func convertCounts(counts []interface{}) []float64 {
-	argsSlice := make([]float64, len(counts))
-	for i, s := range counts {
-		argsSlice[i] = s.(float64)
-	}
+    argsSlice := make([]float64, len(counts))
+    for i, s := range counts {
+        argsSlice[i] = s.(float64)
+    }
 
-	return argsSlice
+    return argsSlice
 }

@@ -1,5 +1,5 @@
 /**
-* asink v0.1-dev
+* asink v0.0.2-dev
 *
 * (c) Ground Six
 *
@@ -17,7 +17,7 @@
 package asink
 
 import (
-	"os"
+    "os"
 )
 
 /**
@@ -30,11 +30,11 @@ import (
 * @return string file path or empty string
  */
 func GetConfigFile() string {
-	if len(os.Args) > 1 {
-		filePath := os.Args[1]
-		if _, err := os.Stat(filePath); err == nil {
-			return filePath
-		}
-	}
-	return ""
+    if len(os.Args) > 1 {
+        filePath := os.Args[1]
+        if _, err := os.Stat(filePath); err == nil {
+            return filePath
+        }
+    }
+    return ""
 }
