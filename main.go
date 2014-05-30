@@ -17,9 +17,15 @@
 package main
 
 import (
-	"./asink"
-	"./vendor/jconfig"
+    "./asink"
+    "./vendor/pb"
+    "./vendor/jconfig"
 )
+
+/**
+ * @var *pb.ProgressBar asink's progress indicator
+ */
+var progressBar *pb.ProgressBar = nil
 
 /**
  * Entry point for asink. Runs the command
@@ -28,11 +34,47 @@ import (
  * file
  */
 func main() {
-	configFile := asink.GetConfigFile()
-	if configFile != "" {
-		command := setupAsinkCommand(configFile)
-		command.Execute()
-	}
+    configFile := asink.GetConfigFile()
+    if configFile != "" {
+        command := setupAsinkCommand(configFile)
+        command.ListenForInit(createProgressBar)
+        command.ListenForProgress(incrementProgressBar)
+        command.ListenForFinish(endProgressBar)
+        command.Execute()
+    }
+}
+
+/**
+ * Creates the progress bar on the
+ * listen init event
+ *
+ * @param int number of commands
+ *
+ * @return nil
+ */
+func createProgressBar(count int) {
+    progressBar = pb.StartNew(count)
+}
+
+/**
+ * Increments the progress bar
+ * by one on the listen progress
+ * event
+ *
+ * @return nil
+ */
+func incrementProgressBar() {
+    progressBar.Increment()
+}
+
+/**
+ * Stops the progress bar on the
+ * listen finish event
+ *
+ * @return nil
+ */
+func endProgressBar() {
+    progressBar.FinishPrint("Finished.")
 }
 
 /**
@@ -45,19 +87,19 @@ func main() {
  * asink
  */
 func setupAsinkCommand(configFile string) *asink.Command {
-	command := asink.New()
-	config := jconfig.LoadConfig(configFile)
+    command := asink.New()
+    config := jconfig.LoadConfig(configFile)
 
-	counts := convertCounts(config.GetArray("count"))
-	args := convertArgs(config.GetArray("args"))
+    counts := convertCounts(config.GetArray("count"))
+    args := convertArgs(config.GetArray("args"))
 
-	command.SetName(config.GetString("command"))
-	command.SetAsyncCount(int(counts[0]))
-	command.SetRelativeCount(int(counts[1]))
-	command.SetArgs(args)
-	command.SetOutput(config.GetBool("output"))
+    command.SetName(config.GetString("command"))
+    command.SetAsyncCount(int(counts[0]))
+    command.SetRelativeCount(int(counts[1]))
+    command.SetArgs(args)
+    command.SetOutput(config.GetBool("output"))
 
-	return command
+    return command
 }
 
 /**
@@ -69,12 +111,12 @@ func setupAsinkCommand(configFile string) *asink.Command {
  * @return []string asink's array
  */
 func convertArgs(args []interface{}) []string {
-	argsSlice := make([]string, len(args))
-	for i, s := range args {
-		argsSlice[i] = s.(string)
-	}
+    argsSlice := make([]string, len(args))
+    for i, s := range args {
+        argsSlice[i] = s.(string)
+    }
 
-	return argsSlice
+    return argsSlice
 }
 
 /**
@@ -86,10 +128,10 @@ func convertArgs(args []interface{}) []string {
  * @return []float64 asink's array
  */
 func convertCounts(counts []interface{}) []float64 {
-	argsSlice := make([]float64, len(counts))
-	for i, s := range counts {
-		argsSlice[i] = s.(float64)
-	}
+    argsSlice := make([]float64, len(counts))
+    for i, s := range counts {
+        argsSlice[i] = s.(float64)
+    }
 
-	return argsSlice
+    return argsSlice
 }
