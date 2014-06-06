@@ -32,3 +32,7 @@ type Task struct {
 func NewTask() *Task {
 	return new(Task)
 }
+
+func (t *Task) Execute() {
+	
+}

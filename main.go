@@ -39,11 +39,17 @@ var progressBar *pb.ProgressBar = nil
 func main() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        command := setupAsinkCommand(jconfig.LoadConfig(configFile))
-        command.ListenForInit(createProgressBar)
-        command.ListenForProgress(incrementProgressBar)
-        command.ListenForFinish(endProgressBar)
-        command.Execute()
+        json := jconfig.LoadConfig(configFile)
+        if (detectTasks(json) == true) {
+            tasks := setupAsinkTasks(json)
+            tasks.Execute()
+        } else {
+            command := setupAsinkCommand(json)
+            command.ListenForInit(createProgressBar)
+            command.ListenForProgress(incrementProgressBar)
+            command.ListenForFinish(endProgressBar)
+            command.Execute()
+        }
     }
 }
 
@@ -145,7 +151,10 @@ func detectTasks(json_data *jconfig.Config) bool {
     return false
 }
 
-func parseTasks() {
+func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     //tasks   := map[string]interface{}{}
     //decoder := json.NewDecoder
+    tasks := asink.NewTask()
+
+    return tasks
 }
