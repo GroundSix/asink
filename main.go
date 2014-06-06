@@ -39,8 +39,7 @@ var progressBar *pb.ProgressBar = nil
 func main() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        command := setupAsinkCommand(configFile)
-
+        command := setupAsinkCommand(jconfig.LoadConfig(configFile))
         command.ListenForInit(createProgressBar)
         command.ListenForProgress(incrementProgressBar)
         command.ListenForFinish(endProgressBar)
@@ -90,18 +89,17 @@ func endProgressBar() {
  * @return *asink.Command configured instance of
  * asink
  */
-func setupAsinkCommand(configFile string) *asink.Command {
+func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     command := asink.New()
-    config  := jconfig.LoadConfig(configFile)
 
-    counts := convertCounts(config.GetArray("count"))
-    args   := convertArgs(config.GetArray("args"))
+    counts := convertCounts(json_data.GetArray("count"))
+    args   := convertArgs(json_data.GetArray("args"))
 
-    command.Name = config.GetString("command")
+    command.Name = json_data.GetString("command")
     command.AsyncCount = counts[0]
     command.RelativeCount = counts[1]
     command.Args = args
-    command.Output = config.GetBool("output")
+    command.Output = json_data.GetBool("output")
 
     return command
 }
