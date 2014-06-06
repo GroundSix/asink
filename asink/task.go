@@ -16,17 +16,11 @@
 
 package asink
 
-import (
-
-)
+import ()
 
 type Task struct {
-	Command 	  string
-    AsyncCount    float64
-    RelativeCount float64
-	Args    	  []string
-	Then		  string
-	Require 	  string
+	Command *Command
+	Then    string
 }
 
 /**
@@ -38,4 +32,3 @@ type Task struct {
 func NewTask() *Task {
 	return new(Task)
 }
-
