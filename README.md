@@ -8,7 +8,7 @@ run a command a number of times very quickly. It
 can be used independently as a tool or within
 your own Go programs.
 
-![example](https://raw.githubusercontent.com/GroundSix/asink/master/images/screenshots/example.gif)
+![example](https://raw.githubusercontent.com/GroundSix/asink/master/images/screenshots/example2.gif)
 
 * * *
 
