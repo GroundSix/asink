@@ -17,9 +17,12 @@
 package main
 
 import (
+    //"strings"
+    //"encoding/json"
     "./asink"
     "./vendor/pb"
     "./vendor/jconfig"
+    //"./vendor/jsonq"
 )
 
 /**
@@ -89,10 +92,10 @@ func endProgressBar() {
  */
 func setupAsinkCommand(configFile string) *asink.Command {
     command := asink.New()
-    config := jconfig.LoadConfig(configFile)
+    config  := jconfig.LoadConfig(configFile)
 
     counts := convertCounts(config.GetArray("count"))
-    args := convertArgs(config.GetArray("args"))
+    args   := convertArgs(config.GetArray("args"))
 
     command.Name = config.GetString("command")
     command.AsyncCount = counts[0]
@@ -135,4 +138,16 @@ func convertCounts(counts []interface{}) []float64 {
     }
 
     return argsSlice
+}
+
+func detectTasks(json_data *jconfig.Config) bool {
+    if len(json_data.GetStringMap("tasks")) > 0 {
+        return true
+    }
+    return false
+}
+
+func parseTasks() {
+    //tasks   := map[string]interface{}{}
+    //decoder := json.NewDecoder
 }
