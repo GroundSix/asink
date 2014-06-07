@@ -19,8 +19,8 @@ your own Go programs.
 You will need:
 
   - Git
-  - Go (tested with versions 1, 1.1 and 1.2)
-  - Make (tested with version 3.81)
+  - Go (1.0+)
+  - Make
 
 ```bash
 $ git clone https://github.com/GroundSix/asink.git
