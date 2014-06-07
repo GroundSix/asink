@@ -1,10 +1,10 @@
 /**
- * asink v0.1-dev
+ * asink v0.0.1
  *
  * (c) Ground Six
  *
  * @package asink
- * @version 0.1-dev
+ * @version 0.0.1
  *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
@@ -31,9 +31,6 @@ func main() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
         command := setupAsinkCommand(configFile)
-        command.ListenForInit(createProgressBar)
-        command.ListenForProgress(incrementProgressBar)
-        command.ListenForFinish(endProgressBar)
         command.Execute()
     }
 }
@@ -59,6 +56,12 @@ func setupAsinkCommand(configFile string) *asink.Command {
     command.RelativeCount = counts[1]
     command.Args = args
     command.Output = config.GetBool("output")
+
+    if (command.Output == false) {
+        command.ListenForInit(createProgressBar)
+        command.ListenForProgress(incrementProgressBar)
+        command.ListenForFinish(endProgressBar)
+    }
 
     return command
 }
