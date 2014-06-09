@@ -17,12 +17,12 @@
 package main
 
 import (
+    //"fmt"
     //"strings"
     //"encoding/json"
     "./asink"
     "./vendor/pb"
     "./vendor/jconfig"
-    //"./vendor/jsonq"
 )
 
 /**
@@ -152,9 +152,23 @@ func detectTasks(json_data *jconfig.Config) bool {
 }
 
 func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
-    //tasks   := map[string]interface{}{}
-    //decoder := json.NewDecoder
     tasks := asink.NewTask()
+    json_tasks := json_data.GetStringMap("tasks")
+    for key, cmd := range json_tasks {
+        
+        /*
+        command := asink.New()
+
+        counts := convertCounts(cmd.GetArray("count"))
+        args   := convertArgs(cmd.GetArray("args"))
+
+        command.Name = cmd.GetString("command")
+        command.AsyncCount = counts[0]
+        command.RelativeCount = counts[1]
+        command.Args = args
+        command.Output = cmd.GetBool("output")
+        */
+    }
 
     return tasks
 }
