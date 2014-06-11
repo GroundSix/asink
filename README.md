@@ -48,7 +48,7 @@ looks like this:
 Then you simply pass through that file as the param when you run asink
 
 ```bash
-$ asink config.json
+$ asink start config.json
 ```
 
 You may call this file what you wish. What the example above will do,
