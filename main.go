@@ -1,5 +1,5 @@
 /**
- * asink v0.1-dev
+ * asink v0.0.2-dev
  *
  * (c) Ground Six
  *
@@ -21,14 +21,9 @@ import (
     //"strings"
     //"encoding/json"
     "./asink"
-    "./vendor/pb"
+    "./vendor/cobra"
     "./vendor/jconfig"
 )
-
-/**
- * @var *pb.ProgressBar asink's progress indicator
- */
-var progressBar *pb.ProgressBar = nil
 
 /**
  * Entry point for asink. Runs the command
@@ -37,53 +32,32 @@ var progressBar *pb.ProgressBar = nil
  * file
  */
 func main() {
+    var startCommand = &cobra.Command{
+        Use:   "start [JSON configuration file]",
+        Short: "Start your asink processes",
+        Long:  `start running a command the specified amount of times from your configuration file`,
+        Run: func(cmd *cobra.Command, args []string) {
+            initAsink()
+        },
+    }
+    var rootCmd = &cobra.Command{Use: "asink"}
+    rootCmd.AddCommand(startCommand)
+    rootCmd.Execute()
+}
+
+/**
+ * Sets up the configuration for asink
+ * and executes the command
+ *
+ * @return nil
+ */
+func initAsink() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        json := jconfig.LoadConfig(configFile)
-        if (detectTasks(json) == true) {
-            tasks := setupAsinkTasks(json)
-            tasks.Execute()
-        } else {
-            command := setupAsinkCommand(json)
-            command.ListenForInit(createProgressBar)
-            command.ListenForProgress(incrementProgressBar)
-            command.ListenForFinish(endProgressBar)
-            command.Execute()
-        }
+        config := jconfig.LoadConfig(configFile)
+        command := setupAsinkCommand(config)
+        command.Execute()
     }
-}
-
-/**
- * Creates the progress bar on the
- * listen init event
- *
- * @param int number of commands
- *
- * @return nil
- */
-func createProgressBar(count int) {
-    progressBar = pb.StartNew(count)
-}
-
-/**
- * Increments the progress bar
- * by one on the listen progress
- * event
- *
- * @return nil
- */
-func incrementProgressBar() {
-    progressBar.Increment()
-}
-
-/**
- * Stops the progress bar on the
- * listen finish event
- *
- * @return nil
- */
-func endProgressBar() {
-    progressBar.FinishPrint("Finished.")
 }
 
 /**
@@ -106,6 +80,12 @@ func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     command.RelativeCount = counts[1]
     command.Args = args
     command.Output = json_data.GetBool("output")
+
+    if (command.Output == false) {
+        command.ListenForInit(createProgressBar)
+        command.ListenForProgress(incrementProgressBar)
+        command.ListenForFinish(endProgressBar)
+    }
 
     return command
 }
@@ -153,8 +133,8 @@ func detectTasks(json_data *jconfig.Config) bool {
 
 func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     tasks := asink.NewTask()
-    json_tasks := json_data.GetStringMap("tasks")
-    for key, cmd := range json_tasks {
+    //json_tasks := json_data.GetStringMap("tasks")
+    //for key, cmd := range json_tasks {
         
         /*
         command := asink.New()
@@ -168,7 +148,7 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         command.Args = args
         command.Output = cmd.GetBool("output")
         */
-    }
+    //}
 
     return tasks
 }
