@@ -1,9 +1,5 @@
 /**
-<<<<<<< HEAD
 * asink v0.0.2-dev
-=======
-* asink v0.0.1
->>>>>>> master
 *
 * (c) Ground Six
 *
