@@ -54,9 +54,14 @@ func main() {
 func initAsink() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        config := jconfig.LoadConfig(configFile)
-        command := setupAsinkCommand(config)
-        command.Execute()
+        json_data  := jconfig.LoadConfig(configFile)
+        if detectTasks(json_data) == true {
+            task := setupAsinkTasks(json_data)
+            task.Execute()
+        } else {
+            command := setupAsinkCommand(json_data)
+            command.Execute()   
+        }
     }
 }
 
@@ -137,7 +142,10 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
 
     for key, cmd := range json_tasks {
         command := asink.New()
-        fmt.Println("key:", key, "   value:", cmd)
+        
+        command_string := cmd.(map[string]interface{})
+
+        fmt.Println("key:", key, "   value:", command_string["command"])
 /*
         counts := convertCounts(cmd.GetArray("count"))
         args   := convertArgs(cmd.GetArray("args"))
