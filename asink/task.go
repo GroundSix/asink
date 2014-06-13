@@ -20,8 +20,11 @@ import ()
 
 type Task struct {
 	Command *Command
-	Then    string
+	Require string
+	Group   string
 }
+
+var tasks *[]Task = nil
 
 /**
  * Creates a new instance of the Task
@@ -30,6 +33,11 @@ type Task struct {
  * @return *Task a new task
  */
 func NewTask() *Task {
+	return new(Task)
+}
+
+
+func (t *Task) AddTask(command *Command, require string, group string) *Task {
 	return new(Task)
 }
 
