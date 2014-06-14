@@ -1,10 +1,14 @@
 /**
- * asink v0.1-dev
+ * asink v0.0.1
  *
  * (c) Ground Six
  *
  * @package asink
+<<<<<<< HEAD
  * @version 0.0.2-dev
+=======
+ * @version 0.0.1
+>>>>>>> master
  *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
@@ -18,14 +22,9 @@ package main
 
 import (
     "./asink"
-    "./vendor/pb"
+    "./vendor/cobra"
     "./vendor/jconfig"
 )
-
-/**
- * @var *pb.ProgressBar asink's progress indicator
- */
-var progressBar *pb.ProgressBar = nil
 
 /**
  * Entry point for asink. Runs the command
@@ -34,6 +33,7 @@ var progressBar *pb.ProgressBar = nil
  * file
  */
 func main() {
+<<<<<<< HEAD
     configFile := asink.GetConfigFile()
     if configFile != "" {
         command := setupAsinkCommand(configFile)
@@ -42,40 +42,33 @@ func main() {
         command.ListenForProgress(incrementProgressBar)
         command.ListenForFinish(endProgressBar)
         command.Execute()
+=======
+    var startCommand = &cobra.Command{
+        Use:   "start [JSON configuration file]",
+        Short: "Start your asink processes",
+        Long:  `start running a command the specified amount of times from your configuration file`,
+        Run: func(cmd *cobra.Command, args []string) {
+            initAsink()
+        },
+>>>>>>> master
     }
+    var rootCmd = &cobra.Command{Use: "asink"}
+    rootCmd.AddCommand(startCommand)
+    rootCmd.Execute()
 }
 
 /**
- * Creates the progress bar on the
- * listen init event
- *
- * @param int number of commands
+ * Sets up the configuration for asink
+ * and executes the command
  *
  * @return nil
  */
-func createProgressBar(count int) {
-    progressBar = pb.StartNew(count)
-}
-
-/**
- * Increments the progress bar
- * by one on the listen progress
- * event
- *
- * @return nil
- */
-func incrementProgressBar() {
-    progressBar.Increment()
-}
-
-/**
- * Stops the progress bar on the
- * listen finish event
- *
- * @return nil
- */
-func endProgressBar() {
-    progressBar.FinishPrint("Finished.")
+func initAsink() {
+    configFile := asink.GetConfigFile()
+    if configFile != "" {
+        command := setupAsinkCommand(configFile)
+        command.Execute()
+    }
 }
 
 /**
@@ -99,6 +92,12 @@ func setupAsinkCommand(configFile string) *asink.Command {
     command.RelativeCount = counts[1]
     command.Args = args
     command.Output = config.GetBool("output")
+
+    if (command.Output == false) {
+        command.ListenForInit(createProgressBar)
+        command.ListenForProgress(incrementProgressBar)
+        command.ListenForFinish(endProgressBar)
+    }
 
     return command
 }

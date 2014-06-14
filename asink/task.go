@@ -4,7 +4,7 @@
  * (c) Ground Six
  *
  * @package asink
- * @version 0.1-dev
+ * @version 0.0.2-dev
  *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
