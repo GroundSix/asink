@@ -1,14 +1,10 @@
 /**
- * asink v0.0.1
+ * asink v0.0.2-dev
  *
  * (c) Ground Six
  *
  * @package asink
-<<<<<<< HEAD
  * @version 0.0.2-dev
-=======
- * @version 0.0.1
->>>>>>> master
  *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
@@ -21,6 +17,9 @@
 package main
 
 import (
+    "fmt"
+    //"strings"
+    //"encoding/json"
     "./asink"
     "./vendor/cobra"
     "./vendor/jconfig"
@@ -33,16 +32,6 @@ import (
  * file
  */
 func main() {
-<<<<<<< HEAD
-    configFile := asink.GetConfigFile()
-    if configFile != "" {
-        command := setupAsinkCommand(configFile)
-
-        command.ListenForInit(createProgressBar)
-        command.ListenForProgress(incrementProgressBar)
-        command.ListenForFinish(endProgressBar)
-        command.Execute()
-=======
     var startCommand = &cobra.Command{
         Use:   "start [JSON configuration file]",
         Short: "Start your asink processes",
@@ -50,7 +39,6 @@ func main() {
         Run: func(cmd *cobra.Command, args []string) {
             initAsink()
         },
->>>>>>> master
     }
     var rootCmd = &cobra.Command{Use: "asink"}
     rootCmd.AddCommand(startCommand)
@@ -66,8 +54,14 @@ func main() {
 func initAsink() {
     configFile := asink.GetConfigFile()
     if configFile != "" {
-        command := setupAsinkCommand(configFile)
-        command.Execute()
+        json_data  := jconfig.LoadConfig(configFile)
+        if detectTasks(json_data) == true {
+            task := setupAsinkTasks(json_data)
+            task.Execute()
+        } else {
+            command := setupAsinkCommand(json_data)
+            command.Execute()   
+        }
     }
 }
 
@@ -80,18 +74,17 @@ func initAsink() {
  * @return *asink.Command configured instance of
  * asink
  */
-func setupAsinkCommand(configFile string) *asink.Command {
+func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     command := asink.New()
-    config := jconfig.LoadConfig(configFile)
 
-    counts := convertCounts(config.GetArray("count"))
-    args := convertArgs(config.GetArray("args"))
+    counts := convertCounts(json_data.GetArray("count"))
+    args   := convertArgs(json_data.GetArray("args"))
 
-    command.Name = config.GetString("command")
+    command.Name = json_data.GetString("command")
     command.AsyncCount = counts[0]
     command.RelativeCount = counts[1]
     command.Args = args
-    command.Output = config.GetBool("output")
+    command.Output = json_data.GetBool("output")
 
     if (command.Output == false) {
         command.ListenForInit(createProgressBar)
@@ -134,4 +127,37 @@ func convertCounts(counts []interface{}) []float64 {
     }
 
     return argsSlice
+}
+
+func detectTasks(json_data *jconfig.Config) bool {
+    if len(json_data.GetStringMap("tasks")) > 0 {
+        return true
+    }
+    return false
+}
+
+func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
+    task       := asink.NewTask()
+    json_tasks := json_data.GetStringMap("tasks")
+
+    for key, cmd := range json_tasks {
+        command := asink.New()
+        
+        command_string := cmd.(map[string]interface{})
+
+        fmt.Println("key:", key, "   value:", command_string["command"])
+/*
+        counts := convertCounts(cmd.GetArray("count"))
+        args   := convertArgs(cmd.GetArray("args"))
+
+        command.Name = cmd.GetString("command")
+        command.AsyncCount = counts[0]
+        command.RelativeCount = counts[1]
+        command.Args = args
+        command.Output = cmd.GetBool("output")
+        */
+        task.AddTask(command, "test", "test")
+    }
+
+    return task
 }

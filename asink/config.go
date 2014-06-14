@@ -30,15 +30,6 @@ import (
 * @return string file path or empty string
  */
 func GetConfigFile() string {
-<<<<<<< HEAD
-    if len(os.Args) > 1 {
-        filePath := os.Args[1]
-        if _, err := os.Stat(filePath); err == nil {
-            return filePath
-        }
-    }
-    return ""
-=======
 	if len(os.Args) > 2 {
 		if (os.Args[1] == "start") {
 			filePath := os.Args[2]
@@ -48,5 +39,4 @@ func GetConfigFile() string {
 		}
 	}
 	return ""
->>>>>>> master
 }
