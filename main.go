@@ -146,7 +146,7 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         command_string := cmd.(map[string]interface{})
 
         fmt.Println("key:", key, "   value:", command_string["command"])
-/*
+    /*
         counts := convertCounts(cmd.GetArray("count"))
         args   := convertArgs(cmd.GetArray("args"))
 

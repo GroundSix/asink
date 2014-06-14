@@ -16,18 +16,15 @@
 
 package asink
 
-import (
-
-)
+import ()
 
 type Task struct {
-	Command 	  string
-    AsyncCount    float64
-    RelativeCount float64
-	Args    	  []string
-	Then		  string
-	Require 	  string
+	Command *Command
+	Require string
+	Group   string
 }
+
+var tasks *[]Task = nil
 
 /**
  * Creates a new instance of the Task
@@ -39,3 +36,11 @@ func NewTask() *Task {
 	return new(Task)
 }
 
+
+func (t *Task) AddTask(command *Command, require string, group string) *Task {
+	return new(Task)
+}
+
+func (t *Task) Execute() {
+
+}
