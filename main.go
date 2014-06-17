@@ -17,6 +17,7 @@
 package main
 
 import (
+ //"reflect"
     "fmt"
     //"strings"
     //"encoding/json"
@@ -140,12 +141,14 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     task       := asink.NewTask()
     json_tasks := json_data.GetStringMap("tasks")
 
-    for key, cmd := range json_tasks {
+    for f, cmd := range json_tasks {
         command := asink.New()
         
         command_string := cmd.(map[string]interface{})
 
-        fmt.Println("key:", key, "   value:", command_string["command"])
+        fmt.Println(f, command_string)
+
+        //fmt.Println("key:", key, "   value:", command_string["command"])
 /*
         counts := convertCounts(cmd.GetArray("count"))
         args   := convertArgs(cmd.GetArray("args"))
