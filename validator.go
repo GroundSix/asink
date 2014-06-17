@@ -63,3 +63,10 @@ func validateGroup(block map[string]interface{}) map[string]interface{} {
 	}
 	return block
 }
+
+func validateDir(block map[string]interface{}) map[string]interface{} {
+	if _,ok := block["dir"]; !ok {
+	    block["dir"] = "."
+	}
+	return block
+}
