@@ -17,9 +17,6 @@
 package main
 
 import (
-    "fmt"
-    //"strings"
-    //"encoding/json"
     "./asink"
     "./vendor/cobra"
     "./vendor/jconfig"
@@ -75,58 +72,15 @@ func initAsink() {
  * asink
  */
 func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
-    command := asink.New()
-
+    name   := json_data.GetString("command")
     counts := convertCounts(json_data.GetArray("count"))
     args   := convertArgs(json_data.GetArray("args"))
+    output := json_data.GetBool("output")
 
-    command.Name = json_data.GetString("command")
-    command.AsyncCount = counts[0]
-    command.RelativeCount = counts[1]
-    command.Args = args
-    command.Output = json_data.GetBool("output")
-
-    if (command.Output == false) {
-        command.ListenForInit(createProgressBar)
-        command.ListenForProgress(incrementProgressBar)
-        command.ListenForFinish(endProgressBar)
-    }
+    command := createCommand(name, counts, args, output)
+    command  = attachCallbacks(command)
 
     return command
-}
-
-/**
- * Converts jconfigs []interface into
- * []string for asink
- *
- * @param []interface{} jconfig's array
- *
- * @return []string asink's array
- */
-func convertArgs(args []interface{}) []string {
-    argsSlice := make([]string, len(args))
-    for i, s := range args {
-        argsSlice[i] = s.(string)
-    }
-
-    return argsSlice
-}
-
-/**
- * Converts jconfigs []interface into
- * []float64 for asink
- *
- * @param []interface{} jconfig's array
- *
- * @return []float64 asink's array
- */
-func convertCounts(counts []interface{}) []float64 {
-    argsSlice := make([]float64, len(counts))
-    for i, s := range counts {
-        argsSlice[i] = s.(float64)
-    }
-
-    return argsSlice
 }
 
 func detectTasks(json_data *jconfig.Config) bool {
@@ -136,27 +90,25 @@ func detectTasks(json_data *jconfig.Config) bool {
     return false
 }
 
+
 func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     task       := asink.NewTask()
     json_tasks := json_data.GetStringMap("tasks")
 
-    for key, cmd := range json_tasks {
-        command := asink.New()
+    for _, cmd := range json_tasks {
+        block := cmd.(map[string]interface{})
+
+        name    := block["command"].(string)
+        counts  := convertCounts(block["count"].([]interface{}))
+        args    := convertArgs(block["args"].([]interface{}))
+        output  := block["output"].(bool)
+        require := block["require"].(string)
+        group   := block["group"].(string)
+
+        command := createCommand(name, counts, args, output)
+        command  = attachCallbacks(command)
         
-        command_string := cmd.(map[string]interface{})
-
-        fmt.Println("key:", key, "   value:", command_string["command"])
-    /*
-        counts := convertCounts(cmd.GetArray("count"))
-        args   := convertArgs(cmd.GetArray("args"))
-
-        command.Name = cmd.GetString("command")
-        command.AsyncCount = counts[0]
-        command.RelativeCount = counts[1]
-        command.Args = args
-        command.Output = cmd.GetBool("output")
-        */
-        task.AddTask(command, "test", "test")
+        task.AddTask(command, require, group)
     }
 
     return task

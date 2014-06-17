@@ -58,6 +58,15 @@ func New() *Command {
     return command
 }
 
+func NewEmptyCommand() *Command {
+    command := New()
+    command.Name          = ""
+    command.AsyncCount    = 0
+    command.RelativeCount = 0
+
+    return command
+}
+
 /**
  * An optional callback public function
  * that gets called on job creation
