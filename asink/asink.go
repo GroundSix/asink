@@ -50,19 +50,15 @@ type Command struct {
  */
 func New() *Command {
     command := new(Command)
-    command.Output = false
+    command.Name          = ""
+    command.AsyncCount    = 0
+    command.Args          = []string{}
+    command.RelativeCount = 0
+    command.Output        = false
+
     command.progressInit = func(count int){}
     command.progressAdd  = func(){}
     command.progressEnd  = func(){}
-
-    return command
-}
-
-func NewEmptyCommand() *Command {
-    command := New()
-    command.Name          = ""
-    command.AsyncCount    = 0
-    command.RelativeCount = 0
 
     return command
 }

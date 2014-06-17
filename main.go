@@ -96,8 +96,8 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     json_tasks := json_data.GetStringMap("tasks")
 
     for _, cmd := range json_tasks {
-        block := cmd.(map[string]interface{})
-
+        block := validateBlock(cmd.(map[string]interface{}))
+        
         name    := block["command"].(string)
         counts  := convertCounts(block["count"].([]interface{}))
         args    := convertArgs(block["args"].([]interface{}))
