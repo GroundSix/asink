@@ -17,7 +17,7 @@
 package asink
 
 import (
- "fmt"
+
 )
 
 type Task struct {
@@ -27,7 +27,7 @@ type Task struct {
 	Group   string
 }
 
-var tasks []*Task = nil
+var tasks map[string]*Task = nil
 
 /**
  * Creates a new instance of the Task
@@ -36,6 +36,7 @@ var tasks []*Task = nil
  * @return *Task a new task
  */
 func NewTask() *Task {
+	tasks = make(map[string]*Task)
 	return new(Task)
 }
 
@@ -47,13 +48,13 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 	task.Require = require
 	task.Group   = group
 
-	tasks = append(tasks, task)
+	tasks[name] = task
 
 	return new(Task)
 }
 
 func (t *Task) Execute() {
-	for _, task := range tasks {
+	for name, task := range tasks {
 		command := task.Command
 
 		// check for require and groups ect...
