@@ -17,7 +17,7 @@
 package asink
 
 import (
-
+ "fmt"
 )
 
 type Task struct {
@@ -40,7 +40,7 @@ func NewTask() *Task {
 	return new(Task)
 }
 
-func (t *Task) AddTask(name string, command *Command, require string, group string) *Task {
+func (t *Task) AddTask(name string, command *Command, require string, group string) {
 	task := new(Task)
 
 	task.Name    = name
@@ -49,12 +49,11 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 	task.Group   = group
 
 	tasks[name] = task
-
-	return new(Task)
 }
 
 func (t *Task) Execute() {
 	for name, task := range tasks {
+		fmt.Println(name)
 		command := task.Command
 
 		// check for require and groups ect...
