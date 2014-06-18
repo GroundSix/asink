@@ -54,7 +54,7 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 func (t *Task) Execute() {
 	for _, task := range tasks {
 		command := task.Command
-		
+
 		if detectRequiredTask(task) == true {
 			executeRequiredTask(task)
 		}
@@ -76,4 +76,15 @@ func executeRequiredTask(task *Task) {
 		command.Execute()
 		delete(tasks, task.Require)
 	}
+}
+
+func detectGroupedTasks(task *Task) bool {
+	if (task.Group != "") {
+		return true
+	}
+	return false
+}
+
+func executeGroupedTasks() {
+	
 }
