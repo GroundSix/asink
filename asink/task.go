@@ -17,14 +17,14 @@
 package asink
 
 import (
- "fmt"
+
 )
 
 type Task struct {
-	Name    string
-	Command *Command
-	Require string
-	Group   string
+	Name     string
+	Command  *Command
+	Require  string
+	Group    string
 }
 
 var tasks map[string]*Task = nil
@@ -43,20 +43,37 @@ func NewTask() *Task {
 func (t *Task) AddTask(name string, command *Command, require string, group string) {
 	task := new(Task)
 
-	task.Name    = name
-	task.Command = command
-	task.Require = require
-	task.Group   = group
+	task.Name     = name
+	task.Command  = command
+	task.Require  = require
+	task.Group    = group
 
 	tasks[name] = task
 }
 
 func (t *Task) Execute() {
-	for name, task := range tasks {
-		fmt.Println(name)
+	for _, task := range tasks {
 		command := task.Command
-
-		// check for require and groups ect...
+		
+		if detectRequiredTask(task) == true {
+			executeRequiredTask(task)
+		}
 		command.Execute()
+	}
+}
+
+func detectRequiredTask(task *Task) bool {
+	if (task.Require != "") {
+		return true
+	}
+	return false
+}
+
+func executeRequiredTask(task *Task) {
+	required_task := tasks[task.Require]
+	if (required_task != nil) {
+		command := required_task.Command
+		command.Execute()
+		delete(tasks, task.Require)
 	}
 }
