@@ -17,7 +17,7 @@
 package asink
 
 import (
-
+	"sync"
 )
 
 type Task struct {
@@ -52,13 +52,19 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 }
 
 func (t *Task) Execute() {
-	for _, task := range tasks {
+	for name, task := range tasks {
 		command := task.Command
 
 		if detectRequiredTask(task) == true {
 			executeRequiredTask(task)
 		}
-		command.Execute()
+
+		if detectGroupedTasks(task) == true {
+			executeGroupedTasks(task)
+		} else {
+			command.Execute()
+			delete(tasks, name)
+		}
 	}
 }
 
@@ -73,8 +79,17 @@ func executeRequiredTask(task *Task) {
 	required_task := tasks[task.Require]
 	if (required_task != nil) {
 		command := required_task.Command
-		command.Execute()
-		delete(tasks, task.Require)
+		
+		if detectRequiredTask(required_task) == true {
+			executeRequiredTask(required_task)
+		}
+
+		if detectGroupedTasks(required_task) == true {
+			executeGroupedTasks(required_task)
+		} else {
+			command.Execute()
+			delete(tasks, task.Require)
+		}
 	}
 }
 
@@ -85,6 +100,21 @@ func detectGroupedTasks(task *Task) bool {
 	return false
 }
 
-func executeGroupedTasks() {
-	
+func executeGroupedTasks(task *Task) {
+	group := task.Group
+	var wg sync.WaitGroup
+	for _, block := range tasks {
+		if block.Group == group {
+			wg.Add(1)
+			go executeGroupConcurrently(block, &wg)
+		}
+	}
+	wg.Wait()
+}
+
+func executeGroupConcurrently(task *Task, wg *sync.WaitGroup) {
+	defer wg.Done()
+	command := task.Command
+	command.Execute()
+	delete(tasks, task.Name)
 }

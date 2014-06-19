@@ -37,6 +37,7 @@ func main() {
             initAsink()
         },
     }
+
     var rootCmd = &cobra.Command{Use: "asink"}
     rootCmd.AddCommand(startCommand)
     rootCmd.Execute()
