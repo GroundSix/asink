@@ -37,6 +37,7 @@ func main() {
             initAsink()
         },
     }
+
     var rootCmd = &cobra.Command{Use: "asink"}
     rootCmd.AddCommand(startCommand)
     rootCmd.Execute()
@@ -95,7 +96,7 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     task       := asink.NewTask()
     json_tasks := json_data.GetStringMap("tasks")
 
-    for _, cmd := range json_tasks {
+    for task_name, cmd := range json_tasks {
         block := validateBlock(cmd.(map[string]interface{}))
         
         name    := block["command"].(string)
@@ -108,7 +109,7 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         command := createCommand(name, counts, args, output)
         command  = attachCallbacks(command)
         
-        task.AddTask(command, require, group)
+        task.AddTask(task_name, command, require, group)
     }
 
     return task
