@@ -3,10 +3,7 @@
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/GroundSix/asink/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-asink is a tool that allows you to concurrently
-run a command a number of times very quickly. It
-can be used independently as a tool or within
-your own Go programs.
+asink lets you run tasks concurrently...
 
 ![example](https://raw.githubusercontent.com/GroundSix/asink/master/images/screenshots/example2.gif)
 
@@ -29,10 +26,18 @@ $ make
 $ sudo make install
 ```
 
-#### Configuration
+#### Basic Usage
 
-asink requires one configuration file written in JSON. An example
-looks like this:
+##### Commands
+
+There are two main ways of using asink. It can either be
+used to to execute one command in multiple sets concurrently,
+or used to execute a number of tasks in groups and / or a
+particular order.
+
+A configuration file is needed for asink. The simplest way
+to configure a single command to be executed lots of times
+could look like the following: 
 
 ```json
 {
@@ -55,25 +60,21 @@ You may call this file what you wish. What the example above will do,
 is run two batches of `ls -a` running five times. So the two batches will
 both run concurrently and in each batch it will execute five times.
 
-Multiplying the two numbers together will give you the total number of
-times the command will run.
+##### Tasks
 
-So if your config file looked like this:
+Tasks can be ran using a similar kind of configuration. There are various
+keys that can currently be used which are as follows:
 
-```json
-{
-    "command" : "php",
-    "args" : [
-        "index.php",
-        "hello"
-    ],
-    "count" : [10, 10],
-    "output" : true
-}
-```
+  - `command`
+  - `args`
+  - `count`
+  - `output`
+  - `require`
+  - `group`
 
-It will run `php index.php hello` ten times (concurrently) in batches of ten, so one hundred
-in total.
+
+More to come...
+
 
 ### Integrating asink
 
