@@ -50,7 +50,7 @@ func main() {
  * @return nil
  */
 func initAsink() {
-    configFile := asink.GetConfigFile()
+    configFile := asink.GetFirstCliParam()
     if configFile != "" {
         json_data  := jconfig.LoadConfig(configFile)
         if detectTasks(json_data) == true {

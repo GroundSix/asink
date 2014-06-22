@@ -21,22 +21,31 @@ import (
 )
 
 /**
-* Gets the name of your config file
-* from the param passed through when
-* the program is ran
-*
-* e.g. asink config.json
-*
-* @return string file path or empty string
+ * Gets params and flags from cli
+ * and calls appropriate func
+ *
+ * @return String 
  */
-func GetConfigFile() string {
+func GetFirstCliParam() string {
 	if len(os.Args) > 2 {
 		if (os.Args[1] == "start") {
-			filePath := os.Args[2]
-			if _, err := os.Stat(filePath); err == nil {
-				return filePath
-			}
+			return CliStart()
 		}
+	}
+	return ""
+}
+
+
+/**
+ * Returns string from cli to start
+ * asink
+ *
+ * @return String config file name
+ */
+func CliStart() string {
+	filePath := os.Args[2]
+	if _, err := os.Stat(filePath); err == nil {
+		return filePath
 	}
 	return ""
 }
