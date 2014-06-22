@@ -20,6 +20,12 @@ import (
 	"sync"
 )
 
+/**
+ * @var String task name
+ * @var *Command initial command
+ * @var String required task name
+ * @var String task group name
+ */
 type Task struct {
 	Name     string
 	Command  *Command
@@ -40,6 +46,16 @@ func NewTask() *Task {
 	return new(Task)
 }
 
+/**
+ * Adds a new tasks to the map
+ *
+ * @param String name of task
+ * @param *Command the initial command
+ * @param String the required task to run
+ * @param String the group of tasks to be ran
+ *
+ * @return nil
+ */
 func (t *Task) AddTask(name string, command *Command, require string, group string) {
 	task := new(Task)
 
@@ -51,23 +67,48 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 	tasks[name] = task
 }
 
+/**
+ * Runs all tasks, required and grouped
+ *
+ * @return nil
+ */
 func (t *Task) Execute() {
 	for name, task := range tasks {
-		command := task.Command
-
-		if detectRequiredTask(task) == true {
-			executeRequiredTask(task)
-		}
-
-		if detectGroupedTasks(task) == true {
-			executeGroupedTasks(task)
-		} else {
-			command.Execute()
-			delete(tasks, name)
-		}
+		runTasks(task, name)
 	}
 }
 
+/**
+ * Checks for groups and required
+ * tasks
+ *
+ * @param *Task
+ * @param String name of task
+ *
+ * @return nil
+ */
+func runTasks(task *Task, task_name string) {
+	command := task.Command
+	if detectRequiredTask(task) == true {
+		executeRequiredTask(task)
+	}
+
+	if detectGroupedTasks(task) == true {
+		executeGroupedTasks(task)
+	} else {
+		command.Execute()
+		delete(tasks, task_name)
+	}
+}
+
+/**
+ * Checks to see if there is a required
+ * task before running it's parent
+ *
+ * @param *Task
+ *
+ * @return Bool
+ */
 func detectRequiredTask(task *Task) bool {
 	if (task.Require != "") {
 		return true
@@ -75,24 +116,29 @@ func detectRequiredTask(task *Task) bool {
 	return false
 }
 
+/**
+ * If a required task is found it
+ * is ran
+ *
+ * @param *Task
+ *
+ * @return nil
+ */
 func executeRequiredTask(task *Task) {
 	required_task := tasks[task.Require]
 	if (required_task != nil) {
-		command := required_task.Command
-		
-		if detectRequiredTask(required_task) == true {
-			executeRequiredTask(required_task)
-		}
-
-		if detectGroupedTasks(required_task) == true {
-			executeGroupedTasks(required_task)
-		} else {
-			command.Execute()
-			delete(tasks, task.Require)
-		}
+		runTasks(required_task, task.Require)
 	}
 }
 
+/**
+ * Checks to see if there is a grouped
+ * task so they can be ran concurrently
+ *
+ * @param *Task
+ *
+ * @return Bool
+ */
 func detectGroupedTasks(task *Task) bool {
 	if (task.Group != "") {
 		return true
@@ -100,6 +146,14 @@ func detectGroupedTasks(task *Task) bool {
 	return false
 }
 
+/**
+ * If a grouped task is found, it is
+ * ran
+ *
+ * @param *Task
+ *
+ * @return nil
+ */
 func executeGroupedTasks(task *Task) {
 	group := task.Group
 	var wg sync.WaitGroup
@@ -112,6 +166,13 @@ func executeGroupedTasks(task *Task) {
 	wg.Wait()
 }
 
+/**
+ * Allows tasks to be ran without
+ * any blocking
+ *
+ * @param *Task
+ * @param *sync.WaitGroup
+ */
 func executeGroupConcurrently(task *Task, wg *sync.WaitGroup) {
 	defer wg.Done()
 	command := task.Command
