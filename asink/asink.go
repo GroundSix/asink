@@ -21,6 +21,7 @@ import (
     "log"
     "os/exec"
     "sync"
+    "strings"
 )
 
 /**
@@ -183,7 +184,9 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
 
     for c := 0; c != int(commandData.RelativeCount); c++ {
         if commandData.Manual == true {
-            commandData.manualCallback(commandData.Name)
+            full_command := commandData.Name + " "
+            full_command = full_command + strings.Join(commandData.Args, " ")
+            commandData.manualCallback(full_command)
         } else {
             out, err := exec.Command(commandData.Name, commandData.Args...).Output()
             if err != nil {
