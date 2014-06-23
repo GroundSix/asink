@@ -1,0 +1,38 @@
+{
+    "tasks" : {
+        "clone-asink" : {
+            "command" : "git",
+            "args"    : [
+                "clone",
+                "https://github.com/GroundSix/asink.git"
+            ],
+            "output" : true
+        },
+        "build-asink" : {
+            "command" : "make",
+            "args"    : [
+                "-C",
+                "asink"
+            ],
+            "output" : true
+        },
+        "install-asink" : {
+            "command" : "make",
+            "args"    : [
+                "-C",
+                "asink",
+                "install"
+            ],
+            "output" : true
+        },
+        "clean-up" : {
+            "command" : "rm",
+            "args"    : [
+                "-rf",
+                "asink"
+            ],
+            "output"  : true,
+            "require" : "install-asink"
+        }
+    }
+}
