@@ -127,6 +127,47 @@ however this is not required.
 
 See the examples directory for more.
 
+##### Remote Access (SSH)
+
+You can execute commands on a remote machine if you wish
+by listing them in the `ssh` key like so:
+
+```json
+{
+  "ssh" : {
+    "vagrant" : {
+      "host"     : "127.0.0.1",
+      "port"     : "2222",
+      "user"     : "vagrant",
+      "password" : "vagrant"
+    }
+  }
+  "tasks" : {
+    "do-ls" : {
+      "remote"  : "vagrant",
+      "command" : "ls",
+      "args"    : [
+        "-la"
+      ],
+      "output" : true
+    }
+  }
+}
+```
+
+You may list multiple boxes and then just use the `remote` key
+in your task to choose where that command will be executed. In
+the example above, `vagrant` has been used as the remote key. This
+may be called anything you like as long as you reference it by
+the same name when you choose which `remote` you'd like it to run on.
+
+Vagrant makes a good example as you could essentially `vagrant up` using
+asink and then remotely execute any extra commands on that box as
+soon as it's available. The same rules apply with using the `group` and
+`require` keys on remote machines. This means you could execute multiple
+commands at once on both your host machine and your remote one if you
+so wish to.
+
 ### Integrating asink
 
 You may integrate asink into your own Go programs like so:
