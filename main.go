@@ -18,7 +18,6 @@ package main
 
 import (
     "./asink"
-    "./vendor/cobra"
     "./vendor/jconfig"
 )
 
@@ -29,18 +28,8 @@ import (
  * file
  */
 func main() {
-    var startCommand = &cobra.Command{
-        Use:   "start [JSON configuration file]",
-        Short: "Start your asink processes",
-        Long:  `start running a command the specified amount of times from your configuration file`,
-        Run: func(cmd *cobra.Command, args []string) {
-            initAsink()
-        },
-    }
-
-    var rootCmd = &cobra.Command{Use: "asink"}
-    rootCmd.AddCommand(startCommand)
-    rootCmd.Execute()
+    // Located in help.go
+    executeRootCommand()
 }
 
 /**
