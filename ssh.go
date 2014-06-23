@@ -19,14 +19,13 @@ package main
 import (
     "fmt"
 	"log"
-    "strconv"
 	"./vendor/go.crypto/ssh"
 )
 
 type Remote struct {
     Name     string
     Host     string
-    Port     int
+    Port     string
     User     string
     Password string
 }
@@ -39,7 +38,7 @@ func NewRemote() *Remote {
     return new(Remote)
 }
 
-func AddRemote(name string, host string, port int, user string, password string) {
+func (r *Remote) AddRemote(name string, host string, port string, user string, password string) {
     remote := new(Remote)
 
     remote.Name     = name
@@ -61,8 +60,7 @@ func StartSession(name string) {
         },
     }
 
-    port     := strconv.Itoa(remote.Port)
-    hostname := remote.Host + ":" + port
+    hostname := remote.Host + ":" + remote.Port
 
     conn, err := ssh.Dial("tcp", hostname, config)
     if err != nil {

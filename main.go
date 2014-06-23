@@ -54,6 +54,9 @@ func initAsink() {
     configFile := asink.GetFirstCliParam()
     if configFile != "" {
         json_data  := jconfig.LoadConfig(configFile)
+        if detectSshRemotes(json_data) == true {
+            setupSshRemotes(json_data)
+        }
         if detectTasks(json_data) == true {
             task := setupAsinkTasks(json_data)
             task.Execute()
@@ -119,4 +122,27 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     }
 
     return task
+}
+
+func detectSshRemotes(json_data *jconfig.Config) bool {
+    if len(json_data.GetStringMap("ssh")) > 0 {
+        return true
+    }
+    return false
+}
+
+func setupSshRemotes(json_data *jconfig.Config) {
+    remote       := NewRemote()
+    json_remotes := json_data.GetStringMap("ssh")
+
+    for remote_name, config := range json_remotes {
+        block := config.(map[string]interface{})
+
+        host     := block["host"].(string)
+        port     := block["port"].(string)
+        user     := block["user"].(string)
+        password := block["password"].(string)
+
+        remote.AddRemote(remote_name, host, port, user, password)
+    }
 }
