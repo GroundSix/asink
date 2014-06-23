@@ -87,6 +87,13 @@ func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     return command
 }
 
+/**
+ * Detects if there are any tasks to be ran
+ *
+ * @param *jconfig.Config json data
+ *
+ * @return Bool
+ */
 func detectTasks(json_data *jconfig.Config) bool {
     if len(json_data.GetStringMap("tasks")) > 0 {
         return true
@@ -94,6 +101,13 @@ func detectTasks(json_data *jconfig.Config) bool {
     return false
 }
 
+/**
+ * If tasks are detected, they are configured here
+ *
+ * @param *jconfig.Config json data
+ *
+ * @return *asink.Task configured task
+ */
 func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     task       := asink.NewTask()
     json_tasks := json_data.GetStringMap("tasks")
@@ -123,6 +137,14 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     return task
 }
 
+/**
+ * Detects if there are any SSH remotes
+ * that need to be setup
+ *
+ * @param *jconfig.Config json data
+ *
+ * @return Bool
+ */
 func detectSshRemotes(json_data *jconfig.Config) bool {
     if len(json_data.GetStringMap("ssh")) > 0 {
         return true
@@ -130,6 +152,14 @@ func detectSshRemotes(json_data *jconfig.Config) bool {
     return false
 }
 
+/**
+ * If SSH remotes are detected, they are setup
+ * here
+ *
+ * @param *jconfig.Config json data
+ *
+ * @return nil
+ */
 func setupSshRemotes(json_data *jconfig.Config) {
     remote       := NewRemote()
     json_remotes := json_data.GetStringMap("ssh")
@@ -146,6 +176,14 @@ func setupSshRemotes(json_data *jconfig.Config) {
     }
 }
 
+/**
+ * Remotely runs a command within the SSH session
+ *
+ * @param String remote name
+ * @param String command name and args
+ *
+ * @return nil
+ */
 func runInSshSession(remote string, command string) {
     if (remote != "") {
         StartSession(remote)

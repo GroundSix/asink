@@ -22,6 +22,13 @@ import (
 	"./vendor/go.crypto/ssh"
 )
 
+/**
+ * @var String remote name
+ * @var String remote host
+ * @var String remote port number
+ * @var String remote username
+ * @var String remote password
+ */
 type Remote struct {
     Name     string
     Host     string
@@ -33,12 +40,30 @@ type Remote struct {
 var remotes  map[string]*Remote = nil
 var sessions map[string]*ssh.Session = nil
 
+/**
+ * Inits remotes and sessions then
+ * returns a new instance of remote
+ *
+ * @return *Remote new remote
+ */
 func NewRemote() *Remote {
     remotes  = make(map[string]*Remote)
     sessions = make(map[string]*ssh.Session)
     return new(Remote)
 }
 
+/**
+ * Adds a new remote to the map of
+ * remotes with a string key
+ *
+ * @param String remote name
+ * @param String remote host
+ * @param String remote port number
+ * @param String remote username
+ * @param String remote password
+ *
+ * @return nil
+ */
 func (r *Remote) AddRemote(name string, host string, port string, user string, password string) {
     remote := new(Remote)
 
@@ -51,6 +76,15 @@ func (r *Remote) AddRemote(name string, host string, port string, user string, p
     remotes[name] = remote
 }
 
+/**
+ * Starts a new SSH session which is then
+ * stored in the sessions map with a given
+ * key
+ *
+ * @param String session key
+ *
+ * @return nil
+ */
 func StartSession(name string) {
     remote := remotes[name]
 
@@ -90,6 +124,15 @@ func StartSession(name string) {
     sessions[name] = session
 }
 
+/**
+ * Runs the remote command given the session
+ * key
+ *
+ * @param String session name
+ * @param String command string
+ *
+ * @return nil
+ */
 func RunRemoteCommand(name string, command string) {
     session  := sessions[name]
     res, err := session.Output(command);
