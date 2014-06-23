@@ -20,7 +20,7 @@ uninstall:
 	@echo "Uninstalled asink"
 
 test: asink_test.go
-	go test asink_test.go
+	go test asink_test.go task_test.go
 
 clean:
 	@echo "Deleting ${BIN_PATH}."

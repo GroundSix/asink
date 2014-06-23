@@ -73,8 +73,59 @@ keys that can currently be used which are as follows:
   - `group`
 
 
-More to come...
+Here is an example of three tasks running, two of which are executed
+concurrently and one of wich requires another one to run first:
 
+```json
+{
+  "tasks" : {
+    "do-ls" : {
+      "command" : "ls",
+      "args"    : [
+        "-la"
+      ],
+      "count"   : [1, 1],
+      "output"  : true,
+      "require" : "make-text-file"
+    },
+    "make-text-file" : {
+      "command" : "touch",
+      "args"    : [
+        "file.txt"
+      ],
+      "count"  : [1, 1],
+      "output" : true,
+      "group"  : "create-files"
+    },
+    "make-json-file" : {
+      "command" : "touch",
+      "args"    : [
+        "file.json"
+      ],
+      "count"  : [1, 1],
+      "output" : true,
+      "group"  : "create-files"
+    }
+  }
+}
+```
+
+The `create-files` group tells asink that these commands
+are to be ran at the same time. By default asink will
+always initially run chronologically, so from the top
+down.
+
+In the example above `ls` will not actually run first. This
+is because it requires `make-text-file` (the key of a different
+task) to run. However, `make-text-file` is in a group
+along-side `make-json-file`, so both of these will run first
+at the same time, then our `do-ls` task will run afterwards.
+
+NOTE: `count` will always default to [1, 1], so each command
+will only run once. It is specified in the example above
+however this is not required.
+
+See the examples directory for more.
 
 ### Integrating asink
 

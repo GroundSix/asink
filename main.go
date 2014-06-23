@@ -91,7 +91,6 @@ func detectTasks(json_data *jconfig.Config) bool {
     return false
 }
 
-
 func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     task       := asink.NewTask()
     json_tasks := json_data.GetStringMap("tasks")

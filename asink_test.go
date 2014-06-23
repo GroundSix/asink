@@ -1,10 +1,10 @@
 /**
- * asink v0.0.1
+ * asink v0.0.2-dev
  *
  * (c) Ground Six
  *
  * @package asink
- * @version 0.0.1
+ * @version v0.0.2-dev
  *
  * @author Harry Lawrence <http://github.com/hazbo>
  *
