@@ -1,9 +1,5 @@
 package main
 
-import (
-
-)
-
 func validateBlock(block map[string]interface{}) map[string]interface{} {
 	finalBlock := validateName(block)
 	finalBlock  = validateCount(finalBlock)
