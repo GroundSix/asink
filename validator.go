@@ -70,3 +70,10 @@ func validateDir(block map[string]interface{}) map[string]interface{} {
 	}
 	return block
 }
+
+func validateRemote(block map[string]interface{}) map[string]interface{} {
+	if _,ok := block["remote"]; !ok {
+	    block["remote"] = ""
+	}
+	return block
+}

@@ -35,6 +35,7 @@ type Command struct {
     RelativeCount float64
     Args          []string
     Output        bool
+    Manual        bool
 
     progressInit  func(count int)
     progressAdd   func()
@@ -55,6 +56,7 @@ func New() *Command {
     command.Args          = []string{}
     command.RelativeCount = 0
     command.Output        = false
+    command.Manual        = false
 
     command.progressInit = func(count int){}
     command.progressAdd  = func(){}
@@ -174,12 +176,16 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
     commandData := <-command
 
     for c := 0; c != int(commandData.RelativeCount); c++ {
-        out, err := exec.Command(commandData.Name, commandData.Args...).Output()
-        if err != nil {
-            log.Fatal(err)
-        }
-        if commandData.Output == true {
-            fmt.Printf("%s\n", out)
+        if commandData.Manual == true {
+            fmt.Println("Hello!")
+        } else {
+            out, err := exec.Command(commandData.Name, commandData.Args...).Output()
+            if err != nil {
+                log.Fatal(err)
+            }
+            if commandData.Output == true {
+                fmt.Printf("%s\n", out)
+            }
         }
         commandData.progressAdd()
     }

@@ -31,6 +31,7 @@ type Task struct {
 	Command  *Command
 	Require  string
 	Group    string
+	Remote   string
 }
 
 var tasks map[string]*Task = nil
