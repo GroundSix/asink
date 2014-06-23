@@ -37,9 +37,10 @@ type Command struct {
     Output        bool
     Manual        bool
 
-    progressInit  func(count int)
-    progressAdd   func()
-    progressEnd   func()
+    progressInit   func(count int)
+    progressAdd    func()
+    progressEnd    func()
+    manualCallback func(command string)
 }
 
 /**
@@ -58,9 +59,10 @@ func New() *Command {
     command.Output        = false
     command.Manual        = false
 
-    command.progressInit = func(count int){}
-    command.progressAdd  = func(){}
-    command.progressEnd  = func(){}
+    command.progressInit   = func(count int){}
+    command.progressAdd    = func(){}
+    command.progressEnd    = func(){}
+    command.manualCallback = func(command string){}
 
     return command
 }
@@ -101,6 +103,10 @@ func (c *Command) ListenForProgress(callback func()) {
  */
 func (c *Command) ListenForFinish(callback func()) {
     c.progressEnd = callback
+}
+
+func (c *Command) SetManualCallback(callback func(command string)) {
+    c.manualCallback = callback
 }
 
 /**
@@ -177,7 +183,7 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
 
     for c := 0; c != int(commandData.RelativeCount); c++ {
         if commandData.Manual == true {
-            fmt.Println("Hello!")
+            commandData.manualCallback(commandData.Name)
         } else {
             out, err := exec.Command(commandData.Name, commandData.Args...).Output()
             if err != nil {

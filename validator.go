@@ -11,6 +11,7 @@ func validateBlock(block map[string]interface{}) map[string]interface{} {
 	finalBlock  = validateOutput(finalBlock)
 	finalBlock  = validateRequire(finalBlock)
 	finalBlock  = validateGroup(finalBlock)
+	finalBlock  = validateRemote(finalBlock)
 
 	return finalBlock
 }

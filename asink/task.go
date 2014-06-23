@@ -68,6 +68,15 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 	tasks[name] = task
 }
 
+func (t *Task) SetRemote(name string, remote string) {
+	task := tasks[name]
+	task.Remote = remote
+	if remote != "" {
+		command := task.Command
+		command.Manual = true
+	}
+}
+
 /**
  * Runs all tasks, required and grouped
  *

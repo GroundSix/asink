@@ -17,6 +17,7 @@
 package main
 
 import (
+    "fmt"
     "./asink"
     "./vendor/cobra"
     "./vendor/jconfig"
@@ -104,11 +105,17 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         output  := block["output"].(bool)
         require := block["require"].(string)
         group   := block["group"].(string)
+        remote  := block["remote"].(string)
 
         command := createCommand(name, counts, args, output)
         command  = attachCallbacks(command)
+
+        command.SetManualCallback(func(name string) {
+            fmt.Println(name)
+        });
         
         task.AddTask(task_name, command, require, group)
+        task.SetRemote(task_name, remote)
     }
 
     return task
