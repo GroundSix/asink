@@ -141,7 +141,7 @@ by listing them in the `ssh` key like so:
       "user"     : "vagrant",
       "password" : "vagrant"
     }
-  }
+  },
   "tasks" : {
     "do-ls" : {
       "remote"  : "vagrant",
