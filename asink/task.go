@@ -68,6 +68,15 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 	tasks[name] = task
 }
 
+/**
+ * Sets a new remote from the ssh block
+ * in the JSON config
+ *
+ * @param String task name
+ * @param String remote name
+ *
+ * @return nil
+ */
 func (t *Task) SetRemote(name string, remote string) {
 	task := tasks[name]
 	task.Remote = remote
