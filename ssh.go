@@ -30,11 +30,12 @@ type Remote struct {
     Password string
 }
 
-var remotes map[string]*Remote = nil
-var sessions map[string]*ssh.Session
+var remotes  map[string]*Remote = nil
+var sessions map[string]*ssh.Session = nil
 
 func NewRemote() *Remote {
     remotes = make(map[string]*Remote)
+    sessions = make(map[string]*ssh.Session)
     return new(Remote)
 }
 
@@ -67,13 +68,13 @@ func StartSession(name string) {
         log.Fatalf("unable to connect: %s", err)
     }
 
-   defer conn.Close()
+   //defer conn.Close()
     // Create a session
     session, err := conn.NewSession()
     if err != nil {
         log.Fatalf("unable to create session: %s", err)
     }
-    defer session.Close()
+    //defer session.Close()
     // Set up terminal modes
     modes := ssh.TerminalModes{
         ssh.ECHO:          0,     // disable echoing
@@ -89,9 +90,8 @@ func StartSession(name string) {
 }
 
 func RunRemoteCommand(name string, command string) {
-    session := sessions[name]
-
-    res, err := session.Output("touch simon.txt && ls");
+    session  := sessions[name]
+    res, err := session.Output(command);
 
     if (err == nil) {
         s := string(res[:])

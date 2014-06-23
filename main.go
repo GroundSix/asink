@@ -17,7 +17,6 @@
 package main
 
 import (
-    "fmt"
     "./asink"
     "./vendor/cobra"
     "./vendor/jconfig"
@@ -114,7 +113,7 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         command  = attachCallbacks(command)
 
         command.SetManualCallback(func(name string) {
-            fmt.Println(name)
+            runInSshSession(remote, name)
         });
         
         task.AddTask(task_name, command, require, group)
@@ -144,5 +143,12 @@ func setupSshRemotes(json_data *jconfig.Config) {
         password := block["password"].(string)
 
         remote.AddRemote(remote_name, host, port, user, password)
+    }
+}
+
+func runInSshSession(remote string, command string) {
+    if (remote != "") {
+        StartSession(remote)
+        RunRemoteCommand(remote, command)
     }
 }
