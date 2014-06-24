@@ -31,6 +31,7 @@ func validateBlock(block map[string]interface{}) map[string]interface{} {
 	finalBlock  = validateOutput(finalBlock)
 	finalBlock  = validateRequire(finalBlock)
 	finalBlock  = validateGroup(finalBlock)
+	finalBlock  = validateDir(finalBlock)
 	finalBlock  = validateRemote(finalBlock)
 	finalBlock  = validateSshPassword(finalBlock)
 	finalBlock  = validateSshKey(finalBlock)
@@ -138,7 +139,7 @@ func validateGroup(block map[string]interface{}) map[string]interface{} {
  */
 func validateDir(block map[string]interface{}) map[string]interface{} {
 	if _,ok := block["dir"]; !ok {
-	    block["dir"] = "."
+	    block["dir"] = getWorkingDirectory()
 	}
 	return block
 }

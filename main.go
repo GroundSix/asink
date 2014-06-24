@@ -17,6 +17,7 @@
 package main
 
 import (
+    "os"
     "./asink"
     "./vendor/jconfig"
 )
@@ -70,7 +71,7 @@ func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     args   := convertArgs(json_data.GetArray("args"))
     output := json_data.GetBool("output")
 
-    command := createCommand(name, counts, args, output)
+    command := createCommand(name, counts, args, output, ".")
     command  = attachCallbacks(command)
 
     return command
@@ -111,8 +112,9 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         require := block["require"].(string)
         group   := block["group"].(string)
         remote  := block["remote"].(string)
+        dir     := block["dir"].(string)
 
-        command := createCommand(name, counts, args, output)
+        command := createCommand(name, counts, args, output, dir)
         command  = attachCallbacks(command)
 
         command.SetManualCallback(func(name string) {
@@ -183,4 +185,18 @@ func runInSshSession(remote string, command string) {
         StartSession(remote)
         RunRemoteCommand(remote, command)
     }
+}
+
+/**
+ * Returns the current working directory
+ * as a string
+ *
+ * @return String working directory
+ */
+func getWorkingDirectory() string {
+    dir, err := os.Getwd()
+    if (err != nil) {
+        panic(err)
+    }
+    return dir
 }

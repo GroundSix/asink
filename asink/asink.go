@@ -18,10 +18,11 @@ package asink
 
 import (
     "fmt"
-    "log"
     "os/exec"
     "sync"
     "strings"
+    "log"
+    "os"
 )
 
 /**
@@ -36,6 +37,7 @@ type Command struct {
     RelativeCount float64
     Args          []string
     Output        bool
+    Dir           string
     Manual        bool
 
     progressInit   func(count int)
@@ -58,6 +60,7 @@ func New() *Command {
     command.Args          = []string{}
     command.RelativeCount = 0
     command.Output        = false
+    command.Dir           = getWorkingDirectory()
     command.Manual        = false
 
     command.progressInit   = func(count int){}
@@ -168,6 +171,38 @@ func (c *Command) Execute() bool {
 }
 
 /**
+ * Returns the current working directory
+ * as a string
+ *
+ * @return String working directory
+ */
+func getWorkingDirectory() string {
+    dir, err := os.Getwd()
+    if (err != nil) {
+        panic(err)
+    }
+    return dir
+}
+
+/**
+ * Generates a full command as a string for manual
+ * use
+ *
+ * @param String command name
+ * @param []string command arguments
+ * @param String directory
+ *
+ * @return String fully formed command
+ */
+func generateCommandWithDirectory(command string, args []string, directory string) string {
+    full_command := "cd " + directory + " && "
+    full_command = full_command + command + " "
+    full_command = full_command + strings.Join(args, " ")
+
+    return full_command
+}
+
+/**
  * Executes command a given amount
  * of times as specefied in the
  * JSON configuration file
@@ -182,10 +217,13 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
 
     commandData := <-command
 
+    if commandData.Manual == true && commandData.Dir == getWorkingDirectory() {
+        commandData.Dir = "."
+    }
+
     for c := 0; c != int(commandData.RelativeCount); c++ {
         if commandData.Manual == true {
-            full_command := commandData.Name + " "
-            full_command = full_command + strings.Join(commandData.Args, " ")
+            full_command := generateCommandWithDirectory(commandData.Name, commandData.Args, commandData.Dir)
             commandData.manualCallback(full_command)
         } else {
             out, err := exec.Command(commandData.Name, commandData.Args...).Output()
