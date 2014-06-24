@@ -19,6 +19,7 @@ package main
 import (
     "fmt"
 	"log"
+    "io/ioutil"
 	"./vendor/go.crypto/ssh"
 )
 
@@ -35,6 +36,7 @@ type Remote struct {
     Port     string
     User     string
     Password string
+    Key      ssh.Signer
 }
 
 var remotes  map[string]*Remote = nil
@@ -77,6 +79,19 @@ func (r *Remote) AddRemote(name string, host string, port string, user string, p
 }
 
 /**
+ * Parses then adds the key to our remote struct
+ *
+ * @param String remote name
+ * @param String key path
+ *
+ * @return nil
+ */
+func (r *Remote) AddSshKey(name string, file string) {
+    remote    := remotes[name]
+    remote.Key = parseKey(file)
+}
+
+/**
  * Starts a new SSH session which is then
  * stored in the sessions map with a given
  * key
@@ -92,6 +107,7 @@ func StartSession(name string) {
         User: remote.User,
         Auth: []ssh.AuthMethod{
             ssh.Password(remote.Password),
+            ssh.PublicKeys(remote.Key),
         },
     }
 
@@ -141,4 +157,25 @@ func RunRemoteCommand(name string, command string) {
         s := string(res[:])
         fmt.Println(s)
     }
+}
+
+/**
+ * Parses the key for the client so
+ * we can SSH into the remote
+ *
+ * @param String file path
+ *
+ * @return ssh.Signer
+ */
+func parseKey(file string) ssh.Signer {
+    privateBytes, err := ioutil.ReadFile(file)
+    if err != nil {
+        panic("Failed to load private key")
+    }
+
+    private, err := ssh.ParsePrivateKey(privateBytes)
+    if err != nil {
+        panic("Failed to parse private key")
+    }
+    return private
 }

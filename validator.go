@@ -32,6 +32,8 @@ func validateBlock(block map[string]interface{}) map[string]interface{} {
 	finalBlock  = validateRequire(finalBlock)
 	finalBlock  = validateGroup(finalBlock)
 	finalBlock  = validateRemote(finalBlock)
+	finalBlock  = validateSshPassword(finalBlock)
+	finalBlock  = validateSshKey(finalBlock)
 
 	return finalBlock
 }
@@ -151,6 +153,34 @@ func validateDir(block map[string]interface{}) map[string]interface{} {
 func validateRemote(block map[string]interface{}) map[string]interface{} {
 	if _,ok := block["remote"]; !ok {
 	    block["remote"] = ""
+	}
+	return block
+}
+
+/**
+ * Validates and defaults the command ssh password
+ *
+ * @param map[string]interface{} block of keys and values
+ *
+ * @return map[string]interface{} defaulted block of keys and values
+ */
+func validateSshPassword(block map[string]interface{}) map[string]interface{} {
+	if _,ok := block["password"]; !ok {
+	    block["password"] = ""
+	}
+	return block
+}
+
+/**
+ * Validates and defaults the command ssh key
+ *
+ * @param map[string]interface{} block of keys and values
+ *
+ * @return map[string]interface{} defaulted block of keys and values
+ */
+func validateSshKey(block map[string]interface{}) map[string]interface{} {
+	if _,ok := block["key"]; !ok {
+	    block["key"] = ""
 	}
 	return block
 }

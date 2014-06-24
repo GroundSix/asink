@@ -155,13 +155,18 @@ func setupSshRemotes(json_data *jconfig.Config) {
 
     for remote_name, config := range json_remotes {
         block := config.(map[string]interface{})
+        block  = validateBlock(block)
 
         host     := block["host"].(string)
         port     := block["port"].(string)
         user     := block["user"].(string)
         password := block["password"].(string)
+        key      := block["key"].(string)
 
         remote.AddRemote(remote_name, host, port, user, password)
+        if (password == "") {
+            remote.AddSshKey(remote_name, key)
+        }
     }
 }
 
