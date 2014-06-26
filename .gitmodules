@@ -13,3 +13,6 @@
 [submodule "vendor/go.crypto"]
 	path = vendor/go.crypto
 	url = https://github.com/GroundSix/go.crypto.git
+[submodule "vendor/color"]
+	path = vendor/color
+	url = https://github.com/GroundSix/color.git

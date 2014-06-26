@@ -3,12 +3,12 @@ INSTALL_PATH=/usr/local/bin/asink
 
 all: asink
 
-dependencies: vendor/
+deps: vendor/
 	git submodule init
 	git submodule update
 	git submodule foreach git pull origin master
 
-asink: dependencies main.go progress.go command.go validator.go ssh.go help.go
+asink: main.go progress.go command.go validator.go ssh.go help.go
 	go build -o ${BIN_PATH} main.go progress.go command.go validator.go ssh.go help.go
 
 install: ${BIN_PATH}
