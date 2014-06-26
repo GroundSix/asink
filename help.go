@@ -53,7 +53,7 @@ func cobraGetCommand() *cobra.Command {
         Short: "Start asink using remote configuration",
         Long:  `use an external / remote configuration file to start asink rather than one on your file system`,
         Run: func(cmd *cobra.Command, args []string) {
-            initAsinkWithHttp()
+            initAsinkWithHttp(args)
         },
     }
 

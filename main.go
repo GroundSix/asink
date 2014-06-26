@@ -18,6 +18,8 @@ package main
 
 import (
     "os"
+    "net/http"
+    "io/ioutil"
     "./asink"
     "./vendor/jconfig"
 )
@@ -43,21 +45,52 @@ func initAsink() {
     configFile := asink.GetFirstCliParam()
     if configFile != "" {
         json_data  := jconfig.LoadConfig(configFile)
-        if detectSshRemotes(json_data) == true {
-            setupSshRemotes(json_data)
-        }
-        if detectTasks(json_data) == true {
-            task := setupAsinkTasks(json_data)
-            task.Execute()
+        startExecutionProcess(json_data)
+    }
+}
+
+/**
+ * Gets response from GET to parse
+ * the JSON
+ *
+ * @return nil
+ */
+func initAsinkWithHttp(args []string) {
+    if args[0] != "" {
+        response, err := http.Get(args[0])
+        if err != nil {
+            panic(err)
         } else {
-            command := setupAsinkCommand(json_data)
-            command.Execute()   
+            defer response.Body.Close()
+            contents, err := ioutil.ReadAll(response.Body)
+            if err != nil {
+                panic(err)
+            }
+            json_data := jconfig.LoadConfigString(string(contents))
+            startExecutionProcess(json_data)
         }
     }
 }
 
-func initAsinkWithHttp() {
-    
+/**
+ * Used in both inits to start the execution
+ * process of a command or a task
+ *
+ * @param *jconfig.Config json data
+ *
+ * @return nil
+ */
+func startExecutionProcess(json_data *jconfig.Config) {
+    if detectSshRemotes(json_data) == true {
+        setupSshRemotes(json_data)
+    }
+    if detectTasks(json_data) == true {
+        task := setupAsinkTasks(json_data)
+        task.Execute()
+    } else {
+        command := setupAsinkCommand(json_data)
+        command.Execute()
+    }
 }
 
 /**
