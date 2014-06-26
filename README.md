@@ -45,8 +45,7 @@ could look like the following:
     "args" : [
         "-a"
     ],
-    "count" : [2, 5],
-    "output" : true
+    "count" : [2, 5]
 }
 ```
 
@@ -68,7 +67,6 @@ keys that can currently be used which are as follows:
   - `command`
   - `args`
   - `count`
-  - `output`
   - `require`
   - `group`
 
@@ -85,7 +83,6 @@ concurrently and one of wich requires another one to run first:
         "-la"
       ],
       "count"   : [1, 1],
-      "output"  : true,
       "require" : "make-text-file"
     },
     "make-text-file" : {
@@ -94,7 +91,6 @@ concurrently and one of wich requires another one to run first:
         "file.txt"
       ],
       "count"  : [1, 1],
-      "output" : true,
       "group"  : "create-files"
     },
     "make-json-file" : {
@@ -103,7 +99,6 @@ concurrently and one of wich requires another one to run first:
         "file.json"
       ],
       "count"  : [1, 1],
-      "output" : true,
       "group"  : "create-files"
     }
   }
@@ -148,8 +143,7 @@ by listing them in the `ssh` key like so:
       "command" : "ls",
       "args"    : [
         "-la"
-      ],
-      "output" : true
+      ]
     }
   }
 }
@@ -192,7 +186,6 @@ func main() {
     command.AsyncCount    = 2
     command.RelativeCount = 2
     command.Args          = []string{"-la"}
-    command.Output        = true
 
     command.Execute()
 }
