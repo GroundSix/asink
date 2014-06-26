@@ -20,6 +20,16 @@ import (
  	"./asink"
 )
 
+/**
+ * Creates a default command
+ *
+ * @param String command name
+ * @param []float64 both instances of count
+ * @param []string command arguments
+ * @param String relative directory
+ *
+ * @return *asink.Command
+ */
 func createCommand(name string, counts []float64, args[]string, dir string) *asink.Command {
 	command := asink.New()
 
