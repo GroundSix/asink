@@ -36,7 +36,6 @@ type Command struct {
     AsyncCount    float64
     RelativeCount float64
     Args          []string
-    Output        bool
     Dir           string
     Manual        bool
 
@@ -59,7 +58,6 @@ func New() *Command {
     command.AsyncCount    = 0
     command.Args          = []string{}
     command.RelativeCount = 0
-    command.Output        = true
     command.Dir           = getWorkingDirectory()
     command.Manual        = false
 
@@ -123,17 +121,15 @@ func (c *Command) SetManualCallback(callback func(command string)) {
  * @param []string command arguments
  * @param int number of async iterations
  * @param int number of sync iterations
- * @param bool flag to show command output
  *
  * @return bool
  */
-func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int, output bool) bool {
+func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int) bool {
     Asink := new(Command)
     Asink.Name = name
     Asink.AsyncCount = float64(asyncCount)
     Asink.RelativeCount = float64(relativeCount)
     Asink.Args = args
-    Asink.Output = output
 
     // Default all callbacks
     Asink.ListenForInit(func(count int){})
@@ -232,9 +228,7 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
             if err != nil {
                 log.Fatal(err)
             }
-            if commandData.Output == true {
-                fmt.Printf("%s\n", out)
-            }
+            fmt.Printf("%s\n", out)
         }
         commandData.progressAdd()
     }

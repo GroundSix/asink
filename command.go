@@ -20,14 +20,13 @@ import (
  	"./asink"
 )
 
-func createCommand(name string, counts []float64, args[]string, output bool, dir string) *asink.Command {
+func createCommand(name string, counts []float64, args[]string, dir string) *asink.Command {
 	command := asink.New()
 
 	command.Name 		  = name
 	command.AsyncCount    = counts[0]
     command.RelativeCount = counts[1]
     command.Args 		  = args
-    command.Output 		  = output
     command.Dir           = dir
 
 	return command

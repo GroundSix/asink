@@ -27,7 +27,7 @@ func TestExecuteCommand(t *testing.T) {
     command := "echo"
     args    := []string{"test"}
 
-    if (Asink.ExecuteCommand(command, args, 2, 2, true) != true) {
+    if (Asink.ExecuteCommand(command, args, 2, 2) != true) {
         t.Error("Expected bool (true)")
     }
 }
