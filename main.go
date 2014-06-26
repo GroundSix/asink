@@ -56,6 +56,10 @@ func initAsink() {
     }
 }
 
+func initAsinkWithHttp() {
+    
+}
+
 /**
  * Initially sets up everything from
  * config file in a new instance of Asink

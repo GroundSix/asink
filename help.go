@@ -28,7 +28,7 @@ import (
  */
 func executeRootCommand() {
     var startCommand = &cobra.Command{
-        Use:   "start [JSON configuration file]",
+        Use:   "start [JSON config file]",
         Short: "Start your asink processes",
         Long:  `start running a command the specified amount of times from your configuration file`,
         Run: func(cmd *cobra.Command, args []string) {
@@ -38,5 +38,24 @@ func executeRootCommand() {
 
     var rootCmd = &cobra.Command{Use: "asink"}
     rootCmd.AddCommand(startCommand)
+    rootCmd.AddCommand(cobraGetCommand())
     rootCmd.Execute()
+}
+
+/**
+ * Returns the 'get' subcommand for asink
+ *
+ * @return *cobra.Command
+ */
+func cobraGetCommand() *cobra.Command {
+    var getCommand = &cobra.Command{
+        Use:   "get   [config URL]",
+        Short: "Start asink using remote configuration",
+        Long:  `use an external / remote configuration file to start asink rather than one on your file system`,
+        Run: func(cmd *cobra.Command, args []string) {
+            initAsinkWithHttp()
+        },
+    }
+
+    return getCommand
 }
