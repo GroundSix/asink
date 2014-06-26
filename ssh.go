@@ -42,8 +42,9 @@ type Remote struct {
     Key      ssh.Signer
 }
 
-var remotes  map[string]*Remote = nil
-var sessions map[string]*ssh.Session = nil
+var remotes  map[string]*Remote        = nil
+var sessions map[string]*ssh.Session   = nil
+var connections map[string]*ssh.Client = nil
 
 /**
  * Inits remotes and sessions then
@@ -54,6 +55,7 @@ var sessions map[string]*ssh.Session = nil
 func NewRemote() *Remote {
     remotes  = make(map[string]*Remote)
     sessions = make(map[string]*ssh.Session)
+    connections = make(map[string]*ssh.Client)
     return new(Remote)
 }
 
@@ -140,7 +142,8 @@ func StartSession(name string) {
         log.Fatalf("request for pseudo terminal failed: %s", err)
     }
 
-    sessions[name] = session
+    connections[name] = conn
+    sessions[name]    = session
 }
 
 /**
@@ -196,4 +199,18 @@ func parseKey(file string) ssh.Signer {
         panic("Failed to parse private key")
     }
     return private
+}
+
+/**
+ * Closes all SSH sessions and connections
+ *
+ * @return nil
+ */
+func closeSshSessions() {
+    for _, session := range sessions {
+        session.Close()
+    }
+    for _, connection := range connections {
+        connection.Close()
+    }
 }

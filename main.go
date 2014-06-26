@@ -91,6 +91,7 @@ func startExecutionProcess(json_data *jconfig.Config) {
         command := setupAsinkCommand(json_data)
         command.Execute()
     }
+    closeSshSessions()
 }
 
 /**
