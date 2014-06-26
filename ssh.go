@@ -22,6 +22,7 @@ import (
     "io/ioutil"
     "bufio"
     "time"
+    "./vendor/color"
 	"./vendor/go.crypto/ssh"
 )
 
@@ -166,7 +167,8 @@ func RunRemoteCommand(name string, command string) {
 
         result := string(i)
         if (result != "") {
-            fmt.Println(string(i))
+            format := color.New(color.FgCyan).SprintFunc()
+            fmt.Printf("%s %s\n", format("> " + name + ":"), string(i))
             time.Sleep(time.Millisecond * 50)
         } else {
             break
