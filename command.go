@@ -33,16 +33,6 @@ func createCommand(name string, counts []float64, args[]string, output bool, dir
 	return command
 }
 
-func attachCallbacks(command *asink.Command) *asink.Command {
-    if (command.Output == false) {
-        command.ListenForInit(createProgressBar)
-        command.ListenForProgress(incrementProgressBar)
-        command.ListenForFinish(endProgressBar)
-    }
-
-    return command
-}
-
 /**
  * Converts jconfigs []interface into
  * []string for asink

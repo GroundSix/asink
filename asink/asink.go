@@ -59,7 +59,7 @@ func New() *Command {
     command.AsyncCount    = 0
     command.Args          = []string{}
     command.RelativeCount = 0
-    command.Output        = false
+    command.Output        = true
     command.Dir           = getWorkingDirectory()
     command.Manual        = false
 

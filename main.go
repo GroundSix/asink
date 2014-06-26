@@ -72,7 +72,6 @@ func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     output := json_data.GetBool("output")
 
     command := createCommand(name, counts, args, output, ".")
-    command  = attachCallbacks(command)
 
     return command
 }
@@ -115,7 +114,6 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         dir     := block["dir"].(string)
 
         command := createCommand(name, counts, args, output, dir)
-        command  = attachCallbacks(command)
 
         command.SetManualCallback(func(name string) {
             runInSshSession(remote, name)
