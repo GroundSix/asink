@@ -81,6 +81,9 @@ func initAsinkWithHttp(args []string) {
  * @return nil
  */
 func startExecutionProcess(json_data *jconfig.Config) {
+    if detectVars(json_data) == true {
+        setupVars(json_data)
+    }
     if detectSshRemotes(json_data) == true {
         setupSshRemotes(json_data)
     }
@@ -233,4 +236,12 @@ func getWorkingDirectory() string {
         panic(err)
     }
     return dir
+}
+
+func detectVars(json_data *jconfig.Config) bool {
+    return true
+}
+
+func setupVars(json_data *jconfig.Config) {
+
 }
