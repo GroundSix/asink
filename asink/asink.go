@@ -221,6 +221,8 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
         commandData.Dir = "."
     }
 
+    os.Chdir(commandData.Dir)
+
     for c := 0; c != int(commandData.RelativeCount); c++ {
         if commandData.Manual == true {
             full_command := generateCommandWithDirectory(commandData.Name, commandData.Args, commandData.Dir)
