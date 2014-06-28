@@ -202,6 +202,20 @@ an alternate method.
 $ make test
 ```
 
+### Contributors
+
+  - [@harry4_](http://twitter.com/harry4_)
+
+### Contributing
+
+Contributions would be great, so do feel free to make a pull request!
+
+1. Fork asink
+2. Create a feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to your feature branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
 ### License
 
 [MIT](https://github.com/GroundSix/asink/blob/master/LICENSE)
