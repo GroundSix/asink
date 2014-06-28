@@ -22,6 +22,7 @@ You will need:
 ```bash
 $ git clone https://github.com/GroundSix/asink.git
 $ cd asink
+$ make deps
 $ make
 $ sudo make install
 ```
