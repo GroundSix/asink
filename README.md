@@ -70,6 +70,8 @@ keys that can currently be used which are as follows:
   - `count`
   - `require`
   - `group`
+  - `dir`
+  - `remote`
 
 
 Here is an example of three tasks running, two of which are executed
@@ -117,9 +119,27 @@ task) to run. However, `make-text-file` is in a group
 along-side `make-json-file`, so both of these will run first
 at the same time, then our `do-ls` task will run afterwards.
 
-NOTE: `count` will always default to [1, 1], so each command
+NOTE: `count` will always default to `[1, 1]`, so each command
 will only run once. It is specified in the example above
 however this is not required.
+
+You can use the `dir` key to specify a directory for the command
+to be ran in. This directory change is relative to that particular
+task and not all that will run after it. e.g.
+
+```json
+{
+  "tasks" : {
+    "do-ls" : {
+      "dir"     : "/var",
+      "command" : "ls"
+    }
+  }
+}
+```
+
+You can either use an absolute path like the example listed above,
+or a path that is relative to where you are when you run asink.
 
 See the examples directory for more.
 
@@ -195,6 +215,37 @@ func main() {
 See `asink/asink.go` for full API. You may also use `ExecuteCommand`
 function which allows you to just pass all the params through as
 an alternate method.
+
+Since version 0.0.2, tasks are now part of the public API. A task
+consists of a command, on top of various other aspects. Here is an
+example:
+
+```go
+package main
+
+import (
+    "github.com/groundsix/asink/asink"
+)
+
+func main() {
+    task    := asink.NewTask()
+    command := asink.New()
+
+    command.Name          = "ls"
+    command.AsyncCount    = 2
+    command.RelativeCount = 2
+    command.Args          = []string{"-la"}
+
+    task.AddTask("task-name", command, "", "")
+    task.Execute()
+}
+```
+
+This example is similar to the initial example with using commands.
+However doing it like this means you can add as many tasks to run
+as you wish. The 3rd and 4th arguments of `AddTask` are for the
+use of `require` and `group` which are described above in the usage
+of asink.
 
 ### Running Tests
 
