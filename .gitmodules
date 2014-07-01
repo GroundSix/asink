@@ -16,3 +16,9 @@
 [submodule "vendor/color"]
 	path = vendor/color
 	url = https://github.com/GroundSix/color.git
+[submodule "vendor/context"]
+	path = vendor/context
+	url = https://github.com/GroundSix/context.git
+[submodule "vendor/mux"]
+	path = vendor/mux
+	url = https://github.com/GroundSix/mux.git
