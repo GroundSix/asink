@@ -22,8 +22,6 @@ import (
 	"./vendor/mux"
 )
 
-var body string = ""
-
 /**
  * Starts a very basic http server to
  * accept JSON input instead of a
@@ -47,6 +45,5 @@ func startServer() {
  */
 func FetchJsonBody(w http.ResponseWriter, r *http.Request) {
 	request_body, _ := ioutil.ReadAll(r.Body)
-	body = 	string(request_body)
-	initAsinkWithServer(body)
+	initAsinkWithServer(string(request_body))
 }
