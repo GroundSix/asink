@@ -183,6 +183,35 @@ soon as it's available. The same rules apply with using the `group` and
 commands at once on both your host machine and your remote one if you
 so wish to.
 
+##### Ways of starting tasks
+
+There a 3 different ways to start a task or set of commands:
+
+Run with a local configuration file using `start`.
+
+```bash
+$ asink start conf.json
+```
+
+Run with a remote file using `get`.
+
+```bash
+$ asink get http://example.com/conf.json
+```
+
+Start a small Http server!
+
+```bash
+$ asink server
+```
+
+###### Http API
+
+If you use asink as a small Http server, currently, all you have to
+do is to send a `POST` request to `127.0.0.1:9000`. The request body
+just has to be the raw JSON that would normally just go into your
+configuration file.
+
 ### Integrating asink
 
 You may integrate asink into your own Go programs like so:
