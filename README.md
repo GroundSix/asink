@@ -205,7 +205,7 @@ Start a small Http server!
 $ asink server
 ```
 
-###### Http API
+##### Http API
 
 If you use asink as a small Http server, currently, all you have to
 do is to send a `POST` request to `127.0.0.1:9000`. The request body
