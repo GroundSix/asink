@@ -33,7 +33,7 @@ func startServer() {
     r := mux.NewRouter()
     r.HandleFunc("/", FetchJsonBody)
     http.Handle("/", r)
-    http.ListenAndServe(":3000", nil)
+    http.ListenAndServe(":9000", nil)
 }
 
 /**
