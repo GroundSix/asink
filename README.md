@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 
-Asink is an asynchronous task runner! It allows you to organise tasks
+Asink is an concurrent task runner! It allows you to organise tasks
 in a particular order and for certain ones to run in groups concurrently.
 These can be ran on your local machine, however Asink is also able to
 start up SSH sessions on multiple remote machines at one time to also
@@ -12,6 +12,14 @@ These tasks can be created using configuration files written in JSON.
 Asink will allow you to use a local task file, a remote task file or
 you can even start up it's small internal server to POST your
 configuration across and Asink will run it all for you.
+
+##### Why would you use it?
+
+It can be used to do an awful lot of things. You could use it
+to locally / remotely set up and deploy a project, configure a
+remote server, run lots and lots of commands concurrently,
+install software and pretty much do all the things you find
+yourself repeating a lot.
 
 * * *
 
