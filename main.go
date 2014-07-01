@@ -72,6 +72,13 @@ func initAsinkWithHttp(args []string) {
     }
 }
 
+/**
+ * Inits asink with only a JSON string
+ * 
+ * @param String json data
+ *
+ * @return nil
+ */
 func initAsinkWithServer(json string) {
     json_data := jconfig.LoadConfigString(json)
     startExecutionProcess(json_data)
