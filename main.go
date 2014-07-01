@@ -72,6 +72,11 @@ func initAsinkWithHttp(args []string) {
     }
 }
 
+func initAsinkWithServer(json string) {
+    json_data := jconfig.LoadConfigString(json)
+    startExecutionProcess(json_data)
+}
+
 /**
  * Used in both inits to start the execution
  * process of a command or a task

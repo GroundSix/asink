@@ -8,8 +8,8 @@ deps: vendor/
 	git submodule update
 	git submodule foreach git pull origin master
 
-asink: main.go progress.go command.go validator.go ssh.go help.go
-	go build -o ${BIN_PATH} main.go progress.go command.go validator.go ssh.go help.go
+asink: main.go progress.go command.go validator.go ssh.go help.go server.go
+	go build -o ${BIN_PATH} main.go progress.go command.go validator.go ssh.go help.go server.go
 
 install: ${BIN_PATH}
 	@cp ${BIN_PATH} ${INSTALL_PATH}
