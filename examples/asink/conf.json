@@ -5,34 +5,15 @@
             "args"    : [
                 "clone",
                 "https://github.com/GroundSix/asink.git"
-            ],
-            "output" : true
+            ]
         },
-        "build-asink" : {
+        "build-asink-deps" : {
+            "dir"     : "asink",
             "command" : "make",
             "args"    : [
-                "-C",
-                "asink"
+                "deps"
             ],
-            "output" : true
-        },
-        "install-asink" : {
-            "command" : "make",
-            "args"    : [
-                "-C",
-                "asink",
-                "install"
-            ],
-            "output" : true
-        },
-        "clean-up" : {
-            "command" : "rm",
-            "args"    : [
-                "-rf",
-                "asink"
-            ],
-            "output"  : true,
-            "require" : "install-asink"
+            "require" : "clone-asink"
         }
     }
 }
