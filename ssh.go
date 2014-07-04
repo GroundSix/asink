@@ -20,10 +20,9 @@ import (
     "fmt"
 	"log"
     "io/ioutil"
-    "bufio"
-    "time"
     "./vendor/color"
 	"./vendor/go.crypto/ssh"
+    "os"
 )
 
 /**
@@ -154,26 +153,17 @@ func StartSession(name string) {
 func RunRemoteCommand(name string, command string) {
     session  := sessions[name]
 
-    n, _ := session.StdoutPipe()
-    err  := session.Start(command);
+    format := color.New(color.FgCyan).SprintFunc()
+    fmt.Printf("%s ", format("> " + name + ":"))
+
+    session.Stdout = os.Stdout
+    session.Stderr = os.Stderr
+
+    err  := session.Run(command);
 
     if (err != nil) {
         panic(err)
     }
-    for {
-        r := bufio.NewReader(n)
-        i, _, _ := r.ReadLine()
-
-        result := string(i)
-        if (result != "") {
-            format := color.New(color.FgCyan).SprintFunc()
-            fmt.Printf("%s %s\n", format("> " + name + ":"), string(i))
-            time.Sleep(time.Millisecond * 50)
-        } else {
-            break
-        }
-    }
-    session.Wait()
 }
 
 /**
