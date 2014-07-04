@@ -17,11 +17,9 @@
 package asink
 
 import (
-    "fmt"
     "os/exec"
     "sync"
     "strings"
-    "log"
     "os"
 )
 
@@ -224,11 +222,11 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
             full_command := generateCommandWithDirectory(commandData.Name, commandData.Args, commandData.Dir)
             commandData.manualCallback(full_command)
         } else {
-            out, err := exec.Command(commandData.Name, commandData.Args...).Output()
-            if err != nil {
-                log.Fatal(err)
-            }
-            fmt.Printf("%s\n", out)
+            cmd := exec.Command(commandData.Name, commandData.Args...)
+
+            cmd.Stdout = os.Stdout
+            cmd.Stderr = os.Stderr
+            cmd.Run()
         }
         commandData.progressAdd()
     }
