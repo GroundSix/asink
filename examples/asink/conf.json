@@ -4,16 +4,42 @@
             "command" : "git",
             "args"    : [
                 "clone",
-                "https://github.com/GroundSix/asink.git"
+                "https://github.com/groundsix/asink"
             ]
         },
-        "build-asink-deps" : {
+        "checkout-stable" : {
             "dir"     : "asink",
-            "command" : "make",
+            "command" : "git",
             "args"    : [
-                "deps"
+                "checkout",
+                "current-stable"
             ],
             "require" : "clone-asink"
+        },
+        "build-asink" : {
+            "command" : "make",
+            "args"    : [
+                "-C",
+                "asink"
+            ],
+            "require" : "checkout-stable"
+        },
+        "install-asink" : {
+            "command" : "make",
+            "args"    : [
+                "-C",
+                "asink",
+                "install"
+            ],
+        "require" : "build-asink"
+        },
+        "clean" : {
+            "command" : "rm",
+            "args"    : [
+                "-rf",
+                "asink"
+            ],
+        "require" : "install-asink"
         }
     }
 }

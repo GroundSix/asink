@@ -86,9 +86,11 @@ keys that can currently be used which are as follows:
   - `count`
   - `require`
   - `group`
-  - `dir`
   - `remote`
 
+Experimental keys:
+
+  - `dir`
 
 Here is an example of three tasks running, two of which are executed
 concurrently and one of wich requires another one to run first:

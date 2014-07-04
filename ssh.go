@@ -123,19 +123,15 @@ func StartSession(name string) {
         log.Fatalf("unable to connect: %s", err)
     }
 
-   //defer conn.Close()
-
     session, err := conn.NewSession()
     if err != nil {
         log.Fatalf("unable to create session: %s", err)
     }
 
-    //defer session.Close()
-
     modes := ssh.TerminalModes{
-        ssh.ECHO:          0,     // disable echoing
-        ssh.TTY_OP_ISPEED: 14400, // input speed = 14.4kbaud
-        ssh.TTY_OP_OSPEED: 14400, // output speed = 14.4kbaud
+        ssh.ECHO:          0,
+        ssh.TTY_OP_ISPEED: 14400,
+        ssh.TTY_OP_OSPEED: 14400,
     }
 
     if err := session.RequestPty("xterm", 80, 40, modes); err != nil {
