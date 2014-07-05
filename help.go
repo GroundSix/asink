@@ -50,7 +50,7 @@ func executeRootCommand() {
  */
 func cobraGetCommand() *cobra.Command {
     var getCommand = &cobra.Command{
-        Use:   "get     [config URL]",
+        Use:   "get    [config URL]",
         Short: "Start asink using remote configuration",
         Long:  `use an external / remote configuration file to start asink rather than one on your file system`,
         Run: func(cmd *cobra.Command, args []string) {
