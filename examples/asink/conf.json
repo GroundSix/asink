@@ -7,39 +7,23 @@
                 "https://github.com/groundsix/asink"
             ]
         },
-        "checkout-stable" : {
-            "dir"     : "asink",
-            "command" : "git",
-            "args"    : [
-                "checkout",
-                "current-stable"
-            ],
-            "require" : "clone-asink"
-        },
         "build-asink" : {
-            "command" : "make",
-            "args"    : [
-                "-C",
-                "asink"
-            ],
-            "require" : "checkout-stable"
+            "dir"     : "asink",
+            "command" : "make"
         },
         "install-asink" : {
+            "dir"     : "asink",
             "command" : "make",
             "args"    : [
-                "-C",
-                "asink",
                 "install"
-            ],
-        "require" : "build-asink"
+            ]
         },
-        "clean" : {
+        "clean-up" : {
             "command" : "rm",
             "args"    : [
                 "-rf",
                 "asink"
-            ],
-        "require" : "install-asink"
+            ]
         }
     }
 }

@@ -37,49 +37,33 @@ $ sudo asink start conf.json
 
 ```json
 {
-	"tasks" : {
-		"clone-asink" : {
-			"command" : "git",
-			"args"    : [
-				"clone",
-				"https://github.com/groundsix/asink"
-			]
-		},
-		"checkout-stable" : {
-			"dir"     : "asink",
-			"command" : "git",
-			"args"    : [
-				"checkout",
-				"current-stable"
-			],
-			"require" : "clone-asink"
-		},
-		"build-asink" : {
-			"command" : "make",
-			"args"    : [
-				"-C",
-				"asink"
-			],
-			"require" : "checkout-stable"
-		},
-		"install-asink" : {
-			"command" : "make",
-			"args"    : [
-				"-C",
-				"asink",
-				"install"
-			],
-		"require" : "build-asink"
-		},
-		"clean" : {
-			"command" : "rm",
-			"args"    : [
-				"-rf",
-				"asink"
-			],
-		"require" : "install-asink"
-		}
-	}
+    "tasks" : {
+        "clone-asink" : {
+            "command" : "git",
+            "args"    : [
+                "clone",
+                "https://github.com/groundsix/asink"
+            ]
+        },
+        "build-asink" : {
+        	"dir"     : "asink",
+            "command" : "make"
+        },
+        "install-asink" : {
+        	"dir"     : "asink",
+            "command" : "make",
+            "args"    : [
+                "install"
+            ]
+        },
+        "clean-up" : {
+            "command" : "rm",
+            "args"    : [
+                "-rf",
+                "asink"
+            ]
+        }
+    }
 }
 ```
 
