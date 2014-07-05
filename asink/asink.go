@@ -198,6 +198,9 @@ func getWorkingDirectory() string {
  * @return String fully formed command
  */
 func generateCommandWithDirectory(command string, args []string, directory string) string {
+    if directory == initial_directory {
+        directory = "."
+    }
     full_command := "cd " + directory + " && "
     full_command = full_command + command + " "
     full_command = full_command + strings.Join(args, " ")
