@@ -23,6 +23,8 @@ import (
     "os"
 )
 
+var initial_directory string = ""
+
 /**
  * @var string name of the command
  * @var float64 number of async iterations
@@ -63,6 +65,8 @@ func New() *Command {
     command.progressAdd    = func(){}
     command.progressEnd    = func(){}
     command.manualCallback = func(command string){}
+
+    initial_directory = getWorkingDirectory()
 
     return command
 }
@@ -150,6 +154,11 @@ func (c *Command) Execute() bool {
 
     c.progressInit(int(c.AsyncCount * c.RelativeCount))
 
+    // Reset to initial directory and then move
+    // to the new one 
+    os.Chdir(initial_directory)
+    os.Chdir(c.Dir)
+
     for i := 0; i != int(c.AsyncCount); i++ {
         wg.Add(1)
         go runConcurrently(commandChan, &wg)
@@ -210,12 +219,6 @@ func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
     defer wg.Done()
 
     commandData := <-command
-
-    if commandData.Manual == true && commandData.Dir == getWorkingDirectory() {
-        commandData.Dir = "."
-    }
-
-    os.Chdir(commandData.Dir)
 
     for c := 0; c != int(commandData.RelativeCount); c++ {
         if commandData.Manual == true {
