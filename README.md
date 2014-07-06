@@ -87,29 +87,29 @@ are the available keys that can be used:
 | remote   | The remote machine to run on        | `"remote" : "vagrant"`      |
 | dir      | The directory to be in when running | `"dir" : "/var/www"`        |
 
-#### Command
+##### Command
 This must just be the root command. So in this example it is `git`. It could
 be anything, however you can't pass any arguments or flags in this.
 
-#### Args
+##### Args
 In args you may pass all arguments and flags. For example if your command
 was `ls`, your args could be just `["-la"]`. These are just comma-seperated
 values and there is no limit to how many you can use.
 
-#### Count
+##### Count
 You'll notice that the `count` key has requires two numbers. This is because
 it can run the same command lots of times in sets. In the example above
 it has been set to `[2, 6]`. This means that it will run 2 batches of
 the command 6 times, concurrently. So 12 times in total. This can be useful
 if you have a command you need to run lots of times very quickly.
 
-#### Require
+##### Require
 Sometimes you'll have a command that first requires another one to be ran
 first. Be default commands are ran chronologically, but if the order becomes
 mixed up or you have a fairly complex configuration you can define the key
 of another command in here and that will be ran first.
 
-#### Group
+##### Group
 Groups allow you to take advantage of Asink's concurrency. Here is a small
 example:
 
@@ -140,7 +140,7 @@ Here we are cloning two repos, asink and mux. A `group` has been defined.
 This means that both of these commands will run concurrently. You can
 add groups to as many commands as you like. It plays well with `require`.
 
-#### Remote
+##### Remote
 The remote key allows you to specify a remote machine for the command
 to be ran on. See below for how this can be set up.
 
@@ -185,16 +185,23 @@ the remote.
 #### Authentication
 
 For remote access there are two ways you can connets. Either with a
-password of with a key. The example above uses a password. Here is
-how you can use a key:
+password of with a key.
 
 ```json
-"ssh" : {
-  "vagrant" : {
-    "host" : "127.0.0.1",
-    "port" : "2222",
-    "user" : "vagrant",
-    "key"  : "/path/to/key"
+{
+  "ssh" : {
+    "vagrant" : {
+      "host" : "127.0.0.1",
+      "port" : "2222",
+      "user" : "vagrant",
+      "key"  : "/path/to/key"
+    },
+    "my-other-vagrant" : {
+      "host"     : "127.0.0.1",
+      "port"     : "1234",
+      "user"     : "vagrant",
+      "password" : "vagrant"
+    }
   }
 }
 ```
