@@ -84,8 +84,8 @@ are the available keys that can be used:
 | count    | The asynchronous and relative count | `"count" : [2, 6]`          |
 | require  | The required command is ran first   | `"require" : "my-other-cmd"`|
 | group    | Groups are ran at the same time     | `"group" : "my-new-group"`  |
-| remote   | The remote machine to run on        | `"remote" : "vagrant"`      |
 | dir      | The directory to be in when running | `"dir" : "/var/www"`        |
+| remote   | The remote machine to run on        | `"remote" : "vagrant"`      |
 
 ##### Command
 This must just be the root command. So in this example it is `git`. It could
@@ -139,6 +139,11 @@ example:
 Here we are cloning two repos, asink and mux. A `group` has been defined.
 This means that both of these commands will run concurrently. You can
 add groups to as many commands as you like. It plays well with `require`.
+
+#### Dir
+This is where you can speicfy the directory for the command to be ran in.
+It may be a relative one to where you are running asink from, or an absolute
+path.
 
 ##### Remote
 The remote key allows you to specify a remote machine for the command
@@ -206,4 +211,125 @@ password of with a key.
 }
 ```
 
+### Execution Methods
 
+As stated above there are 3 ways to start up Asink.
+
+* `asink start my-conf.json`
+* `asink get http://example.com/my-conf.json`
+* `asink server`
+
+The first is just using a local config file, the second is a remote one
+and the third is by starting Asink's server.
+
+#### Using the Server
+
+It is started using:
+
+```bash
+$ asink server
+```
+
+The defalt port is `9000`. All you need to do is send your JSON
+configuration as the POST body. Currently there are no specific
+routes, so it could be just a request to `http://127.0.0.1:9000`.
+
+\* NOTE: The server is very much experimental and has not had much
+time worked on it. It will work, however is not yet recommended to
+do so for production.
+
+## Public Go API
+
+For any Go developers, Asink can also be used as a package in your
+own programs. This does not provide everything you get in the
+program itself. Currently the public API supports the legacy
+JSON interface to run commands, and the tasks interface. Here are
+some examples to get you started:
+
+```bash
+$ go get github.com/groundsix/asink/asink
+```
+
+Running JUST the command lots of times (legacy):
+
+```go
+package main
+
+import (
+    "github.com/groundsix/asink/asink"
+)
+
+func main() {
+    command := asink.New()
+
+    command.Name          = "ls"
+    command.AsyncCount    = 2
+    command.RelativeCount = 2
+    command.Args          = []string{"-la"}
+
+    command.Execute()
+}
+```
+
+See `asink/asink.go` for full API. You may also use `ExecuteCommand`
+function which allows you to just pass all the params through as an
+alternate method.
+
+Since version 0.0.2, tasks are now part of the public API. A task
+consists of a command, on top of various other aspects. Here is an example:
+
+```go
+package main
+
+import (
+    "github.com/groundsix/asink/asink"
+)
+
+func main() {
+    task    := asink.NewTask()
+    command := asink.New()
+
+    command.Name          = "ls"
+    command.AsyncCount    = 2
+    command.RelativeCount = 2
+    command.Args          = []string{"-la"}
+
+    task.AddTask("task-name", command, "", "")
+    task.Execute()
+}
+```
+
+This example is similar to the initial example with using commands.
+However doing it like this means you can add as many tasks to run as you
+wish. The 3rd and 4th arguments of `AddTask` are for the use of `require`
+and `group` which are described above in the usage of asink.
+
+## Tests
+
+Tests may be ran using make
+
+```bash
+$ make test
+```
+
+## Contributors
+
+  - [@harry4_](http://twitter.com/harry4_)
+
+## Contributing
+
+Contributions would be great, so do feel free to make a pull request!
+
+1. Fork asink
+2. Create a feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to your feature branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## License
+
+[MIT](https://github.com/GroundSix/asink/blob/master/LICENSE)
+
+* * *
+
+![Ground Six](https://raw.githubusercontent.com/GroundSix/asink/master/images/groundsix.jpg)
