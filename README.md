@@ -18,8 +18,8 @@ run tasks on there.
   * Remote configuration file
   * Small internal server
 * Good speed and performance
-* Public API for Go developers
-* Can automate SSH sessions
+* [Public API](https://github.com/GroundSix/asink/tree/v0.0.2-dev#public-go-api) for Go developers
+* Can automate [SSH sessions](https://github.com/GroundSix/asink/tree/v0.0.2-dev#remote-access-ssh)
 
 ## Getting Started
 
@@ -72,7 +72,6 @@ $ asink start my-tasks.json
 By default all tasks will be ran chronologically, so from the top down.
 After the first task has been ran, it will then move onto the second.
 
-
 There are only three examples of keys being used in this example, these
 are the available keys that can be used:
 
@@ -86,6 +85,9 @@ are the available keys that can be used:
 | group    | Groups are ran at the same time     | `"group" : "my-new-group"`  |
 | dir      | The directory to be in when running | `"dir" : "/var/www"`        |
 | remote   | The remote machine to run on        | `"remote" : "vagrant"`      |
+
+See the [examples](https://github.com/GroundSix/asink/tree/master/examples)
+for more.
 
 ##### Command
 This must just be the root command. So in this example it is `git`. It could
@@ -320,7 +322,7 @@ $ make test
 
 Contributions would be great, so do feel free to make a pull request!
 
-1. Fork asink
+1. Fork Asink
 2. Create a feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to your feature branch (`git push origin my-new-feature`)
