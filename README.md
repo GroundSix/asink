@@ -77,9 +77,12 @@ There are only three examples of keys being used in this example, these
 are the available keys that can be used:
 
 
-| Key      | Description                         | Usage                |
-|----------|-------------------------------------|----------------------|
-| command  | This is the root command            | `"command" : "git"`  |
-| args     | An array of command arguments       | `"args" : ["status"]`|
-| count    | The asynchronous and relative count |                      |
-
+| Key      | Description                         | Usage                       |
+|----------|-------------------------------------|-----------------------------|
+| command  | This is the root command            | `"command" : "git"`         |
+| args     | An array of command arguments       | `"args" : ["status"]`       |
+| count    | The asynchronous and relative count | `"count" : [2, 6]`          |
+| require  | The required command is ran first   | `"require" : "my-other-cmd"`|
+| group    | Groups are ran at the same time     | `"group" : "my-new-group"`  |
+| remote   | The remote machine to run on        | `"remote" : "vagrant"`      |
+| dir      | The directory to be in when running | `"dir" : "/var/www"`        |
