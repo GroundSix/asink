@@ -162,7 +162,7 @@ func RunRemoteCommand(name string, command string) {
     err  := session.Run(command)
 
     if (err != nil) {
-        panic(err)
+        fmt.Println("Failed to run:", command)
     }
 }
 
