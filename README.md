@@ -202,7 +202,7 @@ the remote.
 
 #### Authentication
 
-For remote access there are two ways you can connets. Either with a
+For remote access there are two ways you can connect. Either with a
 password of with a key.
 
 ```json
