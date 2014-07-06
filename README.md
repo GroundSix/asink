@@ -1,170 +1,163 @@
 ![asink](https://raw.githubusercontent.com/GroundSix/asink/master/images/asink.png)
 
-[![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
-
 Asink is an concurrent task runner! It allows you to organise tasks
 in a particular order and for certain ones to run in groups concurrently.
-These can be ran on your local machine, however Asink is also able to
+
+These tasks can be ran on your local machine. However, Asink is also able to
 start up SSH sessions on multiple remote machines at one time to also
 run tasks on there.
 
-These tasks can be created using configuration files written in JSON.
-Asink will allow you to use a local task file, a remote task file or
-you can even start up it's small internal server to POST your
-configuration across and Asink will run it all for you.
+[![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 
-##### Why would you use it?
+## Features
 
-It can be used to do an awful lot of things. You could use it
-to locally / remotely set up and deploy a project, configure a
-remote server, run lots and lots of commands concurrently,
-install software and pretty much do all the things you find
-yourself repeating a lot.
+* Written in [Go](http://golang.org)
+* Very easy to get started with
+* Comes with 3 different ways to use
+  * Via local configuration file
+  * Remote configuration file
+  * Small internal server
+* Good speed and performance
+* [Public API](https://github.com/GroundSix/asink/tree/v0.0.2-dev#public-go-api) for Go developers
+* Can automate [SSH sessions](https://github.com/GroundSix/asink/tree/v0.0.2-dev#remote-access-ssh)
 
-* * *
+## Getting Started
 
-### Standalone Usage
+Building from source requires:
 
-#### Install
-
-You will need:
-
-  - Git
-  - Go (1.0+)
-  - Make
+* Go (tested on 1.2+)
+* Git
+* Make
 
 ```bash
 $ git clone https://github.com/GroundSix/asink.git
 $ cd asink
-$ make deps
 $ make
 $ sudo make install
 ```
 
 Run `asink help` for list of available commands.
 
-#### Basic Usage
+### Configuring
 
-##### Commands
+Asink requires JSON to be configured. Here is an example JSON
+file that could be used:
 
-There are two main ways of using asink. It can either be
-used to to execute one command in multiple sets concurrently,
-or used to execute a number of tasks in groups and / or a
-particular order.
-
-A configuration file is needed for asink. The simplest way
-to configure a single command to be executed lots of times
-could look like the following: 
-
+`my-tasks.json`
 ```json
 {
-    "command" : "ls",
-    "args" : [
-        "-a"
-    ],
-    "count" : [2, 5]
+  "tasks" : {
+      "clone-asink" : {
+          "command" : "git",
+          "args"    : [
+              "clone",
+              "https://github.com/groundsix/asink"
+          ]
+      },
+      "build-asink" : {
+          "dir"     : "asink",
+          "command" : "make"
+      }
+  }
 }
 ```
 
-Then you simply pass through that file as the param when you run asink
+In the example above there are two tasks being ran. `clone-asink` and
+`build-asink`. To run this we just run the start sub command.
 
 ```bash
-$ asink start config.json
+$ asink start my-tasks.json
 ```
 
-You may call this file what you wish. What the example above will do,
-is run two batches of `ls -a` running five times. So the two batches will
-both run concurrently and in each batch it will execute five times.
+By default all tasks will be ran chronologically, so from the top down.
+After the first task has been ran, it will then move onto the second.
 
-##### Tasks
+There are only three examples of keys being used in this example, these
+are the available keys that can be used:
 
-Tasks can be ran using a similar kind of configuration. There are various
-keys that can currently be used which are as follows:
 
-  - `command`
-  - `args`
-  - `count`
-  - `require`
-  - `group`
-  - `remote`
+| Key      | Description                         | Usage                       |
+|----------|-------------------------------------|-----------------------------|
+| command  | This is the root command            | `"command" : "git"`         |
+| args     | An array of command arguments       | `"args" : ["status"]`       |
+| count    | The asynchronous and relative count | `"count" : [2, 6]`          |
+| require  | The required command is ran first   | `"require" : "my-other-cmd"`|
+| group    | Groups are ran at the same time     | `"group" : "my-new-group"`  |
+| dir      | The directory to be in when running | `"dir" : "/var/www"`        |
+| remote   | The remote machine to run on        | `"remote" : "vagrant"`      |
 
-Experimental keys:
+See the [examples](https://github.com/GroundSix/asink/tree/master/examples)
+for more.
 
-  - `dir`
+##### Command
+This must just be the root command. So in this example it is `git`. It could
+be anything, however you can't pass any arguments or flags in this.
 
-Here is an example of three tasks running, two of which are executed
-concurrently and one of wich requires another one to run first:
+##### Args
+In args you may pass all arguments and flags. For example if your command
+was `ls`, your args could be just `["-la"]`. These are just comma-seperated
+values and there is no limit to how many you can use.
+
+##### Count
+You'll notice that the `count` key has requires two numbers. This is because
+it can run the same command lots of times in sets. In the example above
+it has been set to `[2, 6]`. This means that it will run 2 batches of
+the command 6 times, concurrently. So 12 times in total. This can be useful
+if you have a command you need to run lots of times very quickly.
+
+##### Require
+Sometimes you'll have a command that first requires another one to be ran
+first. Be default commands are ran chronologically, but if the order becomes
+mixed up or you have a fairly complex configuration you can define the key
+of another command in here and that will be ran first.
+
+##### Group
+Groups allow you to take advantage of Asink's concurrency. Here is a small
+example:
 
 ```json
 {
   "tasks" : {
-    "do-ls" : {
-      "command" : "ls",
+    "clone-asink" : {
+      "command" : "git",
       "args"    : [
-        "-la"
+        "clone",
+        "https://github.com/groundsix/asink"
       ],
-      "count"   : [1, 1],
-      "require" : "make-text-file"
+      "group" : "repos"
     },
-    "make-text-file" : {
-      "command" : "touch",
+    "clone-mux" : {
+      "command" : "git",
       "args"    : [
-        "file.txt"
+        "clone",
+        "https://github.com/GroundSix/mux"
       ],
-      "count"  : [1, 1],
-      "group"  : "create-files"
-    },
-    "make-json-file" : {
-      "command" : "touch",
-      "args"    : [
-        "file.json"
-      ],
-      "count"  : [1, 1],
-      "group"  : "create-files"
+      "group" : "repos"
     }
   }
 }
 ```
 
-The `create-files` group tells asink that these commands
-are to be ran at the same time. By default asink will
-always initially run chronologically, so from the top
-down.
+Here we are cloning two repos, asink and mux. A `group` has been defined.
+This means that both of these commands will run concurrently. You can
+add groups to as many commands as you like. It plays well with `require`.
 
-In the example above `ls` will not actually run first. This
-is because it requires `make-text-file` (the key of a different
-task) to run. However, `make-text-file` is in a group
-along-side `make-json-file`, so both of these will run first
-at the same time, then our `do-ls` task will run afterwards.
+##### Dir
+This is where you can speicfy the directory for the command to be ran in.
+It may be a relative one to where you are running asink from, or an absolute
+path.
 
-NOTE: `count` will always default to `[1, 1]`, so each command
-will only run once. It is specified in the example above
-however this is not required.
+##### Remote
+The remote key allows you to specify a remote machine for the command
+to be ran on. See below for how this can be set up.
 
-You can use the `dir` key to specify a directory for the command
-to be ran in. This directory change is relative to that particular
-task and not all that will run after it. e.g.
+### Remote Access (SSH)
 
-```json
-{
-  "tasks" : {
-    "do-ls" : {
-      "dir"     : "/var",
-      "command" : "ls"
-    }
-  }
-}
-```
+As well as being able to run commands locally, Asink can start up
+SSH sessions and run commands on another machine at the same time.
+This is done using a special `ssh` key outside of the `tasks` scope.
 
-You can either use an absolute path like the example listed above,
-or a path that is relative to where you are when you run asink.
-
-See the examples directory for more.
-
-##### Remote Access (SSH)
-
-You can execute commands on a remote machine if you wish
-by listing them in the `ssh` key like so:
+Here is an example of running a command on a vagrant box:
 
 ```json
 {
@@ -177,68 +170,89 @@ by listing them in the `ssh` key like so:
     }
   },
   "tasks" : {
-    "do-ls" : {
+    "clone-asink" : {
       "remote"  : "vagrant",
-      "command" : "ls",
+      "command" : "git",
       "args"    : [
-        "-la"
+        "clone",
+        "https://github.com/groundsix/asink"
       ]
     }
   }
 }
 ```
+Multiple remotes can be specified under the `ssh` key and then are
+accessed in tasks using the `remote` key. You can name this remotes
+whatever you like. In the example it's been named `vagrant`.
 
-You may list multiple boxes and then just use the `remote` key
-in your task to choose where that command will be executed. In
-the example above, `vagrant` has been used as the remote key. This
-may be called anything you like as long as you reference it by
-the same name when you choose which `remote` you'd like it to run on.
+In your output when this is being ran you'll be able to see which remote
+it is being ran on as it will be highlighted blue and show the name of
+the remote.
 
-Vagrant makes a good example as you could essentially `vagrant up` using
-asink and then remotely execute any extra commands on that box as
-soon as it's available. The same rules apply with using the `group` and
-`require` keys on remote machines. This means you could execute multiple
-commands at once on both your host machine and your remote one if you
-so wish to.
+#### Authentication
 
-##### Ways of starting tasks
+For remote access there are two ways you can connets. Either with a
+password of with a key.
 
-There a 3 different ways to start a task or set of commands:
-
-Run with a local configuration file using `start`.
-
-```bash
-$ asink start conf.json
+```json
+{
+  "ssh" : {
+    "vagrant" : {
+      "host" : "127.0.0.1",
+      "port" : "2222",
+      "user" : "vagrant",
+      "key"  : "/path/to/key"
+    },
+    "my-other-vagrant" : {
+      "host"     : "127.0.0.1",
+      "port"     : "1234",
+      "user"     : "vagrant",
+      "password" : "vagrant"
+    }
+  }
+}
 ```
 
-Run with a remote file using `get`.
+### Execution Methods
 
-```bash
-$ asink get http://example.com/conf.json
-```
+As stated above there are 3 ways to start up Asink.
 
-Start a small Http server!
+* `asink start my-conf.json`
+* `asink get http://example.com/my-conf.json`
+* `asink server`
+
+The first is just using a local config file, the second is a remote one
+and the third is by starting Asink's server.
+
+#### Using the Server
+
+It is started using:
 
 ```bash
 $ asink server
 ```
 
-##### Http API
+The defalt port is `9000`. All you need to do is send your JSON
+configuration as the POST body. Currently there are no specific
+routes, so it could be just a request to `http://127.0.0.1:9000`.
 
-If you use asink as a small Http server, currently, all you have to
-do is to send a `POST` request to `127.0.0.1:9000`. The request body
-just has to be the raw JSON that would normally just go into your
-configuration file.
+\* NOTE: The server is very much experimental and has not had much
+time worked on it. It will work, however is not yet recommended to
+do so for production.
 
-### Integrating asink
+## Public Go API
 
-You may integrate asink into your own Go programs like so:
+For any Go developers, Asink can also be used as a package in your
+own programs. This does not provide everything you get in the
+program itself. Currently the public API supports the legacy
+JSON interface to run commands, and the tasks interface. Here are
+some examples to get you started:
 
 ```bash
 $ go get github.com/groundsix/asink/asink
 ```
 
-#### Example
+Running JUST the command lots of times (legacy):
 
 ```go
 package main
@@ -260,12 +274,11 @@ func main() {
 ```
 
 See `asink/asink.go` for full API. You may also use `ExecuteCommand`
-function which allows you to just pass all the params through as
-an alternate method.
+function which allows you to just pass all the params through as an
+alternate method.
 
 Since version 0.0.2, tasks are now part of the public API. A task
-consists of a command, on top of various other aspects. Here is an
-example:
+consists of a command, on top of various other aspects. Here is an example:
 
 ```go
 package main
@@ -289,22 +302,23 @@ func main() {
 ```
 
 This example is similar to the initial example with using commands.
-However doing it like this means you can add as many tasks to run
-as you wish. The 3rd and 4th arguments of `AddTask` are for the
-use of `require` and `group` which are described above in the usage
-of asink.
+However doing it like this means you can add as many tasks to run as you
+wish. The 3rd and 4th arguments of `AddTask` are for the use of `require`
+and `group` which are described above in the usage of asink.
 
-### Running Tests
+## Tests
+
+Tests may be ran using make
 
 ```bash
 $ make test
 ```
 
-### Contributors
+## Contributors
 
   - [@harry4_](http://twitter.com/harry4_)
 
-### Contributing
+## Contributing
 
 Contributions would be great, so do feel free to make a pull request!
 
@@ -314,7 +328,7 @@ Contributions would be great, so do feel free to make a pull request!
 4. Push to your feature branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-### License
+## License
 
 [MIT](https://github.com/GroundSix/asink/blob/master/LICENSE)
 
