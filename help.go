@@ -17,6 +17,7 @@
 package main
 
 import (
+    "fmt"
     "./vendor/cobra"
 )
 
@@ -27,6 +28,37 @@ import (
  * @return nil
  */
 func executeRootCommand() {
+    var rootCmd = &cobra.Command{Use: "asink"}
+    rootCmd.AddCommand(cobraVersionCommand())
+    rootCmd.AddCommand(cobraStartCommand())
+    rootCmd.AddCommand(cobraGetCommand())
+    rootCmd.AddCommand(cobraServerCommand())
+    rootCmd.Execute()
+}
+
+/**
+ * Returns the 'version' subcommand for asink
+ *
+ * @return *cobra.Command
+ */
+ func cobraVersionCommand() *cobra.Command {
+    var versionCommand = &cobra.Command{
+        Use:   "version",
+        Short: "Shows asink version",
+        Run: func(cmd *cobra.Command, args []string) {
+            fmt.Println("Asink version 0.0.2 - Created by Ground Six")
+        },
+    }
+
+    return versionCommand
+}
+
+/**
+ * Returns the 'start' subcommand for asink
+ *
+ * @return *cobra.Command
+ */
+ func cobraStartCommand() *cobra.Command {
     var startCommand = &cobra.Command{
         Use:   "start  [JSON config file]",
         Short: "Start your asink processes",
@@ -36,11 +68,7 @@ func executeRootCommand() {
         },
     }
 
-    var rootCmd = &cobra.Command{Use: "asink"}
-    rootCmd.AddCommand(startCommand)
-    rootCmd.AddCommand(cobraGetCommand())
-    rootCmd.AddCommand(cobraServerCommand())
-    rootCmd.Execute()
+    return startCommand
 }
 
 /**
