@@ -42,6 +42,13 @@ $ sudo make install
 
 Run `asink help` for list of available commands.
 
+\* NOTE: This has only been tested on OS X and Ubuntu.
+Everything works fine, it could work on Windows, however
+the `make install` won't. The binary should still build
+and can be found in the `bin` directory.
+If someone has a chance to test this for me I'd be very
+grateful.
+
 ### Configuring
 
 Asink requires JSON to be configured. Here is an example JSON
