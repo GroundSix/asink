@@ -27,12 +27,12 @@ import (
  * @return String 
  */
 func GetFirstCliParam() string {
-	if len(os.Args) > 2 {
-		if (os.Args[1] == "start") {
-			return CliStart()
-		}
-	}
-	return ""
+    if len(os.Args) > 2 {
+        if (os.Args[1] == "start") {
+            return CliStart()
+        }
+    }
+    return ""
 }
 
 
@@ -43,9 +43,9 @@ func GetFirstCliParam() string {
  * @return String config file name
  */
 func CliStart() string {
-	filePath := os.Args[2]
-	if _, err := os.Stat(filePath); err == nil {
-		return filePath
-	}
-	return ""
+    filePath := os.Args[2]
+    if _, err := os.Stat(filePath); err == nil {
+        return filePath
+    }
+    return ""
 }

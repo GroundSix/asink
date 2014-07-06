@@ -17,7 +17,7 @@
 package main
 
 import (
- 	"./asink"
+    "./asink"
 )
 
 /**
@@ -31,15 +31,15 @@ import (
  * @return *asink.Command
  */
 func createCommand(name string, counts []float64, args[]string, dir string) *asink.Command {
-	command := asink.New()
+    command := asink.New()
 
-	command.Name 		  = name
-	command.AsyncCount    = counts[0]
+    command.Name          = name
+    command.AsyncCount    = counts[0]
     command.RelativeCount = counts[1]
-    command.Args 		  = args
+    command.Args          = args
     command.Dir           = dir
 
-	return command
+    return command
 }
 
 /**

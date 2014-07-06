@@ -17,9 +17,9 @@
 package main
 
 import (
-	"net/http"
-	"io/ioutil"
-	"./vendor/mux"
+    "net/http"
+    "io/ioutil"
+    "./vendor/mux"
 )
 
 /**
@@ -44,6 +44,6 @@ func startServer() {
  * @param *http.Request
  */
 func FetchJsonBody(w http.ResponseWriter, r *http.Request) {
-	request_body, _ := ioutil.ReadAll(r.Body)
-	initAsinkWithServer(string(request_body))
+    request_body, _ := ioutil.ReadAll(r.Body)
+    initAsinkWithServer(string(request_body))
 }

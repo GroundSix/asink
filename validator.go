@@ -25,18 +25,18 @@ package main
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateBlock(block map[string]interface{}) map[string]interface{} {
-	finalBlock := validateName(block)
-	finalBlock  = validateCount(finalBlock)
-	finalBlock  = validateArgs(finalBlock)
-	finalBlock  = validateOutput(finalBlock)
-	finalBlock  = validateRequire(finalBlock)
-	finalBlock  = validateGroup(finalBlock)
-	finalBlock  = validateDir(finalBlock)
-	finalBlock  = validateRemote(finalBlock)
-	finalBlock  = validateSshPassword(finalBlock)
-	finalBlock  = validateSshKey(finalBlock)
+    finalBlock := validateName(block)
+    finalBlock  = validateCount(finalBlock)
+    finalBlock  = validateArgs(finalBlock)
+    finalBlock  = validateOutput(finalBlock)
+    finalBlock  = validateRequire(finalBlock)
+    finalBlock  = validateGroup(finalBlock)
+    finalBlock  = validateDir(finalBlock)
+    finalBlock  = validateRemote(finalBlock)
+    finalBlock  = validateSshPassword(finalBlock)
+    finalBlock  = validateSshKey(finalBlock)
 
-	return finalBlock
+    return finalBlock
 }
 
 /**
@@ -47,10 +47,10 @@ func validateBlock(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateName(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["command"]; !ok {
-	    block["command"] = ""
-	}
-	return block
+    if _,ok := block["command"]; !ok {
+        block["command"] = ""
+    }
+    return block
 }
 
 /**
@@ -61,16 +61,16 @@ func validateName(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateCount(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["count"]; !ok {
-		var defaults []interface{}
-		var single float64 = 1
+    if _,ok := block["count"]; !ok {
+        var defaults []interface{}
+        var single float64 = 1
 
-		defaults = append(defaults, single)
-		defaults = append(defaults, single)
+        defaults = append(defaults, single)
+        defaults = append(defaults, single)
 
-	    block["count"] = defaults
-	}
-	return block
+        block["count"] = defaults
+    }
+    return block
 }
 
 /**
@@ -81,11 +81,11 @@ func validateCount(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateArgs(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["args"]; !ok {
-		var defaults []interface{}
-		block["args"] = defaults
-	}
-	return block
+    if _,ok := block["args"]; !ok {
+        var defaults []interface{}
+        block["args"] = defaults
+    }
+    return block
 }
 
 /**
@@ -96,10 +96,10 @@ func validateArgs(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateOutput(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["output"]; !ok {
-	    block["output"] = false
-	}
-	return block
+    if _,ok := block["output"]; !ok {
+        block["output"] = false
+    }
+    return block
 }
 
 /**
@@ -110,10 +110,10 @@ func validateOutput(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateRequire(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["require"]; !ok {
-	    block["require"] = ""
-	}
-	return block
+    if _,ok := block["require"]; !ok {
+        block["require"] = ""
+    }
+    return block
 }
 
 /**
@@ -124,10 +124,10 @@ func validateRequire(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateGroup(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["group"]; !ok {
-	    block["group"] = ""
-	}
-	return block
+    if _,ok := block["group"]; !ok {
+        block["group"] = ""
+    }
+    return block
 }
 
 /**
@@ -138,10 +138,10 @@ func validateGroup(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateDir(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["dir"]; !ok {
-	    block["dir"] = getWorkingDirectory()
-	}
-	return block
+    if _,ok := block["dir"]; !ok {
+        block["dir"] = getWorkingDirectory()
+    }
+    return block
 }
 
 /**
@@ -152,10 +152,10 @@ func validateDir(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateRemote(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["remote"]; !ok {
-	    block["remote"] = ""
-	}
-	return block
+    if _,ok := block["remote"]; !ok {
+        block["remote"] = ""
+    }
+    return block
 }
 
 /**
@@ -166,10 +166,10 @@ func validateRemote(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateSshPassword(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["password"]; !ok {
-	    block["password"] = ""
-	}
-	return block
+    if _,ok := block["password"]; !ok {
+        block["password"] = ""
+    }
+    return block
 }
 
 /**
@@ -180,8 +180,8 @@ func validateSshPassword(block map[string]interface{}) map[string]interface{} {
  * @return map[string]interface{} defaulted block of keys and values
  */
 func validateSshKey(block map[string]interface{}) map[string]interface{} {
-	if _,ok := block["key"]; !ok {
-	    block["key"] = ""
-	}
-	return block
+    if _,ok := block["key"]; !ok {
+        block["key"] = ""
+    }
+    return block
 }

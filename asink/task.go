@@ -17,7 +17,7 @@
 package asink
 
 import (
-	"sync"
+    "sync"
 )
 
 /**
@@ -27,11 +27,11 @@ import (
  * @var String task group name
  */
 type Task struct {
-	Name     string
-	Command  *Command
-	Require  string
-	Group    string
-	Remote   string
+    Name     string
+    Command  *Command
+    Require  string
+    Group    string
+    Remote   string
 }
 
 var tasks map[string]*Task = nil
@@ -43,8 +43,8 @@ var tasks map[string]*Task = nil
  * @return *Task a new task
  */
 func NewTask() *Task {
-	tasks = make(map[string]*Task)
-	return new(Task)
+    tasks = make(map[string]*Task)
+    return new(Task)
 }
 
 /**
@@ -58,14 +58,14 @@ func NewTask() *Task {
  * @return nil
  */
 func (t *Task) AddTask(name string, command *Command, require string, group string) {
-	task := new(Task)
+    task := new(Task)
 
-	task.Name     = name
-	task.Command  = command
-	task.Require  = require
-	task.Group    = group
+    task.Name     = name
+    task.Command  = command
+    task.Require  = require
+    task.Group    = group
 
-	tasks[name] = task
+    tasks[name] = task
 }
 
 /**
@@ -78,12 +78,12 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
  * @return nil
  */
 func (t *Task) SetRemote(name string, remote string) {
-	task := tasks[name]
-	task.Remote = remote
-	if remote != "" {
-		command := task.Command
-		command.Manual = true
-	}
+    task := tasks[name]
+    task.Remote = remote
+    if remote != "" {
+        command := task.Command
+        command.Manual = true
+    }
 }
 
 /**
@@ -92,9 +92,9 @@ func (t *Task) SetRemote(name string, remote string) {
  * @return nil
  */
 func (t *Task) Execute() {
-	for name, task := range tasks {
-		runTasks(task, name)
-	}
+    for name, task := range tasks {
+        runTasks(task, name)
+    }
 }
 
 /**
@@ -107,17 +107,17 @@ func (t *Task) Execute() {
  * @return nil
  */
 func runTasks(task *Task, task_name string) {
-	command := task.Command
-	if detectRequiredTask(task) == true {
-		executeRequiredTask(task)
-	}
+    command := task.Command
+    if detectRequiredTask(task) == true {
+        executeRequiredTask(task)
+    }
 
-	if detectGroupedTasks(task) == true {
-		executeGroupedTasks(task)
-	} else {
-		command.Execute()
-		delete(tasks, task_name)
-	}
+    if detectGroupedTasks(task) == true {
+        executeGroupedTasks(task)
+    } else {
+        command.Execute()
+        delete(tasks, task_name)
+    }
 }
 
 /**
@@ -129,10 +129,10 @@ func runTasks(task *Task, task_name string) {
  * @return Bool
  */
 func detectRequiredTask(task *Task) bool {
-	if (task.Require != "") {
-		return true
-	}
-	return false
+    if (task.Require != "") {
+        return true
+    }
+    return false
 }
 
 /**
@@ -144,10 +144,10 @@ func detectRequiredTask(task *Task) bool {
  * @return nil
  */
 func executeRequiredTask(task *Task) {
-	required_task := tasks[task.Require]
-	if (required_task != nil) {
-		runTasks(required_task, task.Require)
-	}
+    required_task := tasks[task.Require]
+    if (required_task != nil) {
+        runTasks(required_task, task.Require)
+    }
 }
 
 /**
@@ -159,10 +159,10 @@ func executeRequiredTask(task *Task) {
  * @return Bool
  */
 func detectGroupedTasks(task *Task) bool {
-	if (task.Group != "") {
-		return true
-	}
-	return false
+    if (task.Group != "") {
+        return true
+    }
+    return false
 }
 
 /**
@@ -174,15 +174,15 @@ func detectGroupedTasks(task *Task) bool {
  * @return nil
  */
 func executeGroupedTasks(task *Task) {
-	group := task.Group
-	var wg sync.WaitGroup
-	for _, block := range tasks {
-		if block.Group == group {
-			wg.Add(1)
-			go executeGroupConcurrently(block, &wg)
-		}
-	}
-	wg.Wait()
+    group := task.Group
+    var wg sync.WaitGroup
+    for _, block := range tasks {
+        if block.Group == group {
+            wg.Add(1)
+            go executeGroupConcurrently(block, &wg)
+        }
+    }
+    wg.Wait()
 }
 
 /**
@@ -193,8 +193,8 @@ func executeGroupedTasks(task *Task) {
  * @param *sync.WaitGroup
  */
 func executeGroupConcurrently(task *Task, wg *sync.WaitGroup) {
-	defer wg.Done()
-	command := task.Command
-	command.Execute()
-	delete(tasks, task.Name)
+    defer wg.Done()
+    command := task.Command
+    command.Execute()
+    delete(tasks, task.Name)
 }

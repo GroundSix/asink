@@ -18,10 +18,10 @@ package main
 
 import (
     "fmt"
-	"log"
+    "log"
     "io/ioutil"
     "./vendor/color"
-	"./vendor/go.crypto/ssh"
+    "./vendor/go.crypto/ssh"
     "os"
 )
 
