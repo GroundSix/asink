@@ -26,7 +26,7 @@ configuration file is actually already on GitHub you could use
 the `get` sub command in asink like so:
 
 ```bash
-$ asink get https://raw.githubusercontent.com/GroundSix/asink/master/examples/asink/conf.json
+$ sudo asink get https://raw.githubusercontent.com/GroundSix/asink/master/examples/asink/conf.json
 ```
 Or if you grab a copy of the configuration you could run it
 using `start` from your machine like so:
