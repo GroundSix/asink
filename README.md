@@ -322,7 +322,7 @@ $ make test
 
 Contributions would be great, so do feel free to make a pull request!
 
-1. Fork asink
+1. Fork Asink
 2. Create a feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to your feature branch (`git push origin my-new-feature`)

@@ -16,7 +16,7 @@ Steps:
 Requires:
 
   - Git
-  - Go (1.0+)
+  - Go (1.2+)
   - Make
 
 So far this has only been tested on OS X.
