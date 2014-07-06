@@ -140,7 +140,7 @@ Here we are cloning two repos, asink and mux. A `group` has been defined.
 This means that both of these commands will run concurrently. You can
 add groups to as many commands as you like. It plays well with `require`.
 
-#### Dir
+##### Dir
 This is where you can speicfy the directory for the command to be ran in.
 It may be a relative one to where you are running asink from, or an absolute
 path.
