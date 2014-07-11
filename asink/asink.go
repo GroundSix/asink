@@ -21,6 +21,8 @@ import (
     "sync"
     "strings"
     "os"
+    "os/user"
+    "log"
 )
 
 var initial_directory string = ""
@@ -153,6 +155,7 @@ func (c *Command) Execute() bool {
     var wg sync.WaitGroup
 
     c.progressInit(int(c.AsyncCount * c.RelativeCount))
+    c = validateDirectoryName(c)
 
     // Reset to initial directory and then move
     // to the new one 
@@ -185,6 +188,24 @@ func getWorkingDirectory() string {
         panic(err)
     }
     return dir
+}
+
+// Returns the current user's home directory
+// as a string
+func getHomeDirectory() string {
+    usr, err := user.Current()
+    if err != nil {
+        log.Fatal(err)
+    }
+    return usr.HomeDir
+}
+
+// Corrects a ~ with the users home directory
+func validateDirectoryName(command *Command) *Command {
+    if command.Manual == false {
+        command.Dir = strings.Replace(command.Dir, "~", getHomeDirectory(), -1)
+    }
+    return command
 }
 
 /**
