@@ -1,18 +1,17 @@
-/**
- * asink v0.0.2
- *
- * (c) Ground Six
- *
- * @package asink
- * @version 0.0.2
- *
- * @author Harry Lawrence <http://github.com/hazbo>
- *
- * License: MIT
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+// asink v0.0.3-dev
+//
+// (c) Ground Six
+//
+// @package asink
+// @version 0.0.3-dev
+//
+// @author Harry Lawrence <http://github.com/hazbo>
+//
+// License: MIT
+//
+// For the full copyright and license information, please view the LICENSE
+// file that was distributed with this source code.
+ 
 
 package asink
 
@@ -21,16 +20,12 @@ import (
     "sync"
     "strings"
     "os"
+    "os/user"
+    "log"
 )
 
 var initial_directory string = ""
 
-/**
- * @var string name of the command
- * @var float64 number of async iterations
- * @var float64 number of sync iterations
- * @var []string command arguments
- */
 type Command struct {
     Name          string
     AsyncCount    float64
@@ -45,13 +40,9 @@ type Command struct {
     manualCallback func(command string)
 }
 
-/**
- * Acting as a constructor to
- * return a new instance of
- * Command
- *
- * @return *Command
- */
+// Acting as a constructor to
+// return a new instance of
+// Command
 func New() *Command {
     command := new(Command)
     command.Name          = ""
@@ -71,40 +62,22 @@ func New() *Command {
     return command
 }
 
-/**
- * An optional callback public function
- * that gets called on job creation
- *
- * @param func(count int) callback function
- *
- * @return nil
- */
+// An optional callback public function
+// that gets called on job creation
 func (c *Command) ListenForInit(callback func(count int)) {
     c.progressInit = callback
 }
 
-/**
- * An optional callback public function
- * that gets called everytime a job
- * has finished
- *
- * @param func() callback function
- *
- * @return nil
- */
+// An optional callback public function
+// that gets called everytime a job
+// has finished
 func (c *Command) ListenForProgress(callback func()) {
     c.progressAdd = callback
 }
 
-/**
- * An optional callback public function
- * that gets called when all jobs have
- * been finished
- *
- * @param func() callback function
- *
- * @return nil
- */
+// An optional callback public function
+// that gets called when all jobs have
+// been finished
 func (c *Command) ListenForFinish(callback func()) {
     c.progressEnd = callback
 }
@@ -113,19 +86,10 @@ func (c *Command) SetManualCallback(callback func(command string)) {
     c.manualCallback = callback
 }
 
-/**
- * An alias function that nicely
- * interfaces the Execute function
- * to make it easier to use in external Go
- * programs
- *
- * @param string the command name
- * @param []string command arguments
- * @param int number of async iterations
- * @param int number of sync iterations
- *
- * @return bool
- */
+// An alias function that nicely
+// interfaces the Execute function
+// to make it easier to use in external Go
+// programs
 func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, relativeCount int) bool {
     Asink := new(Command)
     Asink.Name = name
@@ -141,18 +105,15 @@ func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, rel
     return Asink.Execute()
 }
 
-/**
- * Creates the command channel and sets
- * up everything ready for execution
- *
- * @return bool
- */
+// Creates the command channel and sets
+// up everything ready for execution
 func (c *Command) Execute() bool {
     commandChan := make(chan *Command)
 
     var wg sync.WaitGroup
 
     c.progressInit(int(c.AsyncCount * c.RelativeCount))
+    c = validateDirectoryName(c)
 
     // Reset to initial directory and then move
     // to the new one 
@@ -173,12 +134,9 @@ func (c *Command) Execute() bool {
     return true
 }
 
-/**
- * Returns the current working directory
- * as a string
- *
- * @return String working directory
- */
+
+// Returns the current working directory
+// as a string
 func getWorkingDirectory() string {
     dir, err := os.Getwd()
     if (err != nil) {
@@ -187,16 +145,26 @@ func getWorkingDirectory() string {
     return dir
 }
 
-/**
- * Generates a full command as a string for manual
- * use
- *
- * @param String command name
- * @param []string command arguments
- * @param String directory
- *
- * @return String fully formed command
- */
+// Returns the current user's home directory
+// as a string
+func getHomeDirectory() string {
+    usr, err := user.Current()
+    if err != nil {
+        log.Fatal(err)
+    }
+    return usr.HomeDir
+}
+
+// Corrects a ~ with the users home directory
+func validateDirectoryName(command *Command) *Command {
+    if command.Manual == false {
+        command.Dir = strings.Replace(command.Dir, "~", getHomeDirectory(), -1)
+    }
+    return command
+}
+
+// Generates a full command as a string for manual
+// use
 func generateCommandWithDirectory(command string, args []string, directory string) string {
     if directory == initial_directory {
         directory = "."
@@ -208,16 +176,9 @@ func generateCommandWithDirectory(command string, args []string, directory strin
     return full_command
 }
 
-/**
- * Executes command a given amount
- * of times as specefied in the
- * JSON configuration file
- *
- * @param *Command an instance of Command struct
- * @param WaitGroup our async wait group for the channel
- *
- * @return nil
- */
+// Executes command a given amount
+// of times as specefied in the
+// JSON configuration file
 func runConcurrently(command chan *Command, wg *sync.WaitGroup) {
     defer wg.Done()
 

@@ -1,18 +1,16 @@
-/**
- * asink v0.0.2
- *
- * (c) Ground Six
- *
- * @package asink
- * @version 0.0.2
- *
- * @author Harry Lawrence <http://github.com/hazbo>
- *
- * License: MIT
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+// asink v0.0.3-dev
+//
+// (c) Ground Six
+//
+// @package asink
+// @version 0.0.3-dev
+//
+// @author Harry Lawrence <http://github.com/hazbo>
+//
+// License: MIT
+//
+// For the full copyright and license information, please view the LICENSE
+// file that was distributed with this source code.
 
 package main
 
@@ -46,7 +44,7 @@ func executeRootCommand() {
         Use:   "version",
         Short: "Shows asink version",
         Run: func(cmd *cobra.Command, args []string) {
-            fmt.Println("Asink version 0.0.2 - Created by Ground Six")
+            fmt.Println("Asink version 0.0.3-dev - Created by Ground Six")
         },
     }
 
