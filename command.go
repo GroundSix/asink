@@ -33,7 +33,7 @@ func createCommand(name string, counts []float64, args[]string, dir string) *asi
 
 // Converts jconfigs []interface into
 // []string for asink
-func convertArgs(args []interface{}) []string {
+func convertStringArray(args []interface{}) []string {
     argsSlice := make([]string, len(args))
     for i, s := range args {
         argsSlice[i] = s.(string)

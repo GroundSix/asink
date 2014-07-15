@@ -24,6 +24,7 @@ type Task struct {
 	Require  string
 	Group    string
 	Remote   string
+	Tag      string
 }
 
 var tasks map[string]*Task = nil
@@ -43,6 +44,7 @@ func (t *Task) AddTask(name string, command *Command, require string, group stri
 	task.Command  = command
 	task.Require  = require
 	task.Group    = group
+	task.Tag      = ""
 
 	tasks[name] = task
 }
@@ -56,6 +58,14 @@ func (t *Task) SetRemote(name string, remote string) {
 		command := task.Command
 		command.Manual = true
 	}
+}
+
+// Sets a custom tag to a task which can be
+// used to identify a particular group of tasks
+// before execution
+func (t *Task) SetTag(name string, tag string) {
+	task := tasks[name]
+	task.Tag = tag
 }
 
 // Runs all tasks, required and grouped

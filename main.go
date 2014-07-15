@@ -92,7 +92,7 @@ func startExecutionProcess(json_data *jconfig.Config) {
 func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     name   := json_data.GetString("command")
     counts := convertCounts(json_data.GetArray("count"))
-    args   := convertArgs(json_data.GetArray("args"))
+    args   := convertStringArray(json_data.GetArray("args"))
 
     command := createCommand(name, counts, args, ".")
 
@@ -115,13 +115,14 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     for task_name, cmd := range json_tasks {
         block := validateBlock(cmd.(map[string]interface{}))
         
-        name    := block["command"].(string)
-        counts  := convertCounts(block["count"].([]interface{}))
-        args    := convertArgs(block["args"].([]interface{}))
-        require := block["require"].(string)
-        group   := block["group"].(string)
-        remote  := block["remote"].(string)
-        dir     := block["dir"].(string)
+        name     := block["command"].(string)
+        counts   := convertCounts(block["count"].([]interface{}))
+        args     := convertStringArray(block["args"].([]interface{}))
+        //includes := convertStringArray(block["include"].([]interface{}))
+        require  := block["require"].(string)
+        group    := block["group"].(string)
+        remote   := block["remote"].(string)
+        dir      := block["dir"].(string)
 
         command := createCommand(name, counts, args, dir)
 

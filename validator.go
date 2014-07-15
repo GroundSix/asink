@@ -27,6 +27,7 @@ func validateBlock(block map[string]interface{}) map[string]interface{} {
 	finalBlock  = validateRemote(finalBlock)
 	finalBlock  = validateSshPassword(finalBlock)
 	finalBlock  = validateSshKey(finalBlock)
+	finalBlock  = validateInclude(finalBlock)
 
 	return finalBlock
 }
@@ -114,6 +115,15 @@ func validateSshPassword(block map[string]interface{}) map[string]interface{} {
 func validateSshKey(block map[string]interface{}) map[string]interface{} {
 	if _,ok := block["key"]; !ok {
 	    block["key"] = ""
+	}
+	return block
+}
+
+// Validates and defaults the includes arguments
+func validateInclude(block map[string]interface{}) map[string]interface{} {
+	if _,ok := block["include"]; !ok {
+		var defaults []interface{}
+		block["include"] = defaults
 	}
 	return block
 }
