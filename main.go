@@ -68,7 +68,12 @@ func initAsinkWithServer(json string) {
 
 // Used in both inits to start the execution
 // process of a command or a task
+//
+// This will need reducing soon
 func startExecutionProcess(json_data *jconfig.Config) {
+    if detectIncludes(json_data) == true {
+        setupIncludes(json_data)
+    }
     if detectSshRemotes(json_data) == true {
         setupSshRemotes(json_data)
     }
@@ -169,6 +174,17 @@ func runInSshSession(remote string, command string) {
         StartSession(remote)
         RunRemoteCommand(remote, command)
     }
+}
+
+func detectIncludes(json_data *jconfig.Config) bool {
+    if len(json_data.GetArray("include")) > 0 {
+        return true
+    }
+    return false
+}
+
+func setupIncludes(json_data *jconfig.Config) {
+    
 }
 
 // Returns the current working directory
