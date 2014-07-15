@@ -46,7 +46,7 @@ func executeRootCommand() {
         Use:   "version",
         Short: "Shows asink version",
         Run: func(cmd *cobra.Command, args []string) {
-            fmt.Println("Asink version 0.0.2 - Created by Ground Six")
+            fmt.Println("Asink version 0.0.3-dev - Created by Ground Six")
         },
     }
 
