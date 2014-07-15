@@ -22,23 +22,17 @@ import (
     "./vendor/jconfig"
 )
 
-/**
- * Entry point for asink. Runs the command
- * and follows general instructions as
- * specefied in the JSON configuration
- * file
- */
+// Entry point for asink. Runs the command
+// and follows general instructions as
+// specefied in the JSON configuration
+// file
 func main() {
     // Located in help.go
     executeRootCommand()
 }
 
-/**
- * Sets up the configuration for asink
- * and executes the command
- *
- * @return nil
- */
+// Sets up the configuration for asink
+// and executes the command
 func initAsink() {
     configFile := asink.GetFirstCliParam()
     if configFile != "" {
@@ -47,12 +41,8 @@ func initAsink() {
     }
 }
 
-/**
- * Gets response from GET to parse
- * the JSON
- *
- * @return nil
- */
+// Gets response from GET to parse
+// the JSON
 func initAsinkWithHttp(args []string) {
     if args[0] != "" {
         response, err := http.Get(args[0])
@@ -70,26 +60,14 @@ func initAsinkWithHttp(args []string) {
     }
 }
 
-/**
- * Inits asink with only a JSON string
- * 
- * @param String json data
- *
- * @return nil
- */
+// Inits asink with only a JSON string
 func initAsinkWithServer(json string) {
     json_data := jconfig.LoadConfigString(json)
     startExecutionProcess(json_data)
 }
 
-/**
- * Used in both inits to start the execution
- * process of a command or a task
- *
- * @param *jconfig.Config json data
- *
- * @return nil
- */
+// Used in both inits to start the execution
+// process of a command or a task
 func startExecutionProcess(json_data *jconfig.Config) {
     if detectSshRemotes(json_data) == true {
         setupSshRemotes(json_data)
@@ -104,15 +82,8 @@ func startExecutionProcess(json_data *jconfig.Config) {
     closeSshSessions()
 }
 
-/**
- * Initially sets up everything from
- * config file in a new instance of Asink
- *
- * @param string path to config file
- *
- * @return *asink.Command configured instance of
- * asink
- */
+// Initially sets up everything from
+// config file in a new instance of Asink
 func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     name   := json_data.GetString("command")
     counts := convertCounts(json_data.GetArray("count"))
@@ -123,13 +94,7 @@ func setupAsinkCommand(json_data *jconfig.Config) *asink.Command {
     return command
 }
 
-/**
- * Detects if there are any tasks to be ran
- *
- * @param *jconfig.Config json data
- *
- * @return Bool
- */
+// Detects if there are any tasks to be ran
 func detectTasks(json_data *jconfig.Config) bool {
     if len(json_data.GetStringMap("tasks")) > 0 {
         return true
@@ -137,13 +102,7 @@ func detectTasks(json_data *jconfig.Config) bool {
     return false
 }
 
-/**
- * If tasks are detected, they are configured here
- *
- * @param *jconfig.Config json data
- *
- * @return *asink.Task configured task
- */
+// If tasks are detected, they are configured here
 func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     task       := asink.NewTask()
     json_tasks := json_data.GetStringMap("tasks")
@@ -172,14 +131,8 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
     return task
 }
 
-/**
- * Detects if there are any SSH remotes
- * that need to be setup
- *
- * @param *jconfig.Config json data
- *
- * @return Bool
- */
+// Detects if there are any SSH remotes
+// that need to be setup
 func detectSshRemotes(json_data *jconfig.Config) bool {
     if len(json_data.GetStringMap("ssh")) > 0 {
         return true
@@ -187,14 +140,8 @@ func detectSshRemotes(json_data *jconfig.Config) bool {
     return false
 }
 
-/**
- * If SSH remotes are detected, they are setup
- * here
- *
- * @param *jconfig.Config json data
- *
- * @return nil
- */
+// If SSH remotes are detected, they are setup
+// here
 func setupSshRemotes(json_data *jconfig.Config) {
     remote       := NewRemote()
     json_remotes := json_data.GetStringMap("ssh")
@@ -216,14 +163,7 @@ func setupSshRemotes(json_data *jconfig.Config) {
     }
 }
 
-/**
- * Remotely runs a command within the SSH session
- *
- * @param String remote name
- * @param String command name and args
- *
- * @return nil
- */
+// Remotely runs a command within the SSH session
 func runInSshSession(remote string, command string) {
     if (remote != "") {
         StartSession(remote)
@@ -231,12 +171,8 @@ func runInSshSession(remote string, command string) {
     }
 }
 
-/**
- * Returns the current working directory
- * as a string
- *
- * @return String working directory
- */
+// Returns the current working directory
+// as a string
 func getWorkingDirectory() string {
     dir, err := os.Getwd()
     if (err != nil) {

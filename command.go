@@ -18,16 +18,7 @@ import (
  	"./asink"
 )
 
-/**
- * Creates a default command
- *
- * @param String command name
- * @param []float64 both instances of count
- * @param []string command arguments
- * @param String relative directory
- *
- * @return *asink.Command
- */
+// Creates a default command
 func createCommand(name string, counts []float64, args[]string, dir string) *asink.Command {
 	command := asink.New()
 
@@ -40,14 +31,8 @@ func createCommand(name string, counts []float64, args[]string, dir string) *asi
 	return command
 }
 
-/**
- * Converts jconfigs []interface into
- * []string for asink
- *
- * @param []interface{} jconfig's array
- *
- * @return []string asink's array
- */
+// Converts jconfigs []interface into
+// []string for asink
 func convertArgs(args []interface{}) []string {
     argsSlice := make([]string, len(args))
     for i, s := range args {
@@ -57,14 +42,8 @@ func convertArgs(args []interface{}) []string {
     return argsSlice
 }
 
-/**
- * Converts jconfigs []interface into
- * []float64 for asink
- *
- * @param []interface{} jconfig's array
- *
- * @return []float64 asink's array
- */
+// Converts jconfigs []interface into
+// []float64 for asink
 func convertCounts(counts []interface{}) []float64 {
     argsSlice := make([]float64, len(counts))
     for i, s := range counts {
