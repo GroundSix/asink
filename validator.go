@@ -17,18 +17,6 @@ package main
 // Validates all keys for tasks and returns
 // default values
 func validateBlock(block map[string]interface{}) map[string]interface{} {
-<<<<<<< HEAD
-    finalBlock := validateName(block)
-    finalBlock  = validateCount(finalBlock)
-    finalBlock  = validateArgs(finalBlock)
-    finalBlock  = validateOutput(finalBlock)
-    finalBlock  = validateRequire(finalBlock)
-    finalBlock  = validateGroup(finalBlock)
-    finalBlock  = validateDir(finalBlock)
-    finalBlock  = validateRemote(finalBlock)
-    finalBlock  = validateSshPassword(finalBlock)
-    finalBlock  = validateSshKey(finalBlock)
-=======
 	finalBlock := validateName(block)
 	finalBlock  = validateCount(finalBlock)
 	finalBlock  = validateArgs(finalBlock)
@@ -40,7 +28,6 @@ func validateBlock(block map[string]interface{}) map[string]interface{} {
 	finalBlock  = validateSshPassword(finalBlock)
 	finalBlock  = validateSshKey(finalBlock)
 	finalBlock  = validateInclude(finalBlock)
->>>>>>> v0.0.3-dev
 
     return finalBlock
 }
