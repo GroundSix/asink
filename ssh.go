@@ -23,6 +23,8 @@ import (
     "./vendor/color"
 	"./vendor/go.crypto/ssh"
     "os"
+    "os/user"
+    "strings"
 )
 
 /**
@@ -82,6 +84,23 @@ func (r *Remote) AddRemote(name string, host string, port string, user string, p
     remotes[name] = remote
 }
 
+// Corrects a ~ with the users home directory
+// This is similar to above to needs to be
+// abstracted
+func validateKeyPath(key_path string) string {
+    return strings.Replace(key_path, "~", getHomeDirectory(), -1)
+}
+
+// Returns the current user's home directory
+// as a string
+func getHomeDirectory() string {
+    usr, err := user.Current()
+    if err != nil {
+        log.Fatal(err)
+    }
+    return usr.HomeDir
+}
+
 /**
  * Parses then adds the key to our remote struct
  *
@@ -92,7 +111,7 @@ func (r *Remote) AddRemote(name string, host string, port string, user string, p
  */
 func (r *Remote) AddSshKey(name string, file string) {
     remote    := remotes[name]
-    remote.Key = parseKey(file)
+    remote.Key = parseKey(validateKeyPath(file))
 }
 
 /**
