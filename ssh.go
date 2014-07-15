@@ -25,13 +25,6 @@ import (
     "strings"
 )
 
-/**
- * @var String remote name
- * @var String remote host
- * @var String remote port number
- * @var String remote username
- * @var String remote password
- */
 type Remote struct {
     Name     string
     Host     string
@@ -45,12 +38,8 @@ var remotes  map[string]*Remote        = nil
 var sessions map[string]*ssh.Session   = nil
 var connections map[string]*ssh.Client = nil
 
-/**
- * Inits remotes and sessions then
- * returns a new instance of remote
- *
- * @return *Remote new remote
- */
+// Inits remotes and sessions then
+// returns a new instance of remote
 func NewRemote() *Remote {
     remotes  = make(map[string]*Remote)
     sessions = make(map[string]*ssh.Session)
@@ -58,18 +47,8 @@ func NewRemote() *Remote {
     return new(Remote)
 }
 
-/**
- * Adds a new remote to the map of
- * remotes with a string key
- *
- * @param String remote name
- * @param String remote host
- * @param String remote port number
- * @param String remote username
- * @param String remote password
- *
- * @return nil
- */
+// Adds a new remote to the map of
+// remotes with a string key
 func (r *Remote) AddRemote(name string, host string, port string, user string, password string) {
     remote := new(Remote)
 
@@ -99,28 +78,15 @@ func getHomeDirectory() string {
     return usr.HomeDir
 }
 
-/**
- * Parses then adds the key to our remote struct
- *
- * @param String remote name
- * @param String key path
- *
- * @return nil
- */
+// Parses then adds the key to our remote struct
 func (r *Remote) AddSshKey(name string, file string) {
     remote    := remotes[name]
     remote.Key = parseKey(validateKeyPath(file))
 }
 
-/**
- * Starts a new SSH session which is then
- * stored in the sessions map with a given
- * key
- *
- * @param String session key
- *
- * @return nil
- */
+// Starts a new SSH session which is then
+// stored in the sessions map with a given
+// key
 func StartSession(name string) {
     remote := remotes[name]
 
@@ -158,15 +124,8 @@ func StartSession(name string) {
     sessions[name]    = session
 }
 
-/**
- * Runs the remote command given the session
- * key
- *
- * @param String session name
- * @param String command string
- *
- * @return nil
- */
+// Runs the remote command given the session
+// key
 func RunRemoteCommand(name string, command string) {
     session  := sessions[name]
 
@@ -183,14 +142,8 @@ func RunRemoteCommand(name string, command string) {
     }
 }
 
-/**
- * Parses the key for the client so
- * we can SSH into the remote
- *
- * @param String file path
- *
- * @return ssh.Signer
- */
+// Parses the key for the client so
+// we can SSH into the remote
 func parseKey(file string) ssh.Signer {
     privateBytes, err := ioutil.ReadFile(file)
     if err != nil {
@@ -204,11 +157,7 @@ func parseKey(file string) ssh.Signer {
     return private
 }
 
-/**
- * Closes all SSH sessions and connections
- *
- * @return nil
- */
+// Closes all SSH sessions and connections
 func closeSshSessions() {
     for _, session := range sessions {
         session.Close()

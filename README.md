@@ -87,7 +87,7 @@ There are only three examples of keys being used in this example, these
 are the available keys that can be used:
 
 
-| Key      | Description                         | Usage                       |
+| Key      | Description                         | Usage                       | 
 |----------|-------------------------------------|-----------------------------|
 | command  | This is the root command            | `"command" : "git"`         |
 | args     | An array of command arguments       | `"args" : ["status"]`       |
@@ -212,7 +212,7 @@ password of with a key.
       "host" : "127.0.0.1",
       "port" : "2222",
       "user" : "vagrant",
-      "key"  : "/path/to/key"
+      "key"  : "~/.ssh/id_rsa"
     },
     "my-other-vagrant" : {
       "host"     : "127.0.0.1",
@@ -223,6 +223,9 @@ password of with a key.
   }
 }
 ```
+
+And yes using `~` will work, however only for the `key` key within
+`ssh` and the `dir` key within `tasks`.
 
 ### Execution Methods
 

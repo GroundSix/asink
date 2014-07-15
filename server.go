@@ -20,13 +20,9 @@ import (
     "./vendor/mux"
 )
 
-/**
- * Starts a very basic http server to
- * accept JSON input instead of a
- * static configuration file
- *
- * @return nil
- */
+// Starts a very basic http server to
+// accept JSON input instead of a
+// static configuration file
 func startServer() {
     r := mux.NewRouter()
     r.HandleFunc("/", FetchJsonBody)
@@ -34,13 +30,8 @@ func startServer() {
     http.ListenAndServe(":9000", nil)
 }
 
-/**
- * Fetches the body sent in the http
- * request and returns it as a string
- *
- * @param http.ResponseWriter
- * @param *http.Request
- */
+// Fetches the body sent in the http
+// request and returns it as a string
 func FetchJsonBody(w http.ResponseWriter, r *http.Request) {
     request_body, _ := ioutil.ReadAll(r.Body)
     initAsinkWithServer(string(request_body))

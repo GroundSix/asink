@@ -19,12 +19,8 @@ import (
     "./vendor/cobra"
 )
 
-/**
- * Prompts the cobra help screen with
- * a list of all available commands
- *
- * @return nil
- */
+// Prompts the cobra help screen with
+// a list of all available commands
 func executeRootCommand() {
     var rootCmd = &cobra.Command{Use: "asink"}
     rootCmd.AddCommand(cobraVersionCommand())
