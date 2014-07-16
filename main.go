@@ -29,6 +29,8 @@ import (
 func main() {
     // Located in help.go
     executeRootCommand()
+    
+    closeSshSessions()
 }
 
 // Sets up the configuration for asink
@@ -61,7 +63,7 @@ func initAsinkWithHttp(args []string) {
 }
 
 // Inits asink with only a JSON string
-func initAsinkWithServer(json string) {
+func initAsinkWithString(json string) {
     json_data := jconfig.LoadConfigString(json)
     startExecutionProcess(json_data)
 }
@@ -71,6 +73,9 @@ func initAsinkWithServer(json string) {
 //
 // This will need reducing soon
 func startExecutionProcess(json_data *jconfig.Config) {
+    if detectExtend(json_data) == true {
+        setupExtend(json_data)
+    }
     if detectIncludes(json_data) == true {
         setupIncludes(json_data)
     }
@@ -84,7 +89,6 @@ func startExecutionProcess(json_data *jconfig.Config) {
         command := setupAsinkCommand(json_data)
         command.Execute()
     }
-    closeSshSessions()
 }
 
 // Initially sets up everything from
@@ -177,6 +181,28 @@ func runInSshSession(remote string, command string) {
     }
 }
 
+// Detects if there are any config files that
+// should be extended
+func detectExtend(json_data *jconfig.Config) bool {
+    if len(json_data.GetString("extend")) > 0 {
+        return true
+    }
+    return false
+}
+
+// Runs extended file if is is found
+func setupExtend(json_data *jconfig.Config) {
+    extend    := json_data.GetString("extend")
+    file_name := extend + ".json"
+    if _, err := os.Stat(file_name); err == nil {
+        contents_bytes, _ := ioutil.ReadFile(file_name)
+        contents := string(contents_bytes)
+        initAsinkWithString(contents)
+    }
+}
+
+// Detects if there are any config files that
+// should be included
 func detectIncludes(json_data *jconfig.Config) bool {
     if len(json_data.GetArray("include")) > 0 {
         return true
@@ -184,6 +210,8 @@ func detectIncludes(json_data *jconfig.Config) bool {
     return false
 }
 
+// Sets up asink to run the included tasks
+// if they are needed
 func setupIncludes(json_data *jconfig.Config) {
     
 }
