@@ -29,6 +29,8 @@ import (
 func main() {
     // Located in help.go
     executeRootCommand()
+    
+    closeSshSessions()
 }
 
 // Sets up the configuration for asink
@@ -87,7 +89,6 @@ func startExecutionProcess(json_data *jconfig.Config) {
         command := setupAsinkCommand(json_data)
         command.Execute()
     }
-    closeSshSessions()
 }
 
 // Initially sets up everything from
