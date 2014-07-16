@@ -34,5 +34,5 @@ func startServer() {
 // request and returns it as a string
 func FetchJsonBody(w http.ResponseWriter, r *http.Request) {
 	request_body, _ := ioutil.ReadAll(r.Body)
-	initAsinkWithServer(string(request_body))
+	initAsinkWithString(string(request_body))
 }
