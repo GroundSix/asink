@@ -15,6 +15,7 @@
 package main
 
 import (
+    "fmt"
     "os"
     "net/http"
     "io/ioutil"
@@ -122,7 +123,6 @@ func setupAsinkTasks(json_data *jconfig.Config) *asink.Task {
         name     := block["command"].(string)
         counts   := convertCounts(block["count"].([]interface{}))
         args     := convertStringArray(block["args"].([]interface{}))
-        //includes := convertStringArray(block["include"].([]interface{}))
         require  := block["require"].(string)
         group    := block["group"].(string)
         remote   := block["remote"].(string)
@@ -213,7 +213,22 @@ func detectIncludes(json_data *jconfig.Config) bool {
 // Sets up asink to run the included tasks
 // if they are needed
 func setupIncludes(json_data *jconfig.Config) {
-    
+    include := json_data.GetArray("include")
+    for _, value := range include {
+        file_name := value.(string) + ".json"
+        if _, err := os.Stat(file_name); err == nil {
+            contents_bytes, _ := ioutil.ReadFile(file_name)
+            contents := string(contents_bytes)
+            contents_json := jconfig.LoadConfigString(contents)
+            json_tasks := contents_json.GetStringMap("tasks")
+            for key, task := range json_tasks {
+                task_interface := task.(map[string]interface{})
+                task_interface["tag"] = value
+                json_tasks[key] = task_interface
+            }
+            
+        }
+    }
 }
 
 // Returns the current working directory
