@@ -9,7 +9,7 @@ run tasks on there.
 
 What can it be used for? Loads! You could configure and deploy a project, build / install
 sortware from source, run one task lots and lots of times, check up on the status of
-a remote machine and anything you find yourself doing manually time and time again.
+a remote machine, install dot files and anything you find yourself doing manually time and time again.
 
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 
