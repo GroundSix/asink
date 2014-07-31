@@ -35,8 +35,14 @@ func main() {
 
 // Sets up the configuration for asink
 // and executes the command
-func initAsink(config_file_path string) {
+func initAsinkWithFile(config_file_path string) {
     json_data  := jconfig.LoadConfig(config_file_path)
+    startExecutionProcess(json_data)
+}
+
+// Inits asink with only a JSON string
+func initAsinkWithString(json string) {
+    json_data := jconfig.LoadConfigString(json)
     startExecutionProcess(json_data)
 }
 
@@ -57,16 +63,8 @@ func initAsinkWithHttp(url string) {
     }
 }
 
-// Inits asink with only a JSON string
-func initAsinkWithString(json string) {
-    json_data := jconfig.LoadConfigString(json)
-    startExecutionProcess(json_data)
-}
-
 // Used in both inits to start the execution
 // process of a command or a task
-//
-// This will need reducing soon
 func startExecutionProcess(json_data *jconfig.Config) {
     setupExtend(json_data)
     setupIncludes(json_data)
