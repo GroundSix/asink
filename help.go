@@ -58,7 +58,9 @@ func executeRootCommand() {
         Short: "Start your asink processes",
         Long:  `start running a command the specified amount of times from your configuration file`,
         Run: func(cmd *cobra.Command, args []string) {
-            initAsink()
+            if args[0] != "" {
+                initAsink(args[0])
+            }
         },
     }
 

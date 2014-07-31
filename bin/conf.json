@@ -1,0 +1,10 @@
+{
+	"include" : [
+		"my"
+	],
+	"tasks" : {
+		"test" : {
+			"command" : "ls"
+		}
+	}
+}

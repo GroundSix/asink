@@ -35,12 +35,9 @@ func main() {
 
 // Sets up the configuration for asink
 // and executes the command
-func initAsink() {
-    configFile := asink.GetFirstCliParam()
-    if configFile != "" {
-        json_data  := jconfig.LoadConfig(configFile)
-        startExecutionProcess(json_data)
-    }
+func initAsink(config_file_path string) {
+    json_data  := jconfig.LoadConfig(config_file_path)
+    startExecutionProcess(json_data)
 }
 
 // Gets response from GET to parse

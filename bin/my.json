@@ -1,0 +1,10 @@
+{
+	"tasks" : {
+		"harry" : {
+			"command" : "ls",
+			"args"    : [
+				"-la"
+			]
+		}
+	}
+}
