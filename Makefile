@@ -1,15 +1,24 @@
 BIN_PATH=bin/asink
 INSTALL_PATH=/usr/local/bin/asink
+ALL_GO_SRC := $(wildcard *.go)
+GO_SRC := $(filter-out %_test.go, $(ALL_GO_SRC))
 
-all: asink
+all: deps asink
 
 deps: vendor/
-	git submodule init
-	git submodule update
-	git submodule foreach git pull origin master
+	@if [ -a vendor/.deps ] ; \
+	then \
+		echo "Skipping dependencies - run 'make clean' first if needed" ; \
+	else \
+		git submodule init ; \
+		git submodule update ; \
+		git submodule foreach git pull origin master ; \
+		touch vendor/.deps ; \
+	fi;
 
-asink: deps main.go progress.go command.go validator.go ssh.go help.go server.go
-	go build -o ${BIN_PATH} main.go progress.go command.go validator.go ssh.go help.go server.go
+asink: ${GO_SRC}
+	go build -o ${BIN_PATH} $^
+	@echo "asink has been built in '${BIN_PATH}'"
 
 install: ${BIN_PATH}
 	@cp ${BIN_PATH} ${INSTALL_PATH}
@@ -19,9 +28,10 @@ uninstall:
 	@rm -f ${INSTALL_PATH}
 	@echo "Uninstalled asink"
 
-test: asink_test.go
-	go test asink_test.go task_test.go
+test: asink_test.go task_test.go
+	go test $^
 
-clean:
-	@echo "Deleting ${BIN_PATH}."
+clean: ${BIN_PATH}
 	rm -f ${BIN_PATH}
+	rm -f vendor/.deps
+	@echo "Deleting ${BIN_PATH}."
