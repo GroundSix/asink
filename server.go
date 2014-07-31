@@ -15,6 +15,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"io/ioutil"
 	"./vendor/mux"
@@ -23,16 +24,17 @@ import (
 // Starts a very basic http server to
 // accept JSON input instead of a
 // static configuration file
-func startServer() {
+func startServer(port string) {
+	fmt.Println("Starting Asink server on port", port)
     r := mux.NewRouter()
-    r.HandleFunc("/", FetchJsonBody)
+    r.HandleFunc("/", fetchJsonBody)
     http.Handle("/", r)
-    http.ListenAndServe(":9000", nil)
+    http.ListenAndServe(port, nil)
 }
 
 // Fetches the body sent in the http
 // request and returns it as a string
-func FetchJsonBody(w http.ResponseWriter, r *http.Request) {
+func fetchJsonBody(w http.ResponseWriter, r *http.Request) {
 	request_body, _ := ioutil.ReadAll(r.Body)
 	initAsinkWithString(string(request_body))
 }

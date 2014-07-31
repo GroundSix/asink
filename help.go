@@ -94,11 +94,17 @@ func cobraGetCommand() *cobra.Command {
  */
 func cobraServerCommand() *cobra.Command {
     var serverCommand = &cobra.Command{
-        Use:   "server",
+        Use:   "server [port]",
         Short: "Starts a small http server",
         Long:  `a small server can be used to interface asink by sending JSON in the request body`,
         Run: func(cmd *cobra.Command, args []string) {
-            startServer()
+            port := ":9000"
+            for index, _ := range args {
+                if index == 0 && args[index] != "" {
+                    port = ":" + args[index]
+                }
+            }
+            startServer(port)
         },
     }
 
