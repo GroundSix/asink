@@ -11,17 +11,16 @@
 //
 // For the full copyright and license information, please view the LICENSE
 // file that was distributed with this source code.
- 
 
 package asink
 
 import (
-    "os/exec"
-    "sync"
-    "strings"
-    "os"
-    "os/user"
     "log"
+    "os"
+    "os/exec"
+    "os/user"
+    "strings"
+    "sync"
 )
 
 var initial_directory string = ""
@@ -45,17 +44,17 @@ type Command struct {
 // Command
 func New() *Command {
     command := new(Command)
-    command.Name          = ""
-    command.AsyncCount    = 0
-    command.Args          = []string{}
+    command.Name = ""
+    command.AsyncCount = 0
+    command.Args = []string{}
     command.RelativeCount = 0
-    command.Dir           = getWorkingDirectory()
-    command.Manual        = false
+    command.Dir = getWorkingDirectory()
+    command.Manual = false
 
-    command.progressInit   = func(count int){}
-    command.progressAdd    = func(){}
-    command.progressEnd    = func(){}
-    command.manualCallback = func(command string){}
+    command.progressInit = func(count int) {}
+    command.progressAdd = func() {}
+    command.progressEnd = func() {}
+    command.manualCallback = func(command string) {}
 
     initial_directory = getWorkingDirectory()
 
@@ -98,9 +97,9 @@ func (c *Command) ExecuteCommand(name string, args []string, asyncCount int, rel
     Asink.Args = args
 
     // Default all callbacks
-    Asink.ListenForInit(func(count int){})
-    Asink.ListenForProgress(func(){})
-    Asink.ListenForFinish(func(){})
+    Asink.ListenForInit(func(count int) {})
+    Asink.ListenForProgress(func() {})
+    Asink.ListenForFinish(func() {})
 
     return Asink.Execute()
 }
@@ -116,7 +115,7 @@ func (c *Command) Execute() bool {
     c = validateDirectoryName(c)
 
     // Reset to initial directory and then move
-    // to the new one 
+    // to the new one
     os.Chdir(initial_directory)
     os.Chdir(c.Dir)
 
@@ -134,12 +133,11 @@ func (c *Command) Execute() bool {
     return true
 }
 
-
 // Returns the current working directory
 // as a string
 func getWorkingDirectory() string {
     dir, err := os.Getwd()
-    if (err != nil) {
+    if err != nil {
         panic(err)
     }
     return dir

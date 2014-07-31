@@ -15,7 +15,6 @@
 package main
 
 import (
-    "fmt"
     "os"
     "net/http"
     "io/ioutil"
@@ -46,20 +45,18 @@ func initAsink() {
 
 // Gets response from GET to parse
 // the JSON
-func initAsinkWithHttp(args []string) {
-    if args[0] != "" {
-        response, err := http.Get(args[0])
+func initAsinkWithHttp(url string) {
+    response, err := http.Get(url)
+    if err != nil {
+        panic(err)
+    } else {
+        defer response.Body.Close()
+        contents, err := ioutil.ReadAll(response.Body)
         if err != nil {
             panic(err)
-        } else {
-            defer response.Body.Close()
-            contents, err := ioutil.ReadAll(response.Body)
-            if err != nil {
-                panic(err)
-            }
-            json_data := jconfig.LoadConfigString(string(contents))
-            startExecutionProcess(json_data)
         }
+        json_data := jconfig.LoadConfigString(string(contents))
+        startExecutionProcess(json_data)
     }
 }
 
