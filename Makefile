@@ -1,4 +1,4 @@
-BIN_PATH=bin/asink
+BIN_PATH=build/asink
 INSTALL_PATH=/usr/local/bin/asink
 ALL_GO_SRC := $(wildcard *.go)
 GO_SRC := $(filter-out %_test.go, $(ALL_GO_SRC))
@@ -17,6 +17,7 @@ deps: vendor/
 	fi;
 
 asink: ${GO_SRC}
+	@mkdir build
 	go build -o ${BIN_PATH} $^
 	@echo "asink has been built in '${BIN_PATH}'"
 
@@ -33,5 +34,6 @@ test: asink_test.go task_test.go
 
 clean: ${BIN_PATH}
 	rm -f ${BIN_PATH}
+	rmdir build
 	rm -f vendor/.deps
 	@echo "Deleting ${BIN_PATH}."
