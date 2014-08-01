@@ -17,7 +17,7 @@ deps: vendor/
 	fi;
 
 asink: ${GO_SRC}
-	@mkdir build
+	@mkdir -p build
 	go build -o ${BIN_PATH} $^
 	@echo "asink has been built in '${BIN_PATH}'"
 
@@ -32,7 +32,7 @@ uninstall:
 test: asink_test.go task_test.go
 	go test $^
 
-clean: ${BIN_PATH}
+clean:
 	rm -f ${BIN_PATH}
 	rmdir build
 	rm -f vendor/.deps

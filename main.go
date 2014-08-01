@@ -18,6 +18,7 @@ import (
     "os"
     "net/http"
     "io/ioutil"
+    "strings"
     "./asink"
     "./vendor/jconfig"
 )
@@ -36,8 +37,13 @@ func main() {
 // Sets up the configuration for asink
 // and executes the command
 func initAsinkWithFile(config_file_path string) {
-    json_data  := jconfig.LoadConfig(config_file_path)
-    startExecutionProcess(json_data)
+    if strings.HasSuffix(config_file_path, ".yaml") {
+        json := processYamlContentFromFile(config_file_path)
+        initAsinkWithString(json)
+    } else {
+        json_data  := jconfig.LoadConfig(config_file_path)
+        startExecutionProcess(json_data)
+    }
 }
 
 // Inits asink with only a JSON string
