@@ -4,10 +4,10 @@ type Block struct {
 
 }
 
-func NewBlock() Command {
-
+func NewBlock() Block {
+	return Block{}
 }
 
 func (b Block) Exec() bool {
-
+	return true
 }
