@@ -1,4 +1,5 @@
 resources/
+vendor/pkg
 vendor/.deps
 build/asink
 .DS_Store
