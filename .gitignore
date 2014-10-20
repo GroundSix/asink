@@ -1,0 +1,4 @@
+resources/
+vendor/.deps
+build/asink
+.DS_Store
