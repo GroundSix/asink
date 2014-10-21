@@ -1,6 +1,5 @@
 package main
 
 type Parser interface {
-	Parse() map[string]string
+	parse(body string) map[string]interface{}
 }
-
