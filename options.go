@@ -5,16 +5,17 @@ import (
 	"github.com/asink/cobra"
 )
 
+// Creates the 
 func createRootCommand() {
 	var rootCmd = &cobra.Command{Use: "asink"}
-	rootCmd.AddCommand(cobraVersionCommand())
+	rootCmd.AddCommand(createVersionCommand())
 	rootCmd.AddCommand(createStartCommand())
-	rootCmd.AddCommand(cobraGetCommand())
-	rootCmd.AddCommand(cobraServerCommand())
+	rootCmd.AddCommand(createGetCommand())
+	rootCmd.AddCommand(createServerCommand())
 	rootCmd.Execute()
 }
 
- func cobraVersionCommand() *cobra.Command {
+ func createVersionCommand() *cobra.Command {
     var versionCommand = &cobra.Command{
         Use:   "version",
         Short: "Shows asink version",
@@ -31,13 +32,13 @@ func createStartCommand() *cobra.Command {
         Short: "Start your asink processes",
         Long:  `start running a command the specified amount of times from your configuration file`,
         Run: func(cmd *cobra.Command, args []string) {
-            //initAsink()
+            initAsink()
         },
     }
     return startCommand
 }
 
-func cobraGetCommand() *cobra.Command {
+func createGetCommand() *cobra.Command {
     var getCommand = &cobra.Command{
         Use:   "get    [config URL]",
         Short: "Start asink using remote configuration",
@@ -49,7 +50,7 @@ func cobraGetCommand() *cobra.Command {
     return getCommand
 }
 
-func cobraServerCommand() *cobra.Command {
+func createServerCommand() *cobra.Command {
     var serverCommand = &cobra.Command{
         Use:   "server",
         Short: "Starts a small http server",

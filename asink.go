@@ -19,9 +19,11 @@ import (
 )
 
 func main() {
-
+	// Creates the root and sub commands defined
+	// in options.go using cobra
+	createRootCommand()
 }
 
 func initAsink() {
-	createRootCommand()
+	
 }
