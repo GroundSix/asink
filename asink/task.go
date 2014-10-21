@@ -19,7 +19,7 @@ import (
 )
 
 type Execer interface {
-	Exec()
+	Exec() bool
 }
 
 var TasksMap map[string]Task = nil

@@ -34,7 +34,7 @@ func NewBlock(block func()) Block {
 // Implemented to satisfy the task's Execer
 // interface. Loops through the AsyncCount
 // to concurrently execute the block
-func (b Block) Exec() {
+func (b Block) Exec() bool {
 	var wg sync.WaitGroup
 
 	block := make(chan Block)
@@ -47,6 +47,7 @@ func (b Block) Exec() {
 
     close(block)
     wg.Wait()
+    return true
 }
 
 // Is called within Exec, the actual block

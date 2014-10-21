@@ -38,7 +38,7 @@ func NewCommand(name string) Command {
 // Implemented to satisfy the task's Execer
 // interface. Loops through the AsyncCount
 // to concurrently execute the command
-func (c Command) Exec() {
+func (c Command) Exec() bool {
 	var wg sync.WaitGroup
 
 	command := make(chan Command)
@@ -55,6 +55,7 @@ func (c Command) Exec() {
 
     close(command)
     wg.Wait()
+    return true
 }
 
 // Is called within Exec, the actual command
@@ -66,7 +67,6 @@ func runCommand(command chan Command, wg *sync.WaitGroup) {
 
     for j := 0; j != c.RelCount; j++ {
         cmd := exec.Command(c.Name, c.Args...)
-
         cmd.Stdout = os.Stdout
         cmd.Stderr = os.Stderr
         cmd.Run()
