@@ -32,7 +32,7 @@ func createStartCommand() *cobra.Command {
         Short: "Start your asink processes",
         Long:  `start running a command the specified amount of times from your configuration file`,
         Run: func(cmd *cobra.Command, args []string) {
-            initAsink()
+            initAsinkWithFile(args)
         },
     }
     return startCommand
@@ -44,7 +44,7 @@ func createGetCommand() *cobra.Command {
         Short: "Start asink using remote configuration",
         Long:  `use an external / remote configuration file to start asink rather than one on your file system`,
         Run: func(cmd *cobra.Command, args []string) {
-            //initAsinkWithHttp(args)
+            //initAsinkWithFile(args)
         },
     }
     return getCommand

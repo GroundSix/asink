@@ -15,6 +15,8 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	//"./asink"
 )
 
@@ -24,6 +26,10 @@ func main() {
 	createRootCommand()
 }
 
-func initAsink() {
-	
+func initAsinkWithFile(args []string) {
+	contents, err := ioutil.ReadFile(args[0])
+	if (err != nil) {
+		panic(err)
+	}
+	fmt.Println(contents)
 }

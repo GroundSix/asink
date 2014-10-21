@@ -18,4 +18,3 @@ func (j *Json) parse(body string) typed.Typed {
 	j.mapped = mapped
 	return j.mapped
 }
-
