@@ -28,10 +28,16 @@ type Command struct {
 	Args 	   []string
 }
 
+// Creates a new instance of Command with some
+// default values. The command string is the
+// only initial value that is required
 func NewCommand(name string) Command {
 	return Command{name, 1, 1, getWorkingDirectory(), []string{}}
 }
 
+// Implemented to satisfy the task's Execer
+// interface. Loops through the AsyncCount
+// to concurrently execute the command
 func (c Command) Exec() {
 	var wg sync.WaitGroup
 
@@ -51,9 +57,8 @@ func (c Command) Exec() {
     wg.Wait()
 }
 
-// Executes command a given amount
-// of times as specefied in the
-// JSON configuration file
+// Is called within Exec, the actual command
+// execution happens in here
 func runCommand(command chan Command, wg *sync.WaitGroup) {
     defer wg.Done()
 

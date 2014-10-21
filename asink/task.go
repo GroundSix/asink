@@ -31,13 +31,16 @@ type Task struct {
 	Group   string
 }
 
+// Creates a new instance of Task with some
+// default values. The task name string and
+// the Execer process are the only initial
+// values that are required
 func NewTask(name string, process Execer) Task {
-	t := Task{}
-	t.Name 	  = name
-	t.Process = process
-	return t
+	return Task{name, process, "", ""}
 }
 
+// Executes a single task, given that there are
+// no required tasks attached to it
 func (t Task) Exec() {
 	p := t.Process
 
@@ -52,6 +55,9 @@ func (t Task) Exec() {
 	}
 }
 
+// Executes multiple tasks from a slice of
+// tasks which are organised into a key value
+// map first
 func ExecMulti(taskSlice []Task) {
 	TasksMap = createTasksMap(taskSlice)
 	for _, t := range TasksMap {
@@ -59,6 +65,9 @@ func ExecMulti(taskSlice []Task) {
 	}
 }
 
+// Converts the initial tasks slice into a key value
+// map using the task name as the key and the instance
+// as the value
 func createTasksMap(tasks []Task) map[string]Task {
 	tasksMap := make(map[string]Task)
 	for _, task := range tasks {
@@ -67,8 +76,8 @@ func createTasksMap(tasks []Task) map[string]Task {
 	return tasksMap
 }
 
-// If a required task is found it
-// is ran
+// If a required task has been specefied it will be
+// found and ran at this point
 func executeRequiredTask(t Task) {
 	if (t.Require != "") {
 		task := TasksMap[t.Require]
@@ -76,8 +85,8 @@ func executeRequiredTask(t Task) {
 	}
 }
 
-// If a grouped task is found, it is
-// ran
+// If grouped tasks have been found they will be ran
+// asynchronously at this point
 func executeGroupedTasks(task Task) bool {
 	if (task.Group != "") {
 		group := task.Group
@@ -94,7 +103,7 @@ func executeGroupedTasks(task Task) bool {
 	return false
 }
 
-// Allows tasks to be ran without
+// Allows grouped tasks to be ran without
 // any blocking
 func executeGroupConcurrently(t Task, wg *sync.WaitGroup) {
 	defer wg.Done()
