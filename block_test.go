@@ -18,25 +18,27 @@ import (
 	"./asink"
 	"testing"
 	"reflect"
+	"fmt"
 )
 
-func TestNewCommand(t *testing.T) {
-	c := asink.NewCommand("echo")
-	c.Args = []string{"'Hello, World!"}
-	c.AsyncCount = 1
-	c.RelCount   = 1
-	c.Dir 	     = "~"
+func TestNewBlock(t *testing.T) {
+	b := asink.NewBlock(func() {
+		fmt.Println("Hello, World!")
+	});
+	b.AsyncCount = 1
+	b.RelCount   = 1
 
-	tp := reflect.TypeOf(c).String()
-	if tp != "asink.Command" {
-		t.Error("Expected asink.Command, got ", tp)
+	tp := reflect.TypeOf(b).String()
+	if tp != "asink.Block" {
+		t.Error("Expected asink.Block, got ", tp)
 	}
 }
 
-func TestExecCommand(t *testing.T) {
-	c := asink.NewCommand("echo")
-	c.Args = []string{"Hello, World!"}
-	result := c.Exec()
+func TestExecBlock(t *testing.T) {
+	b := asink.NewBlock(func() {
+		fmt.Println("Hello, World!")
+	});
+	result := b.Exec()
 	if result != true {
 		t.Error("Expected true, got", result)
 	}
