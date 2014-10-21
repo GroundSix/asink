@@ -15,15 +15,13 @@
 package main
 
 import (
-	"fmt"
-	"./asink"
-	"reflect"
+	//"./asink"
 )
 
 func main() {
-	c := asink.NewCommand("ls")
 
-	if (reflect.TypeOf(c).String()) == "asink.Command" {
-		fmt.Println("woo")
-	}
+}
+
+func initAsink() {
+	createRootCommand()
 }
