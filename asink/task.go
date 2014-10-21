@@ -31,8 +31,10 @@ func (t Task) Exec() {
 
 	if executeGroupedTasks(t) == true {
 	} else {
-		p.Exec()
-		delete(TasksMap, t.Name)
+		if (p != nil) {
+			p.Exec()
+			delete(TasksMap, t.Name)
+		}
 	}
 }
 

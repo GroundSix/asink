@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	ls := asink.NewCommand("ls")
-	ls.Exec()
+    ls := asink.NewCommand("ls")
+    ls.Exec()
 }
