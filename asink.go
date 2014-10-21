@@ -27,9 +27,14 @@ func main() {
 }
 
 func initAsinkWithFile(args []string) {
-	contents, err := ioutil.ReadFile(args[0])
+	fileName := args[0]
+	parser   := createParserFromFileType(fileName)
+
+	contents, err := ioutil.ReadFile(fileName)
 	if (err != nil) {
 		panic(err)
 	}
-	fmt.Println(contents)
+
+	result := parser.parse(contents)
+	fmt.Println(result)
 }

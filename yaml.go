@@ -1,9 +1,10 @@
 package main
 
 type Yaml struct {
-	body string
+	body []byte
 }
 
-func (y Yaml) Parse(body string) {
-
+func (y Yaml) parse(body []byte) map[string]interface{} {
+	v := map[string]interface{}{"hi" : "d"}
+	return v
 }
