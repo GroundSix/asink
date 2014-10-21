@@ -15,7 +15,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"io/ioutil"
 	//"./asink"
 )
@@ -27,6 +27,7 @@ func main() {
 }
 
 func initAsinkWithFile(args []string) {
+
 	fileName := args[0]
 	parser   := createParserFromFileType(fileName)
 
@@ -34,7 +35,7 @@ func initAsinkWithFile(args []string) {
 	if (err != nil) {
 		panic(err)
 	}
-
-	result := parser.parse(contents)
-	fmt.Println(result)
+	parser = parser.parse(contents)
+	parser.assignTasks()
 }
+

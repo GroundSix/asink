@@ -5,14 +5,15 @@ import (
 )
 
 type Parser interface {
-	parse(body []byte) map[string]interface{}
+	parse(body []byte) Parser
+	assignTasks() Parser
 }
 
 func createParserFromFileType(fileName string) Parser {
 	if strings.Contains(fileName, "yml") || strings.Contains(fileName, "yaml") {
-		return Yaml{}
+		return new(Yaml)
 	}
 	
 	// Fall back to JSON if all else fails
-	return Json{}
+	return new(Json)
 }

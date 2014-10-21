@@ -1,0 +1,10 @@
+{
+	"tasks" : {
+		"do-ls" : {
+			"command" : "ls",
+			"args"    : [
+				"-la"
+			]
+		}
+	}
+}
