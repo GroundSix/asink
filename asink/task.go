@@ -44,10 +44,10 @@ func NewTask(name string, process Execer) Task {
 func (t Task) Exec() {
 	p := t.Process
 
+	// Check for any required tasks to execute first
 	executeRequiredTask(t)
 
-	if executeGroupedTasks(t) == true {
-	} else {
+	if executeGroupedTasks(t) != true {
 		if (p != nil) {
 			p.Exec()
 			delete(TasksMap, t.Name)
