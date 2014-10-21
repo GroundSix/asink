@@ -41,7 +41,7 @@ func NewTask(name string, process Execer) Task {
 
 // Executes a single task, given that there are
 // no required tasks attached to it
-func (t Task) Exec() {
+func (t Task) Exec() bool {
 	p := t.Process
 
 	// Check for any required tasks to execute first
@@ -53,16 +53,18 @@ func (t Task) Exec() {
 			delete(TasksMap, t.Name)
 		}
 	}
+	return true
 }
 
 // Executes multiple tasks from a slice of
 // tasks which are organised into a key value
 // map first
-func ExecMulti(taskSlice []Task) {
+func ExecMulti(taskSlice []Task) bool {
 	TasksMap = createTasksMap(taskSlice)
 	for _, t := range TasksMap {
 		t.Exec()
 	}
+	return true
 }
 
 // Converts the initial tasks slice into a key value

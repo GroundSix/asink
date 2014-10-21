@@ -40,6 +40,6 @@ func TestExecBlock(t *testing.T) {
 	});
 	result := b.Exec()
 	if result != true {
-		t.Error("Expected true, got", result)
+		t.Error("Expected true, got ", result)
 	}
 }
