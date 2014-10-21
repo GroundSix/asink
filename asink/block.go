@@ -5,13 +5,13 @@ import (
 )
 
 type Block struct {
-	function func()
+	block func()
 	AsyncCount int
 	RelCount   int
 }
 
-func NewBlock(function func()) Block {
-	return Block{function, 1, 1}
+func NewBlock(block func()) Block {
+	return Block{block, 1, 1}
 }
 
 func (b Block) Exec() {
@@ -35,6 +35,6 @@ func runBlock(block chan Block, wg *sync.WaitGroup) {
     b := <- block
 
     for j := 0; j != b.RelCount; j++ {
-    	b.function()
+    	b.block()
 	}
 }

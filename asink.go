@@ -14,6 +14,12 @@ func main() {
 	b.RelCount   = 3
 
 	blockTask := asink.NewTask("block", b)
+	blockTask.Require = "do-ls"
 
-	blockTask.Exec()
+	ls 	   := asink.NewCommand("ls")
+	lstask := asink.NewTask("do-ls", ls)
+
+	tasks := []asink.Task{blockTask, lstask}
+
+	asink.ExecMulti(tasks)
 }
