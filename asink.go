@@ -1,10 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"./asink"
 )
 
 func main() {
-    ls := asink.NewCommand("ls")
-    ls.Exec()
+	b := asink.NewBlock(func() {
+		fmt.Println("Yo!")
+	});
+
+	b.AsyncCount = 3
+	b.RelCount   = 3
+
+	blockTask := asink.NewTask("block", b)
+
+	blockTask.Exec()
 }

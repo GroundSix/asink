@@ -29,7 +29,7 @@ func (c Command) Exec() {
 
     for i := 0; i != c.AsyncCount; i++ {
         wg.Add(1)
-        go run(command, &wg)
+        go runCommand(command, &wg)
         command <- c
     }
 
@@ -40,10 +40,10 @@ func (c Command) Exec() {
 // Executes command a given amount
 // of times as specefied in the
 // JSON configuration file
-func run(command chan Command, wg *sync.WaitGroup) {
+func runCommand(command chan Command, wg *sync.WaitGroup) {
     defer wg.Done()
 
-    c := <-command
+    c := <- command
 
     for j := 0; j != c.RelCount; j++ {
         cmd := exec.Command(c.Name, c.Args...)
