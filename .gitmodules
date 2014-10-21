@@ -19,3 +19,6 @@
 [submodule "vendor/src/github.com/asink/go.crypto"]
 	path = vendor/src/github.com/asink/go.crypto
 	url = https://github.com/asink/go.crypto.git
+[submodule "vendor/src/github.com/asink/typed"]
+	path = vendor/src/github.com/asink/typed
+	url = https://github.com/asink/typed.git

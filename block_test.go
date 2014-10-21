@@ -25,6 +25,7 @@ func TestNewBlock(t *testing.T) {
 	b := asink.NewBlock(func() {
 		fmt.Println("Hello, World!")
 	});
+	
 	b.AsyncCount = 1
 	b.RelCount   = 1
 
