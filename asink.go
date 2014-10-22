@@ -15,9 +15,8 @@
 package main
 
 import (
-	//"fmt"
 	"io/ioutil"
-	//"./asink"
+	"./asink"
 )
 
 func main() {
@@ -37,5 +36,7 @@ func initAsinkWithFile(args []string) {
 	}
 	parser = parser.parse(contents)
 	parser.assignTasks()
+
+	asink.ExecMulti(parser.Tasks())
 }
 

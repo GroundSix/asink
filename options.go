@@ -1,3 +1,17 @@
+// asink v0.1.1-dev
+//
+// (c) Ground Six
+//
+// @package asink
+// @version 0.1.1-dev
+//
+// @author Harry Lawrence <http://github.com/hazbo>
+//
+// License: MIT
+//
+// For the full copyright and license information, please view the LICENSE
+// file that was distributed with this source code.
+
 package main
 
 import (
@@ -5,7 +19,8 @@ import (
 	"github.com/asink/cobra"
 )
 
-// Creates the 
+// Creates the root command and sub commands
+// for asink to start
 func createRootCommand() {
 	var rootCmd = &cobra.Command{Use: "asink"}
 	rootCmd.AddCommand(createVersionCommand())
@@ -15,6 +30,8 @@ func createRootCommand() {
 	rootCmd.Execute()
 }
 
+// Creates the version sub command to display
+// which version of asink is being used
  func createVersionCommand() *cobra.Command {
     var versionCommand = &cobra.Command{
         Use:   "version",
@@ -27,6 +44,8 @@ func createRootCommand() {
     return versionCommand
 }
 
+// Creates the start sub command which uses a
+// JSON or YAML file to start asink
 func createStartCommand() *cobra.Command {
     var startCommand = &cobra.Command{
         Use:   "start  [JSON config file]",
@@ -39,6 +58,8 @@ func createStartCommand() *cobra.Command {
     return startCommand
 }
 
+// Creates the get sub command used for remote
+// configuration files
 func createGetCommand() *cobra.Command {
     var getCommand = &cobra.Command{
         Use:   "get    [config URL]",
@@ -51,6 +72,8 @@ func createGetCommand() *cobra.Command {
     return getCommand
 }
 
+// Creates the server command for starting up
+// asink as a small internal server
 func createServerCommand() *cobra.Command {
     var serverCommand = &cobra.Command{
         Use:   "server",
