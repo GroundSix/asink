@@ -43,12 +43,16 @@ func (j *Json) assignTasks() Parser {
 	for taskName, task := range tasks {
 		c := asink.NewCommand(task["command"].(string))
 
-		c.AsyncCount = task.Ints("count")[0]
-		c.RelCount   = task.Ints("count")[1]
+		c.AsyncCount = task.IntsOr("count", []int{1, 1})[0]
+		c.RelCount   = task.IntsOr("count", []int{1, 1})[1]
 		c.Dir  = task.String("dir")
 		c.Args = task.StringsOr("args", []string{})
 
 		t := asink.NewTask(taskName, c)
+
+		t.Require = task.StringOr("require", "")
+		t.Group   = task.StringOr("group", "")
+
 		tasksSlice = append(tasksSlice, t)
 	}
 	j.tasks = tasksSlice
