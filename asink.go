@@ -15,6 +15,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"./asink"
 )
@@ -26,17 +27,26 @@ func main() {
 }
 
 func initAsinkWithFile(args []string) {
+	if validateArguments(args) == true {
+		fileName := args[0]
+		parser   := createParserFromFileType(fileName)
 
-	fileName := args[0]
-	parser   := createParserFromFileType(fileName)
+		contents, err := ioutil.ReadFile(fileName)
+		if (err != nil) {
+			panic(err)
+		}
+		parser = parser.parse(contents)
+		parser.assignTasks()
 
-	contents, err := ioutil.ReadFile(fileName)
-	if (err != nil) {
-		panic(err)
+		asink.ExecMulti(parser.Tasks())
 	}
-	parser = parser.parse(contents)
-	parser.assignTasks()
-
-	asink.ExecMulti(parser.Tasks())
 }
 
+func validateArguments(args []string) bool {
+	if len(args) == 0 {
+		fmt.Println("Arguments needed, 0 passed")
+		fmt.Println("Use 'asink help' to see list of available commands")
+		return false
+	}
+	return true
+}
