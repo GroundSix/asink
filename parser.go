@@ -40,3 +40,7 @@ func createParserFromFileType(fileName string) Parser {
 func createJsonParser() Parser {
 	return new(Json)
 }
+
+func createYamlParser() Parser {
+	return new(Yaml)
+}

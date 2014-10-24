@@ -1,11 +1,8 @@
 ![asink](https://raw.githubusercontent.com/GroundSix/asink/master/images/asink.png)
 
-Asink is an concurrent task runner! It allows you to organise tasks
-in a particular order and for certain ones to run in groups concurrently.
-
-These tasks can be ran on your local machine. However, Asink is also able to
-start up SSH sessions on multiple remote machines at one time to also
-run tasks on there.
+Asink is both a [Go](http://golang.org) package that allows you to execute
+code and / or commands concurrently and a command line tool that harnesses
+all the functionality from the package itself to help you create and automate tasks.
 
 What can it be used for? Loads! You could configure and deploy a project, build / install
 sortware from source, run one task lots and lots of times, check up on the status of
@@ -25,6 +22,61 @@ a remote machine, install dot files and anything you find yourself doing manuall
 * [Public API](https://github.com/GroundSix/asink/tree/v0.0.2-dev#public-go-api) for Go developers
 * Can automate [SSH sessions](https://github.com/GroundSix/asink/tree/v0.0.2-dev#remote-access-ssh)
 
+## New in v0.1.1
+
+This versions main focus was to improve the public Go API to make it easier for you
+to create tasks that can be ran as part of your own Go program concurrently. This
+means that the whole public API has been rewritten from scratch! Creating and running
+tasks has never been so easy. Here's an example:
+
+```go
+package main
+
+import (
+    "github.com/groundsix/asink/asink"
+)
+
+func main() {
+    c := asink.NewCommand("mkdir")
+    c.Args = []string{"dir1", "dir2", "dir3"}
+    c.Exec()
+}
+```
+
+This is fairly standard, not a lot going on here. However we can now wrap `commands`
+and `blocks` (blocks of code) into a task.
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/groundsix/asink/asink"
+)
+
+func main() {
+    c := asink.NewCommand("mkdir")
+    c.Args = []string{"dir1", "dir2", "dir3"}
+
+    ct := asink.NewTask("directory-task", c)
+    ct.Group = "my-tasks"
+
+    b := asink.NewBlock(func() {
+        fmt.Println("This is a block of code!")
+    });
+
+    bt := asink.NewTask("print", b)
+    bt.Group = "my-tasks"
+
+    tasks := []asink.Task{ct, bt}
+    asink.ExecMulti(tasks)
+}
+```
+
+So as you can see here we have created a command and a block of code. These have
+been wrapped into individual tasks, which are tied together using a group, `my-tasks`.
+This means that they will run concurrently as part of the same group.
+
 ## Getting Started
 
 Building from source requires:
@@ -36,6 +88,7 @@ Building from source requires:
 ```bash
 $ git clone https://github.com/GroundSix/asink.git
 $ cd asink
+$ export GOPATH=$PWD/vendor
 $ make
 $ sudo make install
 ```
