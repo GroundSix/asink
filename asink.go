@@ -42,6 +42,10 @@ func initAsinkWithFile(args []string) {
 	}
 }
 
+func initAsinkWithServer(args []string) {
+	startServer()
+}
+
 func validateArguments(args []string) bool {
 	if len(args) == 0 {
 		fmt.Println("Arguments needed, 0 passed")

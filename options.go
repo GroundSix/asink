@@ -80,7 +80,7 @@ func createServerCommand() *cobra.Command {
         Short: "Starts a small http server",
         Long:  `a small server can be used to interface asink by sending JSON in the request body`,
         Run: func(cmd *cobra.Command, args []string) {
-            //startServer()
+            initAsinkWithServer(args)
         },
     }
     return serverCommand
