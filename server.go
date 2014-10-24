@@ -18,5 +18,5 @@ func startServer() {
 }
 
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("lol")
+	fmt.Println("test")
 }
