@@ -29,21 +29,24 @@ func main() {
 func initAsinkWithFile(args []string) {
 	if validateArguments(args) == true {
 		fileName := args[0]
-		parser   := createParserFromFileType(fileName)
+		p := createParserFromFileType(fileName)
 
 		contents, err := ioutil.ReadFile(fileName)
 		if (err != nil) {
 			panic(err)
 		}
-		parser = parser.parse(contents)
-		parser.assignTasks()
+		p = p.parse(contents)
+		p.assignTasks()
 
-		asink.ExecMulti(parser.Tasks())
+		asink.ExecMulti(p.Tasks())
 	}
 }
 
-func initAsinkWithServer(args []string) {
-	startServer()
+func initAsinkWithRequest(request []byte) {
+	p := createJsonParser()
+	p = p.parse(request)
+	p.assignTasks()
+	asink.ExecMulti(p.Tasks())
 }
 
 func validateArguments(args []string) bool {

@@ -15,6 +15,7 @@
 package asink
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"sync"
@@ -66,6 +67,11 @@ func runCommand(command chan Command, wg *sync.WaitGroup) {
     c := <- command
 
     for j := 0; j != c.RelCount; j++ {
+    	cs := c.Name
+    	for _, v := range c.Args {
+    		cs = cs + " " + v
+    	}
+    	fmt.Println(cs)
         cmd := exec.Command(c.Name, c.Args...)
         cmd.Stdout = os.Stdout
         cmd.Stderr = os.Stderr

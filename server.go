@@ -1,22 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"io/ioutil"
 	"net/http"
 	"github.com/asink/mux"
 	"github.com/asink/negroni"
 )
 
-func startServer() {
+func startServer(args []string) {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HandleRequest)
 
 	n := negroni.New()
 	n.UseHandler(r)
-	fmt.Println("Starting server on port 3000")
 	n.Run(":3000")
 }
 
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("test")
+	b, _ := ioutil.ReadAll(r.Body)
+	initAsinkWithRequest(b)
 }

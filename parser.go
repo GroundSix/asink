@@ -36,3 +36,7 @@ func createParserFromFileType(fileName string) Parser {
 	// Fall back to JSON if all else fails
 	return new(Json)
 }
+
+func createJsonParser() Parser {
+	return new(Json)
+}
