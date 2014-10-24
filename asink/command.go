@@ -15,7 +15,6 @@
 package asink
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"sync"
@@ -27,13 +26,14 @@ type Command struct {
 	RelCount   int
 	Dir 	   string
 	Args 	   []string
+	Callback   func(command string)
 }
 
 // Creates a new instance of Command with some
 // default values. The command string is the
 // only initial value that is required
 func NewCommand(name string) Command {
-	return Command{name, 1, 1, getWorkingDirectory(), []string{}}
+	return Command{name, 1, 1, getWorkingDirectory(), []string{}, func(command string){}}
 }
 
 // Implemented to satisfy the task's Execer
@@ -71,7 +71,7 @@ func runCommand(command chan Command, wg *sync.WaitGroup) {
     	for _, v := range c.Args {
     		cs = cs + " " + v
     	}
-    	fmt.Println(cs)
+    	c.Callback(cs)
         cmd := exec.Command(c.Name, c.Args...)
         cmd.Stdout = os.Stdout
         cmd.Stderr = os.Stderr

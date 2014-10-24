@@ -17,6 +17,7 @@ package main
 import (
 	"./asink"
 	"github.com/asink/typed"
+	"github.com/asink/color"
 )
 
 type Json struct {
@@ -61,6 +62,7 @@ func (j *Json) buildCommand(c *asink.Command, t typed.Typed) {
 	j.setRelCount(c, t)
 	j.setDir(c, t)
 	j.setArgs(c, t)
+	j.setCallback(c, t)
 }
 
 // Build up the asink task using the parsed
@@ -90,6 +92,13 @@ func (j *Json) setDir(c *asink.Command, t typed.Typed) {
 // Sets the Args for the command object
 func (j *Json) setArgs(c *asink.Command, t typed.Typed) {
 	c.Args = t.StringsOr("args", []string{})
+}
+
+func (j *Json) setCallback(c *asink.Command, t typed.Typed) {
+	c.Callback = func(command string) {
+		r := "$local: " + command
+		color.Cyan(r)
+	}
 }
 
 // Sets the Require for the task object
