@@ -94,6 +94,7 @@ func (j *Json) setArgs(c *asink.Command, t typed.Typed) {
 	c.Args = t.StringsOr("args", []string{})
 }
 
+// Sets the Callback for the command object
 func (j *Json) setCallback(c *asink.Command, t typed.Typed) {
 	c.Callback = func(command string) {
 		r := "$local: " + command
