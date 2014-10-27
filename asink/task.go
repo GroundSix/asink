@@ -29,6 +29,7 @@ type Task struct {
 	Process Execer
 	Require string
 	Group   string
+	buffer  string
 }
 
 // Creates a new instance of Task with some
@@ -36,7 +37,7 @@ type Task struct {
 // the Execer process are the only initial
 // values that are required
 func NewTask(name string, process Execer) Task {
-	return Task{name, process, "", ""}
+	return Task{name, process, "", "", ""}
 }
 
 // Executes a single task, given that there are

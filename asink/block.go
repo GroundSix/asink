@@ -19,7 +19,7 @@ import (
 )
 
 type Block struct {
-	block func()
+	block      func()
 	AsyncCount int
 	RelCount   int
 }
