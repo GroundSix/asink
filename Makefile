@@ -17,6 +17,7 @@ deps: vendor/
 		touch vendor/.deps ; \
 	fi;
 
+.PHONY: asink
 asink: ${GO_SRC}
 	@mkdir -p build
 	go build -o ${BIN_PATH} $^
@@ -33,6 +34,7 @@ uninstall:
 test: command_test.go block_test.go task_test.go
 	go test $^
 
+.PHONY: clean
 clean:
 	rm -f ${BIN_PATH}
 	rmdir build
