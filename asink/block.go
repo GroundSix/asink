@@ -15,29 +15,29 @@
 package asink
 
 import (
-	"sync"
+    "sync"
 )
 
 type Block struct {
-	block      func()
-	AsyncCount int
-	RelCount   int
+    block      func()
+    AsyncCount int
+    RelCount   int
 }
 
 // Creates a new instance of Block with some
 // default values. The block func is the
 // only initial value that is required
 func NewBlock(block func()) Block {
-	return Block{block, 1, 1}
+    return Block{block, 1, 1}
 }
 
 // Implemented to satisfy the task's Execer
 // interface. Loops through the AsyncCount
 // to concurrently execute the block
 func (b Block) Exec() bool {
-	var wg sync.WaitGroup
+    var wg sync.WaitGroup
 
-	block := make(chan Block)
+    block := make(chan Block)
 
     for i := 0; i != b.AsyncCount; i++ {
         wg.Add(1)
@@ -58,6 +58,6 @@ func runBlock(block chan Block, wg *sync.WaitGroup) {
     b := <- block
 
     for j := 0; j != b.RelCount; j++ {
-    	b.block()
-	}
+        b.block()
+    }
 }

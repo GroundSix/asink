@@ -15,19 +15,19 @@
 package main
 
 import (
-	"fmt"
-	"github.com/asink/cobra"
+    "fmt"
+    "github.com/asink/cobra"
 )
 
 // Creates the root command and sub commands
 // for asink to start
 func createRootCommand() {
-	var rootCmd = &cobra.Command{Use: "asink"}
-	rootCmd.AddCommand(createVersionCommand())
-	rootCmd.AddCommand(createStartCommand())
-	rootCmd.AddCommand(createGetCommand())
-	rootCmd.AddCommand(createServerCommand())
-	rootCmd.Execute()
+    var rootCmd = &cobra.Command{Use: "asink"}
+    rootCmd.AddCommand(createVersionCommand())
+    rootCmd.AddCommand(createStartCommand())
+    rootCmd.AddCommand(createGetCommand())
+    rootCmd.AddCommand(createServerCommand())
+    rootCmd.Execute()
 }
 
 // Creates the version sub command to display

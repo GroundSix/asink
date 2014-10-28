@@ -15,9 +15,9 @@
 package asink
 
 import (
-	"os"
-	"os/user"
-	"strings"
+    "os"
+    "os/user"
+    "strings"
 )
 
 // Returns the current working directory
@@ -42,5 +42,5 @@ func getHomeDirectory() string {
 
 // Corrects a ~ with the users home directory
 func validateDirectoryName(c *Command) {
-	c.Dir = strings.Replace(c.Dir, "~", getHomeDirectory(), -1)
+    c.Dir = strings.Replace(c.Dir, "~", getHomeDirectory(), -1)
 }

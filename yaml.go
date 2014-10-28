@@ -15,30 +15,30 @@
 package main
 
 import (
-	"./asink"
+    "./asink"
 )
 
 type Yaml struct {
-	taskMap map[string]interface{}
-	tasks   []asink.Task
+    taskMap map[string]interface{}
+    tasks   []asink.Task
 }
 
 // Parses the YAML into a typed.Typed object
 // which acts as map[string]interface{}
 func (y *Yaml) parse(body []byte) Parser {
-	return y
+    return y
 }
 
 // Creates and assigns tasks using the map
 // from the Yaml struct
 func (y *Yaml) assignTasks() Parser {
-	return y
+    return y
 }
 
 func (y *Yaml) buildTasks() Parser {
-	return y
+    return y
 }
 
 func (y *Yaml) Tasks() []asink.Task {
-	return []asink.Task{}
+    return []asink.Task{}
 }

@@ -15,45 +15,45 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"./asink"
+    "fmt"
+    "io/ioutil"
+    "./asink"
 )
 
 func main() {
-	// Creates the root and sub commands defined
-	// in options.go using cobra
-	createRootCommand()
+    // Creates the root and sub commands defined
+    // in options.go using cobra
+    createRootCommand()
 }
 
 func initAsinkWithFile(args []string) {
-	if validateArguments(args) == true {
-		fileName := args[0]
-		p := createParserFromFileType(fileName)
+    if validateArguments(args) == true {
+        fileName := args[0]
+        p := createParserFromFileType(fileName)
 
-		contents, err := ioutil.ReadFile(fileName)
-		if (err != nil) {
-			panic(err)
-		}
-		p = p.parse(contents)
-		p.assignTasks()
+        contents, err := ioutil.ReadFile(fileName)
+        if (err != nil) {
+            panic(err)
+        }
+        p = p.parse(contents)
+        p.assignTasks()
 
-		asink.ExecMulti(p.Tasks())
-	}
+        asink.ExecMulti(p.Tasks())
+    }
 }
 
 func initAsinkWithRequest(request []byte) {
-	p := createJsonParser()
-	p = p.parse(request)
-	p.assignTasks()
-	asink.ExecMulti(p.Tasks())
+    p := createJsonParser()
+    p = p.parse(request)
+    p.assignTasks()
+    asink.ExecMulti(p.Tasks())
 }
 
 func validateArguments(args []string) bool {
-	if len(args) == 0 {
-		fmt.Println("Arguments needed, 0 passed")
-		fmt.Println("Use 'asink help' to see list of available commands")
-		return false
-	}
-	return true
+    if len(args) == 0 {
+        fmt.Println("Arguments needed, 0 passed")
+        fmt.Println("Use 'asink help' to see list of available commands")
+        return false
+    }
+    return true
 }

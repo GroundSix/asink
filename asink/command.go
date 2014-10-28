@@ -15,38 +15,38 @@
 package asink
 
 import (
-	"os"
-	"os/exec"
-	"sync"
+    "os"
+    "os/exec"
+    "sync"
 )
 
 type Command struct {
-	Name 	   string
-	AsyncCount int
-	RelCount   int
-	Dir 	   string
-	Args 	   []string
-	Callback   func(command string)
+    Name       string
+    AsyncCount int
+    RelCount   int
+    Dir        string
+    Args       []string
+    Callback   func(command string)
 }
 
 // Creates a new instance of Command with some
 // default values. The command string is the
 // only initial value that is required
 func NewCommand(name string) Command {
-	return Command{name, 1, 1, getWorkingDirectory(), []string{}, func(command string){}}
+    return Command{name, 1, 1, getWorkingDirectory(), []string{}, func(command string){}}
 }
 
 // Implemented to satisfy the task's Execer
 // interface. Loops through the AsyncCount
 // to concurrently execute the command
 func (c Command) Exec() bool {
-	var wg sync.WaitGroup
+    var wg sync.WaitGroup
 
-	command := make(chan Command)
+    command := make(chan Command)
 
-	validateDirectoryName(&c)
-	os.Chdir(getWorkingDirectory())
-	os.Chdir(c.Dir)
+    validateDirectoryName(&c)
+    os.Chdir(getWorkingDirectory())
+    os.Chdir(c.Dir)
 
     for i := 0; i != c.AsyncCount; i++ {
         wg.Add(1)
@@ -67,14 +67,14 @@ func runCommand(command chan Command, wg *sync.WaitGroup) {
     c := <- command
 
     for j := 0; j != c.RelCount; j++ {
-    	cs := c.Name
-    	for _, v := range c.Args {
-    		cs = cs + " " + v
-    	}
-    	c.Callback(cs)
+        cs := c.Name
+        for _, v := range c.Args {
+            cs = cs + " " + v
+        }
+        c.Callback(cs)
         cmd := exec.Command(c.Name, c.Args...)
         cmd.Stdout = os.Stdout
         cmd.Stderr = os.Stderr
         cmd.Run()
-	}
+    }
 }

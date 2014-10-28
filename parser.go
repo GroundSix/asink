@@ -15,32 +15,32 @@
 package main
 
 import (
-	"./asink"
-	"strings"
+    "./asink"
+    "strings"
 )
 
 type Parser interface {
-	Tasks() 		   []asink.Task
-	parse(body []byte) Parser
-	assignTasks()      Parser
+    Tasks()            []asink.Task
+    parse(body []byte) Parser
+    assignTasks()      Parser
 }
 
 // Creates a parser using the file extension
 // as a way of determining what parser is
 // needed
 func createParserFromFileType(fileName string) Parser {
-	if strings.Contains(fileName, "yml") || strings.Contains(fileName, "yaml") {
-		return new(Yaml)
-	}
-	
-	// Fall back to JSON if all else fails
-	return new(Json)
+    if strings.Contains(fileName, "yml") || strings.Contains(fileName, "yaml") {
+        return new(Yaml)
+    }
+    
+    // Fall back to JSON if all else fails
+    return new(Json)
 }
 
 func createJsonParser() Parser {
-	return new(Json)
+    return new(Json)
 }
 
 func createYamlParser() Parser {
-	return new(Yaml)
+    return new(Yaml)
 }
