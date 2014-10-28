@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 BIN_PATH=build/asink
 INSTALL_PATH=/usr/local/bin/asink
 ALL_GO_SRC := $(wildcard *.go)
