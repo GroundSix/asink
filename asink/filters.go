@@ -33,9 +33,10 @@ func NewFilter() Filter {
 
 // Applies the filter before the package is
 // installed
-func (f Filter) Apply() bool {
-
-	return true
+func (f Filter) Apply(installs []string) {
+	for _, p := range installs {
+		packages[p](&f)
+	}
 }
 
 func (f Filter) Commands() []string {
