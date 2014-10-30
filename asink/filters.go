@@ -17,7 +17,7 @@ package asink
 type Filter struct {
 	Package  string
 	Dummy    bool
-	Commands []string
+	commands []string
 }
 
 // A list of software packages defined for commands
@@ -39,6 +39,10 @@ func (f Filter) Apply() bool {
 	return true
 }
 
+func (f Filter) Commands() []string {
+	return f.commands
+}
+
 // Package Filters
 
 // Defines default config for installing package
@@ -58,6 +62,6 @@ func MysqlServer(f *Filter) {
 	c.Dummy = f.Dummy
 	c.Exec()
 	if f.Dummy == true {
-		f.Commands = append(f.Commands, c.CommandString)
+		f.commands = append(f.commands, c.CommandString)
 	}
 }
