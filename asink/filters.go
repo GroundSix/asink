@@ -15,7 +15,6 @@
 package asink
 
 type Filter struct {
-	Package  string
 	Dummy    bool
 	commands []string
 }
@@ -28,8 +27,8 @@ var packages map[string]func(f *Filter) = map[string]func(f *Filter){
 
 // Creates a new instance of Filter with a
 // default value. The task package string.
-func NewFilter(p string) Filter {
-	return Filter{p, false, []string{}}
+func NewFilter() Filter {
+	return Filter{false, []string{}}
 }
 
 // Applies the filter before the package is
