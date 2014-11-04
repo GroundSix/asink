@@ -14,10 +14,14 @@
 
 package asink
 
+import "fmt"
+
 type Apt struct {
-    Action   string
-    Package  string
-    Callback func(command string)
+    Action        string
+    Packages      []string
+    Callback      func(command string)
+    Dummy         bool
+    CommandString string
 }
 
 // Creates a new instance of Apt with some
@@ -26,7 +30,10 @@ type Apt struct {
 func NewApt(action string) Apt {
     a := Apt{}
     a.Action  = action
-    a.Package = ""
+    a.Packages = []string{}
+    a.Callback = func(command string){}
+    a.Dummy    = false
+    a.CommandString = ""
     return a
 }
 
@@ -34,19 +41,44 @@ func NewApt(action string) Apt {
 // on apt-get. Currently supports 'update' or
 // 'install'
 func (a Apt) Exec() bool {
-    if a.Action == "update" {
-        a.Callback("apt-get update")
-    } else if (a.Action == "install") {
-        a.Callback("apt-get install -y " + a.Package)
-    } else {
-        return false
+    a.CommandString = "apt-get"
+    a.CommandString = a.appendAptAction(a.CommandString)
+
+    if a.Dummy == false {
+        c := NewCommand("apt-get")
+        args := []string{a.Action}
+        for _, pa := range a.Packages {
+            args = append(args, pa)
+        }
+        c.Args = args
+        c.Callback = func(command string) {
+            fmt.Println(command)
+        }
+        c.Exec()
     }
     return true
 }
 
-// Adds a package to install, needs to be changed
-// into a slice soon rather than concating a
-// string like this!
-func (a Apt) AddPackage(p string) {
-    a.Package = a.Package + " " + p
+// Adds a package to install
+func (a *Apt) AddPackage(p string) {
+    a.Packages = append(a.Packages, p)
+}
+
+// Adds multiple packages to install
+func (a *Apt) AddPackages(p []string) {
+    for _, pa := range p {
+        a.Packages = append(a.Packages, pa)
+    }
+}
+
+func (a Apt) appendAptAction(command string) string {
+    if a.Action == "update" {
+        command = command + " update"
+    } else if (a.Action == "install") {
+        command = command + " install -y"
+        for _, p := range a.Packages {
+            command = command + " " + p
+        }
+    }
+    return command
 }

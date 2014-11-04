@@ -31,7 +31,7 @@ uninstall:
 	@rm -f ${INSTALL_PATH}
 	@echo "Uninstalled asink"
 
-test: command_test.go block_test.go task_test.go
+test: command_test.go block_test.go task_test.go module_test.go
 	go test $^
 
 .PHONY: clean
