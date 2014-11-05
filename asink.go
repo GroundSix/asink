@@ -21,9 +21,15 @@ import (
 )
 
 func main() {
+
+    apt := asink.NewApt("install")
+    apt.Packages = []string{"golang"}
+
+    apt.Exec()
+
     // Creates the root and sub commands defined
     // in options.go using cobra
-    createRootCommand()
+    //createRootCommand()
 }
 
 func initAsinkWithFile(args []string) {
