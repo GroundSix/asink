@@ -19,11 +19,10 @@ import (
 )
 
 type Apt struct {
-    Action        string
-    Packages      []string
-    Callback      func(command string)
-    Dummy         bool
-    CommandString string
+    Action   string
+    Packages []string
+    Callback func(command string)
+    Dummy    bool
 }
 
 // Creates a new instance of Apt with some
@@ -43,9 +42,9 @@ func NewApt(action string) Apt {
 // 'install'
 func (a Apt) Exec() bool {
     if a.Dummy == false {
+        a.Callback("apt-get " + strings.Join(c.Args, " "))
         c := NewCommand("apt-get")
         c.Args = append([]string{a.Action, "-y"}, a.Packages...)
-        a.Callback("apt-get " + strings.Join(c.Args, " "))
         c.Exec()
     }
     return true
