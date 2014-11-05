@@ -23,7 +23,8 @@ import (
 func main() {
 
     apt := asink.NewApt("install")
-    apt.Packages = []string{"golang"}
+
+    apt.Packages = []string{"nginx"}
 
     apt.Exec()
 

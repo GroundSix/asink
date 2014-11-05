@@ -14,8 +14,6 @@
 
 package asink
 
-import "fmt"
-
 type Apt struct {
     Action        string
     Packages      []string
@@ -46,14 +44,7 @@ func (a Apt) Exec() bool {
 
     if a.Dummy == false {
         c := NewCommand("apt-get")
-        args := []string{a.Action}
-        for _, pa := range a.Packages {
-            args = append(args, pa)
-        }
-        c.Args = args
-        c.Callback = func(command string) {
-            fmt.Println(command)
-        }
+        c.Args = append([]string{a.Action, "-y"}, a.Packages...)
         c.Exec()
     }
     return true
