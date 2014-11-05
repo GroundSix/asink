@@ -21,17 +21,9 @@ import (
 )
 
 func main() {
-    a := asink.NewApt("install")
-    a.Packages = []string{"nginx"}
-
-    a.Callback = func(command string) {
-        fmt.Println(command)
-    }
-
-    a.Exec()
     // Creates the root and sub commands defined
     // in options.go using cobra
-    //createRootCommand()
+    createRootCommand()
 }
 
 func initAsinkWithFile(args []string) {
