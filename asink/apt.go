@@ -14,6 +14,10 @@
 
 package asink
 
+import (
+    "strings"
+)
+
 type Apt struct {
     Action        string
     Packages      []string
@@ -31,7 +35,6 @@ func NewApt(action string) Apt {
     a.Packages = []string{}
     a.Callback = func(command string){}
     a.Dummy    = false
-    a.CommandString = ""
     return a
 }
 
@@ -39,12 +42,10 @@ func NewApt(action string) Apt {
 // on apt-get. Currently supports 'update' or
 // 'install'
 func (a Apt) Exec() bool {
-    a.CommandString = "apt-get"
-    a.CommandString = a.appendAptAction(a.CommandString)
-
     if a.Dummy == false {
         c := NewCommand("apt-get")
         c.Args = append([]string{a.Action, "-y"}, a.Packages...)
+        c.Callback("apt-get" + strings.Join(c.Args, " "))
         c.Exec()
     }
     return true
@@ -60,16 +61,4 @@ func (a *Apt) AddPackages(p []string) {
     for _, pa := range p {
         a.Packages = append(a.Packages, pa)
     }
-}
-
-func (a Apt) appendAptAction(command string) string {
-    if a.Action == "update" {
-        command = command + " update"
-    } else if (a.Action == "install") {
-        command = command + " install -y"
-        for _, p := range a.Packages {
-            command = command + " " + p
-        }
-    }
-    return command
 }

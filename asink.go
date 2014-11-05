@@ -21,13 +21,14 @@ import (
 )
 
 func main() {
+    a := asink.NewApt("install")
+    a.Packages = []string{"nginx"}
 
-    apt := asink.NewApt("install")
+    a.Callback = func(command string) {
+        fmt.Println(command)
+    }
 
-    apt.Packages = []string{"nginx"}
-
-    apt.Exec()
-
+    a.Exec()
     // Creates the root and sub commands defined
     // in options.go using cobra
     //createRootCommand()
