@@ -25,7 +25,6 @@ func main() {
     a.Packages = []string{"nginx"}
 
     a.Callback = func(command string) {
-        fmt.Println("WOOOO")
         fmt.Println(command)
     }
 

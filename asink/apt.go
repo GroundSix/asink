@@ -45,7 +45,7 @@ func (a Apt) Exec() bool {
     if a.Dummy == false {
         c := NewCommand("apt-get")
         c.Args = append([]string{a.Action, "-y"}, a.Packages...)
-        c.Callback("apt-get" + strings.Join(c.Args, " "))
+        a.Callback("apt-get " + strings.Join(c.Args, " "))
         c.Exec()
     }
     return true
