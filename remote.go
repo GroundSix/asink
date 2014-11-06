@@ -1,3 +1,17 @@
+// asink v0.1.1-dev
+//
+// (c) Ground Six
+//
+// @package asink
+// @version 0.1.1-dev
+//
+// @author Harry Lawrence <http://github.com/hazbo>
+//
+// License: MIT
+//
+// For the full copyright and license information, please view the LICENSE
+// file that was distributed with this source code.
+
 package main
 
 import (
@@ -30,6 +44,7 @@ func NewRemote(name string) Remote {
     return r
 }
 
+// Adds a new remote to the remote map
 func (r Remote) Add(remoteName string) {
 	remotes[remoteName] = r
 }
@@ -40,6 +55,7 @@ func (r Remote) AddSshKey(remoteName string, filePath string) {
     remote.Key = parseKey(filePath)
 }
 
+// Makes a connection to the remote machine
 func (r Remote) Connect(remoteName string) {
     remote := remotes[remoteName]
 
@@ -79,7 +95,7 @@ func (r Remote) Connect(remoteName string) {
 
 // Runs the remote command given the session
 // key
-func RunRemoteCommand(remoteName string, command string) {
+func runRemoteCommand(remoteName string, command string) {
     session  := sessions[remoteName]
 
     format := color.New(color.FgCyan).SprintFunc()

@@ -38,10 +38,12 @@ func createParserFromFileType(fileName string) Parser {
     return new(Json)
 }
 
+// Returns a new instance of the JSON parser
 func createJsonParser() Parser {
     return new(Json)
 }
 
+// Returns a new instance of the YAML parser
 func createYamlParser() Parser {
     return new(Yaml)
 }

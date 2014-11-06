@@ -89,6 +89,8 @@ func (j *Json) buildTask(name string, task typed.Typed, c *asink.Command) asink.
     return t
 }
 
+// Build up the asink remotes using the parsed
+// JSON data
 func (j *Json) buildRemote(r *Remote, remote typed.Typed) {
     j.setHost(r, remote)
     j.setPort(r, remote)
@@ -133,7 +135,7 @@ func (j *Json) setRemote(c *asink.Command, t typed.Typed) {
     if (r != "") {
         c.Dummy = true
         c.Callback = func(command string) {
-            RunRemoteCommand(r, command)
+            runRemoteCommand(r, command)
         }
     }
 }

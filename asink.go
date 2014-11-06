@@ -39,6 +39,7 @@ func initAsinkWithFile(args []string) {
         p.assignTasks()
         p.assignRemotes()
         asink.ExecMulti(p.Tasks())
+        defer closeSshSessions()
     }
 }
 
