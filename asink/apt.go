@@ -30,7 +30,7 @@ type Apt struct {
 // only initial value that is required
 func NewApt(action string) Apt {
     a := Apt{}
-    a.Action  = action
+    a.Action   = action
     a.Packages = []string{}
     a.Callback = func(command string){}
     a.Dummy    = false
@@ -41,12 +41,12 @@ func NewApt(action string) Apt {
 // on apt-get. Currently supports 'update' or
 // 'install'
 func (a Apt) Exec() bool {
+    c := NewCommand("apt-get")
     if a.Dummy == false {
-        c := NewCommand("apt-get")
-        a.Callback("apt-get " + strings.Join(c.Args, " "))
         c.Args = append([]string{a.Action, "-y"}, a.Packages...)
         c.Exec()
     }
+    a.Callback("apt-get " + strings.Join(c.Args, " "))
     return true
 }
 
