@@ -15,12 +15,12 @@
 package main
 
 import (
-	"os"
-	"fmt"
-	"log"
-	"io/ioutil"
-	"github.com/asink/go.crypto/ssh"
-	"github.com/asink/color"
+    "os"
+    "fmt"
+    "log"
+    "io/ioutil"
+    "github.com/asink/go.crypto/ssh"
+    "github.com/asink/color"
 )
 
 type Remote struct {
@@ -46,7 +46,7 @@ func NewRemote(name string) Remote {
 
 // Adds a new remote to the remote map
 func (r Remote) Add(remoteName string) {
-	remotes[remoteName] = r
+    remotes[remoteName] = r
 }
 
 // Parses then adds the key to our remote struct
