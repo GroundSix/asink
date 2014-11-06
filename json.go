@@ -55,6 +55,11 @@ func (j *Json) assignTasks() Parser {
     return j
 }
 
+func (j *Json) assignRemotes() {
+    //r := j.taskMap.StringObject("ssh")
+
+}
+
 // Builds up the asink command using the parsed
 // JSON data
 func (j *Json) buildCommand(c *asink.Command, t typed.Typed) {
@@ -72,6 +77,10 @@ func (j *Json) buildTask(name string, task typed.Typed, c *asink.Command) asink.
     j.setRequire(&t, task)
     j.setGroup(&t, task)
     return t
+}
+
+func (j *Json) buildRemote() {
+
 }
 
 // Sets the AsyncCount for the command object

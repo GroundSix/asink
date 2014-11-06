@@ -1,8 +1,12 @@
 package main
 
 import (
+	"os"
+	"fmt"
 	"log"
+	"io/ioutil"
 	"github.com/asink/go.crypto/ssh"
+	"github.com/asink/color"
 )
 
 type Remote struct {
@@ -14,7 +18,7 @@ type Remote struct {
     Key      ssh.Signer
 }
 
-var remotes  map[string]Remote        = make(map[string]Remote)
+var remotes  map[string]Remote         = make(map[string]Remote)
 var sessions map[string]*ssh.Session   = make(map[string]*ssh.Session)
 var connections map[string]*ssh.Client = make(map[string]*ssh.Client)
 
@@ -26,6 +30,12 @@ func NewRemote() Remote {
 
 func (r Remote) Add(remoteName string) {
 	remotes[remoteName] = r
+}
+
+// Parses then adds the key to our remote struct
+func (r Remote) AddSshKey(remoteName string, filePath string) {
+    remote := remotes[remoteName]
+    remote.Key = parseKey(filePath)
 }
 
 func (r Remote) Connect(remoteName string) {
@@ -65,3 +75,45 @@ func (r Remote) Connect(remoteName string) {
     sessions[remoteName]    = session
 }
 
+// Runs the remote command given the session
+// key
+func RunRemoteCommand(name string, command string) {
+    session  := sessions[name]
+
+    format := color.New(color.FgCyan).SprintFunc()
+    fmt.Printf("%s ", format("> " + name + ":"))
+
+    session.Stdout = os.Stdout
+    session.Stderr = os.Stderr
+
+    err  := session.Run(command)
+
+    if (err != nil) {
+        fmt.Println("Failed to run:", command)
+    }
+}
+
+// Parses the key for the client so
+// we can SSH into the remote
+func parseKey(file string) ssh.Signer {
+    privateBytes, err := ioutil.ReadFile(file)
+    if err != nil {
+        panic("Failed to load private key")
+    }
+
+    private, err := ssh.ParsePrivateKey(privateBytes)
+    if err != nil {
+        panic("Failed to parse private key")
+    }
+    return private
+}
+
+// Closes all SSH sessions and connections
+func closeSshSessions() {
+    for _, session := range sessions {
+        session.Close()
+    }
+    for _, connection := range connections {
+        connection.Close()
+    }
+}
