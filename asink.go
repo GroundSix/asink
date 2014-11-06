@@ -37,7 +37,7 @@ func initAsinkWithFile(args []string) {
         }
         p = p.parse(contents)
         p.assignTasks()
-
+        p.assignRemotes()
         asink.ExecMulti(p.Tasks())
     }
 }
@@ -46,6 +46,7 @@ func initAsinkWithRequest(request []byte) {
     p := createJsonParser()
     p = p.parse(request)
     p.assignTasks()
+    p.assignRemotes()
     asink.ExecMulti(p.Tasks())
 }
 

@@ -55,9 +55,18 @@ func (j *Json) assignTasks() Parser {
     return j
 }
 
-func (j *Json) assignRemotes() {
-    //r := j.taskMap.StringObject("ssh")
+// Creates and assigns remotes using the map
+// from the Json struct
+func (j *Json) assignRemotes() Parser {
+    remotes := j.taskMap.StringObject("ssh")
+    for name, remote := range remotes {
+        r := NewRemote(name)
+        j.buildRemote(&r, remote)
+        r.Add(name)
+        r.Connect(name)
+    }
 
+    return j
 }
 
 // Builds up the asink command using the parsed
@@ -68,6 +77,7 @@ func (j *Json) buildCommand(c *asink.Command, t typed.Typed) {
     j.setDir(c, t)
     j.setArgs(c, t)
     j.setCallback(c, t)
+    j.setRemote(c, t)
 }
 
 // Build up the asink task using the parsed
@@ -79,9 +89,15 @@ func (j *Json) buildTask(name string, task typed.Typed, c *asink.Command) asink.
     return t
 }
 
-func (j *Json) buildRemote() {
-
+func (j *Json) buildRemote(r *Remote, remote typed.Typed) {
+    j.setHost(r, remote)
+    j.setPort(r, remote)
+    j.setUser(r, remote)
+    j.setPassword(r, remote)
+    j.setKey(r, remote)
 }
+
+// Settings for commands
 
 // Sets the AsyncCount for the command object
 func (j *Json) setAsyncCount(c *asink.Command, t typed.Typed) {
@@ -111,6 +127,19 @@ func (j *Json) setCallback(c *asink.Command, t typed.Typed) {
     }
 }
 
+// Sets the Args for the command object
+func (j *Json) setRemote(c *asink.Command, t typed.Typed) {
+    r := t.StringOr("remote", "")
+    if (r != "") {
+        c.Dummy = true
+        c.Callback = func(command string) {
+            RunRemoteCommand(r, command)
+        }
+    }
+}
+
+// Settings for tasks
+
 // Sets the Require for the task object
 func (j *Json) setRequire(t *asink.Task, task typed.Typed) {
     t.Require = task.StringOr("require", "")
@@ -119,4 +148,34 @@ func (j *Json) setRequire(t *asink.Task, task typed.Typed) {
 // Sets the Group for the task object
 func (j *Json) setGroup(t *asink.Task, task typed.Typed) {
     t.Group   = task.StringOr("group", "")
+}
+
+// Settings for remote machines
+
+// Sets the Host for the remote object
+func (j *Json) setHost(r *Remote, remote typed.Typed) {
+    r.Host = remote.StringOr("host", "localhost")
+}
+
+// Sets the Port for the remote object
+func (j *Json) setPort(r *Remote, remote typed.Typed) {
+    r.Port = remote.StringOr("port", "2222")
+}
+
+// Sets the User for the remote object
+func (j *Json) setUser(r *Remote, remote typed.Typed) {
+    r.User = remote.StringOr("user", "root")
+}
+
+// Sets the Password for the remote object
+func (j *Json) setPassword(r *Remote, remote typed.Typed) {
+    r.Password = remote.StringOr("password", "")
+}
+
+// Sets the Key for the remote object
+func (j *Json) setKey(r *Remote, remote typed.Typed) {
+    k := remote.StringOr("key", "")
+    if (k != "") {
+        r.AddSshKey(r.Name, remote.String("key"))
+    }
 }

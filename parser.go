@@ -23,6 +23,7 @@ type Parser interface {
     Tasks()            []asink.Task
     parse(body []byte) Parser
     assignTasks()      Parser
+    assignRemotes()    Parser
 }
 
 // Creates a parser using the file extension

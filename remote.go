@@ -24,8 +24,10 @@ var connections map[string]*ssh.Client = make(map[string]*ssh.Client)
 
 // Inits remotes and sessions then
 // returns a new instance of remote
-func NewRemote() Remote {
-    return Remote{}
+func NewRemote(name string) Remote {
+    r := Remote{}
+    r.Name = name
+    return r
 }
 
 func (r Remote) Add(remoteName string) {
@@ -77,11 +79,11 @@ func (r Remote) Connect(remoteName string) {
 
 // Runs the remote command given the session
 // key
-func RunRemoteCommand(name string, command string) {
-    session  := sessions[name]
+func RunRemoteCommand(remoteName string, command string) {
+    session  := sessions[remoteName]
 
     format := color.New(color.FgCyan).SprintFunc()
-    fmt.Printf("%s ", format("> " + name + ":"))
+    fmt.Printf("%s ", format("$" + remoteName + ":"))
 
     session.Stdout = os.Stdout
     session.Stderr = os.Stderr

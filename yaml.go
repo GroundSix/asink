@@ -35,6 +35,10 @@ func (y *Yaml) assignTasks() Parser {
     return y
 }
 
+func (y *Yaml) assignRemotes() Parser {
+	return y
+}
+
 func (y *Yaml) buildTasks() Parser {
     return y
 }
