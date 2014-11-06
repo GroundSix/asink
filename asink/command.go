@@ -18,6 +18,7 @@ import (
     "os"
     "os/exec"
     "sync"
+    "strings"
 )
 
 type Command struct {
@@ -28,14 +29,20 @@ type Command struct {
     Args          []string
     Callback      func(command string)
     Dummy         bool
-    CommandString string
 }
 
 // Creates a new instance of Command with some
 // default values. The command string is the
 // only initial value that is required
 func NewCommand(name string) Command {
-    return Command{name, 1, 1, getWorkingDirectory(), []string{}, func(command string){}, false, ""}
+    return Command{
+        name,                   // Root command (required)
+        1,                      // AsyncCount
+        1,                      // RelCount
+        getWorkingDirectory(),  // Directory
+        []string{},             // Command arguments
+        func(command string){}, // Callback func
+        false}                  // Dummy command or not?
 }
 
 // Implemented to satisfy the task's Execer
@@ -69,12 +76,7 @@ func runCommand(command chan Command, wg *sync.WaitGroup) {
     c := <- command
 
     for j := 0; j != c.RelCount; j++ {
-        cs := c.Name
-        for _, v := range c.Args {
-            cs = cs + " " + v
-        }
-        c.CommandString = cs
-        c.Callback(c.CommandString)
+        c.Callback(c.Name + " " + strings.Join(c.Args, " "))
         if c.Dummy == false {
             cmd := exec.Command(c.Name, c.Args...)
             cmd.Stdout = os.Stdout

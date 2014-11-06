@@ -42,11 +42,11 @@ func NewApt(action string) Apt {
 // 'install'
 func (a Apt) Exec() bool {
     c := NewCommand("apt-get")
+    c.Args = append([]string{a.Action, "-y"}, a.Packages...)
+    a.Callback("apt-get " + strings.Join(c.Args, " "))
     if a.Dummy == false {
-        c.Args = append([]string{a.Action, "-y"}, a.Packages...)
         c.Exec()
     }
-    a.Callback("apt-get " + strings.Join(c.Args, " "))
     return true
 }
 
