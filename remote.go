@@ -18,6 +18,7 @@ import (
     "os"
     "fmt"
     "log"
+    "strings"
     "io/ioutil"
     "github.com/asink/go.crypto/ssh"
     "github.com/asink/color"
@@ -52,7 +53,7 @@ func (r Remote) Add(remoteName string) {
 // Parses then adds the key to our remote struct
 func (r Remote) AddSshKey(remoteName string, filePath string) {
     remote := remotes[remoteName]
-    remote.Key = parseKey(filePath)
+    remote.Key = parseKey(validateKeyPath(filePath))
 }
 
 // Makes a connection to the remote machine
@@ -124,6 +125,13 @@ func parseKey(file string) ssh.Signer {
         panic("Failed to parse private key")
     }
     return private
+}
+
+// Corrects a ~ with the users home directory
+// This is similar to above to needs to be
+// abstracted
+func validateKeyPath(key_path string) string {
+    return strings.Replace(key_path, "~", getHomeDirectory(), -1)
 }
 
 // Closes all SSH sessions and connections

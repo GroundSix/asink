@@ -22,13 +22,13 @@ import (
 )
 
 type Command struct {
-    Name          string
-    AsyncCount    int
-    RelCount      int
-    Dir           string
-    Args          []string
-    Callback      func(command string)
-    Dummy         bool
+    Name       string
+    AsyncCount int
+    RelCount   int
+    Dir        string
+    Args       []string
+    Callback   func(command string)
+    Dummy      bool
 }
 
 // Creates a new instance of Command with some
