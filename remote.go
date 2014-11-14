@@ -106,6 +106,7 @@ func runRemoteCommand(remoteName string, command string) {
 
     if (err != nil) {
         fmt.Println("Failed to run:", command)
+        fmt.Println(err)
     }
 }
 

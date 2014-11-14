@@ -20,6 +20,8 @@ import (
     "github.com/asink/color"
 )
 
+var callbackRemoteName string = ""
+
 type Json struct {
     taskMap typed.Typed
     tasks   []asink.Task
@@ -77,6 +79,7 @@ func (j *Json) buildCommand(c *asink.Command, t typed.Typed) {
     j.setArgs(c, t)
     j.setCallback(c, t)
     j.setRemote(c, t)
+    j.setRemotes(c, t)
 }
 
 // Build up the asink task using the parsed
@@ -137,6 +140,25 @@ func (j *Json) setRemote(c *asink.Command, t typed.Typed) {
             runRemoteCommand(r, command)
         }
     }
+}
+
+func (j *Json) setRemotes(c *asink.Command, t typed.Typed) {
+    /*
+    r := t.StringsOr("remotes", []string{})
+    c.Dummy = true
+    c.Callback = func(command string) {
+        tasks := []asink.Task{}
+        for _, remoteName := range r {
+            callbackRemoteName = remoteName
+            task := asink.NewTask("task-"+remoteName, asink.NewBlock(func() {
+                runRemoteCommand(callbackRemoteName, command)
+            }))
+            task.Group = "exec-remotes"
+            tasks = append(tasks, task)
+        }
+        fmt.Println(tasks)
+        asink.ExecMulti(tasks)
+    }*/
 }
 
 // Settings for tasks
