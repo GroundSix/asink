@@ -47,6 +47,7 @@ $ cd asink
 $ export GOPATH=$PWD/vendor
 $ make
 $ sudo make install
+```
 
 Run `asink version` to check the install, or `asink help` to see a full list of commands.
 
