@@ -59,13 +59,12 @@ func (j *Json) assignTasks() Parser {
 // from the Json struct
 func (j *Json) assignRemotes() Parser {
     remotes := j.taskMap.StringObject("ssh")
+
     for name, remote := range remotes {
         r := NewRemote(name)
-        j.buildRemote(&r, remote)
         r.Add(name)
-        r.Connect(name)
+        j.buildRemote(r, remote).Connect()
     }
-
     return j
 }
 
@@ -91,12 +90,12 @@ func (j *Json) buildTask(name string, task typed.Typed, c *asink.Command) asink.
 
 // Build up the asink remotes using the parsed
 // JSON data
-func (j *Json) buildRemote(r *Remote, remote typed.Typed) {
+func (j *Json) buildRemote(r *Remote, remote typed.Typed) *Remote {
     j.setHost(r, remote)
     j.setPort(r, remote)
     j.setUser(r, remote)
     j.setPassword(r, remote)
-    j.setKey(r, remote)
+    return j.setKey(r, remote)
 }
 
 // Settings for commands
@@ -175,9 +174,10 @@ func (j *Json) setPassword(r *Remote, remote typed.Typed) {
 }
 
 // Sets the Key for the remote object
-func (j *Json) setKey(r *Remote, remote typed.Typed) {
+func (j *Json) setKey(r *Remote, remote typed.Typed) *Remote {
     k := remote.StringOr("key", "")
     if (k != "") {
-        r.AddSshKey(r.Name, remote.String("key"))
+        return r.AddSshKey(r.Name, remote.String("key"))
     }
+    return r
 }

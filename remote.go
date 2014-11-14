@@ -33,44 +33,41 @@ type Remote struct {
     Key      ssh.Signer
 }
 
-var remotes  map[string]Remote         = make(map[string]Remote)
+var remotes  map[string]*Remote         = make(map[string]*Remote)
 var sessions map[string]*ssh.Session   = make(map[string]*ssh.Session)
 var connections map[string]*ssh.Client = make(map[string]*ssh.Client)
 
 // Inits remotes and sessions then
 // returns a new instance of remote
-func NewRemote(name string) Remote {
-    r := Remote{}
+func NewRemote(name string) *Remote {
+    r := new(Remote)
     r.Name = name
     return r
 }
 
 // Adds a new remote to the remote map
-func (r Remote) Add(remoteName string) {
+func (r *Remote) Add(remoteName string) {
     remotes[remoteName] = r
 }
 
 // Parses then adds the key to our remote struct
-func (r Remote) AddSshKey(remoteName string, filePath string) {
-    remote := remotes[remoteName]
+func (r *Remote) AddSshKey(remoteName string, filePath string) *Remote {
+    remote := *remotes[remoteName]
     remote.Key = parseKey(validateKeyPath(filePath))
+    return &remote
 }
 
 // Makes a connection to the remote machine
-func (r Remote) Connect(remoteName string) {
-    remote := remotes[remoteName]
-
+func (r Remote) Connect() {
     config := &ssh.ClientConfig{
-        User: remote.User,
+        User: r.User,
         Auth: []ssh.AuthMethod{
-            ssh.Password(remote.Password),
-            ssh.PublicKeys(remote.Key),
+            ssh.Password(r.Password),
+            ssh.PublicKeys(r.Key),
         },
     }
 
-    hostname := remote.Host + ":" + remote.Port
-
-    conn, err := ssh.Dial("tcp", hostname, config)
+    conn, err := ssh.Dial("tcp", fmt.Sprintf("%s:%s", r.Host, r.Port), config)
     if err != nil {
         log.Fatalf("unable to connect: %s", err)
     }
@@ -90,8 +87,8 @@ func (r Remote) Connect(remoteName string) {
         log.Fatalf("request for pseudo terminal failed: %s", err)
     }
 
-    connections[remoteName] = conn
-    sessions[remoteName]    = session
+    connections[r.Name] = conn
+    sessions[r.Name]    = session
 }
 
 // Runs the remote command given the session
@@ -100,7 +97,7 @@ func runRemoteCommand(remoteName string, command string) {
     session  := sessions[remoteName]
 
     format := color.New(color.FgCyan).SprintFunc()
-    fmt.Printf("%s ", format("$" + remoteName + ":"))
+    fmt.Printf("%s ", format("$" + remoteName + ": " + command))
 
     session.Stdout = os.Stdout
     session.Stderr = os.Stderr
