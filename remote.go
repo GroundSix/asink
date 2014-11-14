@@ -98,6 +98,7 @@ func runRemoteCommand(remoteName string, command string) {
 
     format := color.New(color.FgCyan).SprintFunc()
     fmt.Printf("%s ", format("$" + remoteName + ": " + command))
+    fmt.Printf("\n")
 
     session.Stdout = os.Stdout
     session.Stderr = os.Stderr

@@ -137,7 +137,7 @@ func (j *Json) setRemote(c *asink.Command, t typed.Typed) {
     if (r != "") {
         c.Dummy = true
         c.Callback = func(command string) {
-            runRemoteCommand(r, command)
+            runRemoteCommand(r, "cd " + c.Dir + " && " + command)
         }
     }
 }
