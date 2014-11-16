@@ -15,7 +15,6 @@
 package main
 
 import (
-    //"./asink"
     "github.com/asink/typed"
     "strings"
 )
