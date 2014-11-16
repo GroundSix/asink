@@ -1,4 +1,4 @@
-// asink v0.1.1-dev
+    // asink v0.1.1-dev
 //
 // (c) Ground Six
 //
@@ -15,6 +15,7 @@
 package main
 
 import (
+    //"fmt"
     "./asink"
     "github.com/asink/typed"
     "github.com/asink/color"

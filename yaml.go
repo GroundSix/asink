@@ -17,23 +17,25 @@ package main
 import (
 	//"fmt"
 	"github.com/asink/yaml"
+	"github.com/asink/typed"
     "./asink"
 )
 
 type Yaml struct {
-    taskMap map[string]interface{}
+    taskMap typed.Typed
     tasks   []asink.Task
 }
 
 // Parses the YAML into a typed.Typed object
 // which acts as map[string]interface{}
 func (y *Yaml) parse(body []byte) Parser {
-	var mapped interface{}
-	err := yaml.Unmarshal(body, &mapped)
+	var parsed map[string]interface{}
+	err := yaml.Unmarshal(body, &parsed)
 	if (err != nil) {
 		panic(err)
 	}
-	y.taskMap = mapped.(map[string]interface{})
+	y.taskMap = typed.New(parsed)
+	fmt.Println("YAML:", y.taskMap)
     return y
 }
 
