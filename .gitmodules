@@ -22,3 +22,6 @@
 [submodule "vendor/src/github.com/asink/typed"]
 	path = vendor/src/github.com/asink/typed
 	url = https://github.com/asink/typed.git
+[submodule "vendor/src/github.com/asink/yaml"]
+	path = vendor/src/github.com/asink/yaml
+	url = https://github.com/asink/yaml.git
