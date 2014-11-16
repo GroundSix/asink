@@ -32,7 +32,7 @@ uninstall:
 	@echo "Uninstalled asink"
 
 test: command_test.go block_test.go task_test.go module_test.go
-	go test $^
+	go test -v $^
 
 .PHONY: clean
 clean:
