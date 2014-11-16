@@ -15,15 +15,14 @@
 package main
 
 import (
-    "./asink"
+    //"./asink"
+    "github.com/asink/typed"
     "strings"
 )
 
 type Parser interface {
-    Tasks()            []asink.Task
     parse(body []byte) Parser
-    assignTasks()      Parser
-    assignRemotes()    Parser
+    TaskMap() typed.Typed
 }
 
 // Creates a parser using the file extension

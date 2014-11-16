@@ -15,15 +15,12 @@
 package main
 
 import (
-	//"fmt"
 	"github.com/asink/yaml"
 	"github.com/asink/typed"
-    "./asink"
 )
 
 type Yaml struct {
     taskMap typed.Typed
-    tasks   []asink.Task
 }
 
 // Parses the YAML into a typed.Typed object
@@ -35,24 +32,10 @@ func (y *Yaml) parse(body []byte) Parser {
 		panic(err)
 	}
 	y.taskMap = typed.New(parsed)
-	fmt.Println("YAML:", y.taskMap)
     return y
 }
 
-// Creates and assigns tasks using the map
-// from the Yaml struct
-func (y *Yaml) assignTasks() Parser {
-    return y
-}
-
-func (y *Yaml) assignRemotes() Parser {
-	return y
-}
-
-func (y *Yaml) buildTasks() Parser {
-    return y
-}
-
-func (y *Yaml) Tasks() []asink.Task {
-    return []asink.Task{}
+// Returns a map of parsed tasks
+func (y Yaml) TaskMap() typed.Typed {
+    return y.taskMap
 }
