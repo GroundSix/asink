@@ -15,6 +15,8 @@
 package main
 
 import (
+	//"fmt"
+	"github.com/asink/yaml"
     "./asink"
 )
 
@@ -26,6 +28,12 @@ type Yaml struct {
 // Parses the YAML into a typed.Typed object
 // which acts as map[string]interface{}
 func (y *Yaml) parse(body []byte) Parser {
+	var mapped interface{}
+	err := yaml.Unmarshal(body, &mapped)
+	if (err != nil) {
+		panic(err)
+	}
+	y.taskMap = mapped.(map[string]interface{})
     return y
 }
 
