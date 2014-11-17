@@ -1,0 +1,27 @@
+[submodule "vendor/src/github.com/asink/color"]
+	path = vendor/src/github.com/asink/color
+	url = https://github.com/asink/color.git
+[submodule "vendor/src/github.com/asink/context"]
+	path = vendor/src/github.com/asink/context
+	url = https://github.com/asink/context.git
+[submodule "vendor/src/github.com/asink/pflag"]
+	path = vendor/src/github.com/asink/pflag
+	url = https://github.com/asink/pflag.git
+[submodule "vendor/src/github.com/asink/negroni"]
+	path = vendor/src/github.com/asink/negroni
+	url = https://github.com/asink/negroni.git
+[submodule "vendor/src/github.com/asink/cobra"]
+	path = vendor/src/github.com/asink/cobra
+	url = https://github.com/asink/cobra.git
+[submodule "vendor/src/github.com/asink/mux"]
+	path = vendor/src/github.com/asink/mux
+	url = https://github.com/asink/mux.git
+[submodule "vendor/src/github.com/asink/go.crypto"]
+	path = vendor/src/github.com/asink/go.crypto
+	url = https://github.com/asink/go.crypto.git
+[submodule "vendor/src/github.com/asink/typed"]
+	path = vendor/src/github.com/asink/typed
+	url = https://github.com/asink/typed.git
+[submodule "vendor/src/github.com/asink/yaml"]
+	path = vendor/src/github.com/asink/yaml
+	url = https://github.com/asink/yaml.git
