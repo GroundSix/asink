@@ -15,6 +15,7 @@ deps: vendor/
 		git submodule update ; \
 		git submodule foreach git pull origin master ; \
 		touch vendor/.deps ; \
+		cd vendor/src/github.com/asink/yaml && git checkout v2 ; \
 	fi;
 
 .PHONY: asink
