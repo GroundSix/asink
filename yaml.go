@@ -26,12 +26,14 @@ type Yaml struct {
 // Parses the YAML into a typed.Typed object
 // which acts as map[string]interface{}
 func (y *Yaml) parse(body []byte) Parser {
-	var parsed map[string]interface{}
+	var parsed interface{}
 	err := yaml.Unmarshal(body, &parsed)
 	if (err != nil) {
 		panic(err)
 	}
-	y.taskMap = typed.New(parsed)
+	parsedMap := parsed.(map[string]interface{})
+	y.taskMap = typed.New(parsedMap)
+
     return y
 }
 
