@@ -36,9 +36,14 @@ func (a *Assigner) assignTasks() *Assigner {
     t := a.TaskMap.StringObject("tasks")
     tasks := []asink.Task{}
     for name, task := range t {
-        c := asink.NewCommand(task["command"].(string))
-        a.buildCommand(&c, task)
-        tasks = append(tasks, a.buildTask(name, task, &c))
+        if task["command"] != nil {
+            c := asink.NewCommand(task["command"].(string))
+            a.buildCommand(&c, task)
+            tasks = append(tasks, a.buildTask(name, task, &c))
+        }
+        if task["apt-get"] != nil {
+            
+        }
     }
     a.tasks = tasks
     return a
