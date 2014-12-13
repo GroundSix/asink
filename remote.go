@@ -29,7 +29,6 @@ type Remote struct {
     Host     string
     Port     string
     User     string
-    Password string
     Key      ssh.Signer
 }
 
@@ -62,7 +61,6 @@ func (r Remote) Connect() {
     config := &ssh.ClientConfig{
         User: r.User,
         Auth: []ssh.AuthMethod{
-            ssh.Password(r.Password),
             ssh.PublicKeys(r.Key),
         },
     }
