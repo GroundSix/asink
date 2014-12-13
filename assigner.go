@@ -131,7 +131,7 @@ func (a *Assigner) setRemote(c *asink.Command, t typed.Typed) {
 }
 
 func (a *Assigner) setRemotes(c *asink.Command, t typed.Typed) {
-
+    // TODO
 }
 
 // Settings for tasks

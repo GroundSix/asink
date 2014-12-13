@@ -101,7 +101,7 @@ func runRemoteCommand(remoteName string, command string) {
     session.Stdout = os.Stdout
     session.Stderr = os.Stderr
 
-    err  := session.Run(command)
+    err := session.Run(command)
 
     if (err != nil) {
         fmt.Println("Failed to run:", command)
