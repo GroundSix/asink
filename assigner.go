@@ -41,9 +41,6 @@ func (a *Assigner) assignTasks() *Assigner {
             a.buildCommand(&c, task)
             tasks = append(tasks, a.buildTask(name, task, &c))
         }
-        if task["apt-get"] != nil {
-            
-        }
     }
     a.tasks = tasks
     return a
