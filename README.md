@@ -199,7 +199,7 @@ ssh:
     host: localhost
     port: 2222
     user: vagrant
-    password: vagrant
+    key: ~/.ssh/id_rsa
 
 tasks:
   # Clones the Asink repo
@@ -219,27 +219,5 @@ whatever you like. In the example it's been named `vagrant`.
 In your output when this is being ran you'll be able to see which remote
 it is being ran on as it will be highlighted blue and show the name of
 the remote.
-
-#### Authentication
-
-For remote access there are two ways you can connect. Either with a
-password of with a key.
-
-```yaml
----
-ssh:
-  # We define a remote machine here
-  vagrant:
-    host: localhost
-    port: 2222
-    user: vagrant
-    password: vagrant
-
-  other-machine:
-    host: example.com
-    port: 22
-    user: myuser
-    key: ~/.ssh/id_rsa
-```
 
 More to come...
