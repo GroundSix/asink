@@ -86,7 +86,6 @@ func (a *Assigner) buildRemote(r *Remote, remote typed.Typed) *Remote {
     a.setHost(r, remote)
     a.setPort(r, remote)
     a.setUser(r, remote)
-    a.setPassword(r, remote)
     return a.setKey(r, remote)
 }
 
@@ -164,10 +163,6 @@ func (a *Assigner) setUser(r *Remote, remote typed.Typed) {
     r.User = remote.StringOr("user", "root")
 }
 
-// Sets the Password for the remote object
-func (a *Assigner) setPassword(r *Remote, remote typed.Typed) {
-    r.Password = remote.StringOr("password", "")
-}
 
 // Sets the Key for the remote object
 func (a *Assigner) setKey(r *Remote, remote typed.Typed) *Remote {
