@@ -193,7 +193,7 @@ Here is an example of running a command on a vagrant box:
 
 ```yaml
 ---
-ssh:
+remotes:
   # We define a remote machine here
   vagrant:
     host: localhost
