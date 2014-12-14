@@ -26,6 +26,15 @@ func main() {
     createRootCommand()
 }
 
+func initAsink(p Parser) {
+    a := new(Assigner)
+    a.TaskMap = p.TaskMap()
+    a.assignTasks()
+    a.assignRemotes()
+    asink.ExecMulti(a.Tasks())
+    defer closeSshSessions()  
+}
+
 func initAsinkWithFile(args []string) {
     if validateArguments(args) == true {
         fileName := args[0]
@@ -36,21 +45,16 @@ func initAsinkWithFile(args []string) {
             panic(err)
         }
         p = p.parse(contents)
-        a := new(Assigner)
-        a.TaskMap = p.TaskMap()
-        a.assignTasks()
-        a.assignRemotes()
-        asink.ExecMulti(a.Tasks())
-        defer closeSshSessions()
+
+        initAsink(p)
     }
 }
 
 func initAsinkWithRequest(request []byte) {
     p := createJsonParser()
     p = p.parse(request)
-    //p.assignTasks()
-    //p.assignRemotes()
-    //asink.ExecMulti(p.Tasks())
+
+    initAsink(p)
 }
 
 func validateArguments(args []string) bool {
