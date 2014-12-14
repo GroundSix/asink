@@ -12,14 +12,14 @@ sortware from source, provision a machine, run one task lots and lots of times, 
 ## Features
 
 * Written in [Go](http://golang.org)
-* Can automate [SSH sessions](https://github.com/GroundSix/asink/tree/v0.0.2-dev#remote-access-ssh)
+* Can automate [SSH sessions](https://github.com/GroundSix/asink#remote-access-ssh)
 * Very easy to get started with
 * Comes with 3 main different ways to use
   * Via local configuration file
   * Remote configuration file
   * Small internal server
 * Excellent speed and performance
-* [Public API](https://github.com/GroundSix/asink/tree/v0.0.2-dev#public-go-api) for Go developers
+* Public API for Go developers
 * Client libraries for other languages
 
 ## New in v0.1.1
