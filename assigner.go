@@ -15,7 +15,7 @@
 package main
 
 import (
-    //"fmt"
+   //"fmt"
 	"./asink"
 	"github.com/asink/typed"
     "github.com/asink/color"
@@ -50,6 +50,14 @@ func (a *Assigner) assignTasks() *Assigner {
                 color.Cyan(r)
             }
 
+            r := task.StringOr("remote", "")
+            if (r != "") {
+                c.Dummy = true
+                c.Callback = func(command string) {
+                    runRemoteCommand(r, "cd " + c.Dir + " && " + command)
+                }
+            }
+
             at := asink.NewTask(n, c)
             at.Require = task.StringOr("require", "")
             at.Group   = task.StringOr("group", "")
@@ -65,81 +73,18 @@ func (a *Assigner) assignTasks() *Assigner {
 // Creates and assigns remotes using the map
 // from the Json struct
 func (a *Assigner) assignRemotes() *Assigner {
-    remotes := a.TaskMap.StringObject("remotes")
+    r := a.TaskMap.StringObject("remotes")
+    for n, remote := range r {
+        r := NewRemote(n)
 
-    for name, remote := range remotes {
-        r := NewRemote(name)
-        r.Add(name)
-        a.buildRemote(r, remote).Connect()
+        r.Host = remote.StringOr("host", "localhost")
+        r.Port = remote.StringOr("port", "22")
+        r.User = remote.StringOr("user", "root")
+
+        r.Add(n)
+        r.AddSshKey(n, remote.String("key"))
+        r.Connect()
     }
+    
     return a
-}
-
-// Builds up the asink command using the parsed
-// JSON data
-func (a *Assigner) buildCommand(c *asink.Command, t typed.Typed) {
-    a.setRemote(c, t)
-    a.setRemotes(c, t)
-}
-
-// Build up the asink task using the parsed
-// JSON data
-func (a *Assigner) buildTask(name string, task typed.Typed, c *asink.Command) asink.Task {
-    t := asink.NewTask(name, c)
-    return t
-}
-
-// Build up the asink remotes using the parsed
-// JSON data
-func (a *Assigner) buildRemote(r *Remote, remote typed.Typed) *Remote {
-    a.setHost(r, remote)
-    a.setPort(r, remote)
-    a.setUser(r, remote)
-    return a.setKey(r, remote)
-}
-
-// Settings for commands
-
-// Sets the Args for the command object
-func (a *Assigner) setRemote(c *asink.Command, t typed.Typed) {
-    r := t.StringOr("remote", "")
-    if (r != "") {
-        c.Dummy = true
-        c.Callback = func(command string) {
-            runRemoteCommand(r, "cd " + c.Dir + " && " + command)
-        }
-    }
-}
-
-func (a *Assigner) setRemotes(c *asink.Command, t typed.Typed) {
-    // TODO
-}
-
-// Settings for tasks
-
-// Settings for remote machines
-
-// Sets the Host for the remote object
-func (a *Assigner) setHost(r *Remote, remote typed.Typed) {
-    r.Host = remote.StringOr("host", "localhost")
-}
-
-// Sets the Port for the remote object
-func (a *Assigner) setPort(r *Remote, remote typed.Typed) {
-    r.Port = remote.StringOr("port", "2222")
-}
-
-// Sets the User for the remote object
-func (a *Assigner) setUser(r *Remote, remote typed.Typed) {
-    r.User = remote.StringOr("user", "root")
-}
-
-
-// Sets the Key for the remote object
-func (a *Assigner) setKey(r *Remote, remote typed.Typed) *Remote {
-    k := remote.StringOr("key", "")
-    if (k != "") {
-        return r.AddSshKey(r.Name, remote.String("key"))
-    }
-    return r
 }

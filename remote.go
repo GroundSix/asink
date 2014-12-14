@@ -32,7 +32,7 @@ type Remote struct {
     Key      ssh.Signer
 }
 
-var remotes  map[string]*Remote         = make(map[string]*Remote)
+var remotes  map[string]*Remote        = make(map[string]*Remote)
 var sessions map[string]*ssh.Session   = make(map[string]*ssh.Session)
 var connections map[string]*ssh.Client = make(map[string]*ssh.Client)
 
@@ -50,10 +50,9 @@ func (r *Remote) Add(remoteName string) {
 }
 
 // Parses then adds the key to our remote struct
-func (r *Remote) AddSshKey(remoteName string, filePath string) *Remote {
-    remote := *remotes[remoteName]
+func (r *Remote) AddSshKey(remoteName string, filePath string) {
+    remote := remotes[remoteName]
     remote.Key = parseKey(validateKeyPath(filePath))
-    return &remote
 }
 
 // Makes a connection to the remote machine
