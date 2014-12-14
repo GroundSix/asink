@@ -5,7 +5,7 @@ code and / or commands concurrently and a command line tool that harnesses
 all the functionality from the package itself to help you create and automate tasks.
 
 What can it be used for? Loads! You could configure and deploy a project, build / install
-sortware from source, provision a machine, run one task lots and lots of times, check up on the status of a remote machine and anything you find yourself doing manually time and time again.
+software from source, provision a machine, run one task lots and lots of times, check up on the status of a remote machine and anything you find yourself doing manually time and time again.
 
 [![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
 
@@ -54,34 +54,31 @@ Run `asink version` to check the install, or `asink help` to see a full list of 
 ### Configuring
 
 Asink can be configured to run your tasks using either YAML or JSON. Here is a small
-'Hello World-like' example:
+Hello World example:
 
 ```yaml
 ---
 tasks:
-  clone-asink:
-    command: git
-    args:
-     - clone
-     - https://github.com/groundsix/asink
 
-  build-asink:
-    dir: asink
-    command: make
-    args:
-      - GOPATH=$PWD/vendor
+  # All tasks are named
+  # You can name them whatever you like
+  hello-world:
 
-  install-asink:
-    dir: asink
-    command: make
+    # Define the root command
+    command: echo
+
+    # And any args and / or flags here
     args:
-      - install
+      - 'Hello, World!'
 ```
 
-In this example, each command will execute, one at a time from top to bottom. To be on the
-safe side, we can tell Asink that it must require one command to finish before starting
-the next if we need to by using the `require` key and the name of the required task as
-the value:
+And then once we are all configured, running is as simple as this:
+
+```bash
+$ asink start config.yml
+```
+
+Let's take a look at a slightly more involved example:
 
 ```yaml
 ---
@@ -89,26 +86,32 @@ tasks:
   clone-asink:
     command: git
     args:
-     - clone
-     - https://github.com/groundsix/asink
+      - clone
+      - https://github.com/GroundSix/asink.git
+    group: clones
 
-  build-asink:
-    dir: asink
-    command: make
+  clone-martini:
+    command: git
     args:
-      - GOPATH=$PWD/vendor
+      - clone
+      - https://github.com/go-martini/martini.git
+    group: clones
+
+  do-ls:
+    command: ls
+    args:
+      - -la
+    dir: asink
     require: clone-asink
 ```
 
-These can be chained, so we could use require again on the third task to require the
-second one to finish first.
-
-Once we have a configuration file created, the `start` subcommand can be used, with
-the name of the file as the first argument.
-
-```bash
-$ asink start config.yaml
-```
+Here we are running 3 tasks. Asink will clone itself and
+[Martini](https://github.com/go-martini/martini.git) at the same time. This
+is because we have defined `group: clones`. Any tasks using the same group
+key will be executed at the same time. We then want to run `ls -la` in
+the `asink` directory. There is a require key on here which will wait for
+`clone-asink` to finish running first. As it's part of a group, `do-ls` will
+wait for all tasks in that group to execute first, before executing.
 
 Here is a list of keys that can be used for each task, with a small example of each
 case:
@@ -187,7 +190,7 @@ to be ran on. See below for how this can be set up.
 
 As well as being able to run commands locally, Asink can start up
 SSH sessions and run commands on another machine at the same time.
-This is done using a special `ssh` key outside of the `tasks` scope.
+This is done using the `remotes` key outside of the `tasks` scope.
 
 Here is an example of running a command on a vagrant box:
 
