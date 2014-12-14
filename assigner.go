@@ -15,6 +15,7 @@
 package main
 
 import (
+    //"fmt"
 	"./asink"
 	"github.com/asink/typed"
     "github.com/asink/color"
@@ -35,13 +36,28 @@ func (a *Assigner) Tasks() []asink.Task {
 func (a *Assigner) assignTasks() *Assigner {
     t := a.TaskMap.StringObject("tasks")
     tasks := []asink.Task{}
-    for name, task := range t {
+
+    for n, task := range t {
         if task["command"] != nil {
             c := asink.NewCommand(task["command"].(string))
-            a.buildCommand(&c, task)
-            tasks = append(tasks, a.buildTask(name, task, &c))
+            c.AsyncCount = task.IntsOr("count", []int{1, 1})[0]
+            c.RelCount   = task.IntsOr("count", []int{1, 1})[1]
+            c.Dir        = task.StringOr("dir", ".")
+            c.Args       = task.StringsOr("args", []string{})
+
+            c.Callback = func(command string) {
+                r := "$local: " + command
+                color.Cyan(r)
+            }
+
+            at := asink.NewTask(n, c)
+            at.Require = task.StringOr("require", "")
+            at.Group   = task.StringOr("group", "")
+
+            tasks = append(tasks, at)
         }
     }
+
     a.tasks = tasks
     return a
 }
@@ -49,7 +65,7 @@ func (a *Assigner) assignTasks() *Assigner {
 // Creates and assigns remotes using the map
 // from the Json struct
 func (a *Assigner) assignRemotes() *Assigner {
-    remotes := a.TaskMap.StringObject("ssh")
+    remotes := a.TaskMap.StringObject("remotes")
 
     for name, remote := range remotes {
         r := NewRemote(name)
@@ -62,11 +78,6 @@ func (a *Assigner) assignRemotes() *Assigner {
 // Builds up the asink command using the parsed
 // JSON data
 func (a *Assigner) buildCommand(c *asink.Command, t typed.Typed) {
-    a.setAsyncCount(c, t)
-    a.setRelCount(c, t)
-    a.setDir(c, t)
-    a.setArgs(c, t)
-    a.setCallback(c, t)
     a.setRemote(c, t)
     a.setRemotes(c, t)
 }
@@ -75,8 +86,6 @@ func (a *Assigner) buildCommand(c *asink.Command, t typed.Typed) {
 // JSON data
 func (a *Assigner) buildTask(name string, task typed.Typed, c *asink.Command) asink.Task {
     t := asink.NewTask(name, c)
-    a.setRequire(&t, task)
-    a.setGroup(&t, task)
     return t
 }
 
@@ -90,34 +99,6 @@ func (a *Assigner) buildRemote(r *Remote, remote typed.Typed) *Remote {
 }
 
 // Settings for commands
-
-// Sets the AsyncCount for the command object
-func (a *Assigner) setAsyncCount(c *asink.Command, t typed.Typed) {
-    c.AsyncCount = t.IntsOr("count", []int{1, 1})[0]
-}
-
-// Sets the RelCount for the command object
-func (a *Assigner) setRelCount(c *asink.Command, t typed.Typed) {
-    c.RelCount = t.IntsOr("count", []int{1, 1})[1]
-}
-
-// Sets the Dir for the command object
-func (a *Assigner) setDir(c *asink.Command, t typed.Typed) {
-    c.Dir = t.String("dir")
-}
-
-// Sets the Args for the command object
-func (a *Assigner) setArgs(c *asink.Command, t typed.Typed) {
-    c.Args = t.StringsOr("args", []string{})
-}
-
-// Sets the Callback for the command object
-func (a *Assigner) setCallback(c *asink.Command, t typed.Typed) {
-    c.Callback = func(command string) {
-        r := "$local: " + command
-        color.Cyan(r)
-    }
-}
 
 // Sets the Args for the command object
 func (a *Assigner) setRemote(c *asink.Command, t typed.Typed) {
@@ -135,16 +116,6 @@ func (a *Assigner) setRemotes(c *asink.Command, t typed.Typed) {
 }
 
 // Settings for tasks
-
-// Sets the Require for the task object
-func (a *Assigner) setRequire(t *asink.Task, task typed.Typed) {
-    t.Require = task.StringOr("require", "")
-}
-
-// Sets the Group for the task object
-func (a *Assigner) setGroup(t *asink.Task, task typed.Typed) {
-    t.Group   = task.StringOr("group", "")
-}
 
 // Settings for remote machines
 
