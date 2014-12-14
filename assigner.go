@@ -15,6 +15,7 @@
 package main
 
 import (
+    "strconv"
     "./asink"
     "github.com/asink/typed"
     "github.com/asink/color"
@@ -84,7 +85,7 @@ func (a *Assigner) assignRemotes() *Assigner {
         r := NewRemote(n)
 
         r.Host = remote.StringOr("host", "localhost")
-        r.Port = remote.StringOr("port", "22")
+        r.Port = strconv.Itoa(remote.IntOr("port", 22))
         r.User = remote.StringOr("user", "root")
 
         r.Add(n)
