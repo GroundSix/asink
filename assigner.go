@@ -15,7 +15,6 @@
 package main
 
 import (
-   //"fmt"
 	"./asink"
 	"github.com/asink/typed"
     "github.com/asink/color"
@@ -39,12 +38,17 @@ func (a *Assigner) assignTasks() *Assigner {
 
     for n, task := range t {
         if task["command"] != nil {
+
+            // Creates a new Asink command with values that have
+            // been converted into Typed objects
             c := asink.NewCommand(task["command"].(string))
             c.AsyncCount = task.IntsOr("count", []int{1, 1})[0]
             c.RelCount   = task.IntsOr("count", []int{1, 1})[1]
             c.Dir        = task.StringOr("dir", ".")
             c.Args       = task.StringsOr("args", []string{})
 
+            // Set a default callback as we don't know if this will
+            // be ran on a remote machine yet or not
             c.Callback = func(command string) {
                 r := "$local: " + command
                 color.Cyan(r)
@@ -59,6 +63,7 @@ func (a *Assigner) assignTasks() *Assigner {
                 }
             }
 
+            // Start to build the Asink task up
             at := asink.NewTask(n, c)
             at.Require = task.StringOr("require", "")
             at.Group   = task.StringOr("group", "")
@@ -66,8 +71,8 @@ func (a *Assigner) assignTasks() *Assigner {
             tasks = append(tasks, at)
         }
     }
-
     a.tasks = tasks
+
     return a
 }
 
@@ -86,6 +91,6 @@ func (a *Assigner) assignRemotes() *Assigner {
         r.AddSshKey(n, remote.String("key"))
         r.Connect()
     }
-    
+
     return a
 }
