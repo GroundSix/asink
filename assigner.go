@@ -15,8 +15,8 @@
 package main
 
 import (
-	"./asink"
-	"github.com/asink/typed"
+    "./asink"
+    "github.com/asink/typed"
     "github.com/asink/color"
 )
 
