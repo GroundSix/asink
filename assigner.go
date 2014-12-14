@@ -54,6 +54,7 @@ func (a *Assigner) assignTasks() *Assigner {
             if (r != "") {
                 c.Dummy = true
                 c.Callback = func(command string) {
+                    remotes[r].Connect()
                     runRemoteCommand(r, "cd " + c.Dir + " && " + command)
                 }
             }
