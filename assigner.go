@@ -89,7 +89,6 @@ func (a *Assigner) assignRemotes() *Assigner {
 
         r.Add(n)
         r.AddSshKey(n, remote.String("key"))
-        r.Connect()
     }
 
     return a
