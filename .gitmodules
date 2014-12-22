@@ -10,9 +10,6 @@
 [submodule "vendor/src/github.com/asink/negroni"]
 	path = vendor/src/github.com/asink/negroni
 	url = https://github.com/asink/negroni.git
-[submodule "vendor/src/github.com/asink/cobra"]
-	path = vendor/src/github.com/asink/cobra
-	url = https://github.com/asink/cobra.git
 [submodule "vendor/src/github.com/asink/mux"]
 	path = vendor/src/github.com/asink/mux
 	url = https://github.com/asink/mux.git

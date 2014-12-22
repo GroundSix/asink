@@ -24,7 +24,7 @@ import (
 
 // Starts the asink built in server with a default
 // on port 3000 by default
-func startServer(args []string) {
+func startServer() {
     r := mux.NewRouter()
     r.HandleFunc("/", HandleRequest).
     Methods("POST").

@@ -15,16 +15,41 @@
 package main
 
 import (
+    "os"
     "fmt"
-    "io/ioutil"
     "./asink"
+    "io/ioutil"
+    "github.com/asink/cli"
 )
 
 // Application entry point
 func main() {
-    // Creates the root and sub commands defined
-    // in options.go using cobra
-    createRootCommand()
+    app := cli.NewApp()
+
+    // constants located in meta.go
+    app.Name    = appName
+    app.Version = version
+    app.Usage   = usage
+    app.Author  = author
+    app.Email   = email
+
+    app.Commands = []cli.Command{
+        {
+            Name: "start",
+            Usage: "<tasks.yml> pass through your tasks file",
+            Action: func (c *cli.Context) {
+                initAsinkWithFile(os.Args)
+            },
+        },
+        {
+            Name: "server",
+            Usage: "starts up a small server listening on port 3000",
+            Action: func (c *cli.Context) {
+                startServer()
+            },
+        },
+    }
+    app.Run(os.Args)
 }
 
 // Creates the assigner object to deal with
@@ -43,7 +68,7 @@ func initAsink(p Parser) {
 // extension
 func initAsinkWithFile(args []string) {
     if validateArguments(args) == true {
-        fileName := args[0]
+        fileName := args[2]
         p := createParserFromFileType(fileName)
 
         contents, err := ioutil.ReadFile(fileName)
