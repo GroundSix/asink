@@ -25,3 +25,6 @@
 [submodule "vendor/src/github.com/asink/yaml"]
 	path = vendor/src/github.com/asink/yaml
 	url = https://github.com/asink/yaml.git
+[submodule "vendor/src/github.com/asink/cli"]
+	path = vendor/src/github.com/asink/cli
+	url = https://github.com/asink/cli
