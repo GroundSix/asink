@@ -55,7 +55,11 @@ func main() {
             Name: "server",
             Usage: "starts up a small server listening on port 3000",
             Action: func (c *cli.Context) {
-                startServer()
+                s := Server{}
+                if c.IsSet("a") {
+                    s.AuthorizedKeysPath = c.String("a")
+                }
+                s.Start()
             },
             Flags: []cli.Flag{
                 cli.StringFlag{

@@ -22,14 +22,22 @@ import (
     "github.com/asink/negroni"
 )
 
+type Auth struct {
+    privateKeyPath string
+    publicKeyPath  string
+}
+
+type Server struct {
+    Auth
+    AuthorizedKeysPath string
+}
+
 // Starts the asink built in server with a default
 // on port 3000 by default
-func startServer() {
+func (s Server) Start() {
     r := mux.NewRouter()
     r.HandleFunc("/", HandleRequest).
-    Methods("POST").
-    Host("localhost").
-    Headers("Content-Type", "application/json")
+    Methods("POST")
 
     n := negroni.New()
     n.UseHandler(r)
