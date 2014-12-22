@@ -40,12 +40,28 @@ func main() {
             Action: func (c *cli.Context) {
                 initAsinkWithFile(os.Args)
             },
+            Flags: []cli.Flag{
+                cli.StringFlag{
+                    Name:  "remote, r",
+                    Usage: "remote to connect to",
+                },
+                cli.StringFlag{
+                    Name:  "identity-file, i",
+                    Usage: "path to private key",
+                },
+            },
         },
         {
             Name: "server",
             Usage: "starts up a small server listening on port 3000",
             Action: func (c *cli.Context) {
                 startServer()
+            },
+            Flags: []cli.Flag{
+                cli.StringFlag{
+                    Name:  "authorized-keys, a",
+                    Usage: "path to asink's authorized_keys file",
+                },
             },
         },
     }
