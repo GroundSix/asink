@@ -68,6 +68,19 @@ func main() {
                 },
             },
         },
+        {
+            Name: "keygen",
+            Usage: "generates public/private key pair",
+            Action: func (c *cli.Context) {
+                
+            },
+            Flags: []cli.Flag{
+                cli.StringFlag{
+                    Name:  "path, p",
+                    Usage: "path to create public/private key pair to use with asink",
+                },
+            },
+        },
     }
     app.Run(os.Args)
 }
