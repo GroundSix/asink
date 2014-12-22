@@ -25,3 +25,6 @@
 [submodule "vendor/src/github.com/asink/cli"]
 	path = vendor/src/github.com/asink/cli
 	url = https://github.com/asink/cli
+[submodule "vendor/src/github.com/asink/go-jose"]
+	path = vendor/src/github.com/asink/go-jose
+	url = https://github.com/asink/go-jose.git
