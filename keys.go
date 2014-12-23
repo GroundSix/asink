@@ -14,22 +14,44 @@
 
 package main
 
+import (
+	"os"
+	"crypto/rsa"
+	"crypto/rand"
+)
+
 type Keys struct {
+	private *rsa.PrivateKey
+	public  *rsa.PublicKey
+}
+
+func NewKeys() Keys {
+	return Keys{}
+}
+
+func (k *Keys) Generate() {
+	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+	  panic(err)
+	}
+	k.private = privateKey
+	k.public  = &privateKey.PublicKey
+}
+
+func (k Keys) WriteTo(filepath string) {
+	if pathExists(filepath) == false {
+
+	}
+}
+
+func (k Keys) Exist() {
 
 }
 
-func (k Keys) New() {
-
+func pathExists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
 
-func keysDirExists() {
-
-}
-
-func privateKeyExists() {
-
-}
-
-func publicKeyExists() {
-
-}

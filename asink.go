@@ -36,7 +36,7 @@ func main() {
     app.Commands = []cli.Command{
         {
             Name: "start",
-            Usage: "<tasks.yml> pass through your tasks file",
+            Usage: "[tasks.yml] pass through your tasks file",
             Action: func (c *cli.Context) {
                 initAsinkWithFile(os.Args)
             },
@@ -56,12 +56,20 @@ func main() {
             Usage: "starts up a small server listening on port 3000",
             Action: func (c *cli.Context) {
                 s := Server{}
+                s.Port = "3000"
                 if c.IsSet("a") {
                     s.AuthorizedKeysPath = c.String("a")
+                }
+                if c.IsSet("p") {
+                    s.Port = c.String("p")
                 }
                 s.Start()
             },
             Flags: []cli.Flag{
+                cli.StringFlag{
+                    Name:  "port, p",
+                    Usage: "port for asink's server to listen on",
+                },
                 cli.StringFlag{
                     Name:  "authorized-keys, a",
                     Usage: "path to asink's authorized_keys file",
@@ -76,7 +84,7 @@ func main() {
             },
             Flags: []cli.Flag{
                 cli.StringFlag{
-                    Name:  "path, p",
+                    Name:  "directory, d",
                     Usage: "path to create public/private key pair to use with asink",
                 },
             },

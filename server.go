@@ -15,7 +15,6 @@
 package main
 
 import (
-    "fmt"
     "io/ioutil"
     "net/http"
     "github.com/asink/mux"
@@ -29,6 +28,7 @@ type Auth struct {
 
 type Server struct {
     Auth
+    Port string
     AuthorizedKeysPath string
 }
 
@@ -41,13 +41,17 @@ func (s Server) Start() {
 
     n := negroni.New()
     n.UseHandler(r)
-    n.Run(":3000")
+    n.Run(":" + s.Port)
 }
 
 // Request handler for any incoming requests
 // This needs to do a lot more, not just always give success!
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
     b, _ := ioutil.ReadAll(r.Body)
-    initAsinkWithRequest(b)
-    fmt.Fprintf(w, "{\"success\" : true}")
+    println(b)
+
+    //k := NewKeys()
+
+    //initAsinkWithRequest(b)
+    //fmt.Fprintf(w, "{\"success\" : true}")
 }
