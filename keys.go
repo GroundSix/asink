@@ -16,6 +16,7 @@ package main
 
 import (
 	"os"
+	"io/ioutil"
 	"crypto/x509"
 	"crypto/rsa"
 	"crypto/rand"
@@ -48,19 +49,39 @@ func (k *Keys) generate() {
 }
 
 // Writes key to a file
-func (k Keys) writeTo(filepath string) []byte {
-	return pem.EncodeToMemory(
+func (k Keys) writePublicKey() {
+	publicAsn, err := x509.MarshalPKIXPublicKey(k.public)
+	if err != nil {
+		publicPem := pem.EncodeToMemory(&pem.Block{
+		    Type:  "RSA PUBLIC KEY",
+		    Bytes: publicAsn,
+		})
+		ioutil.WriteFile(k.path + "/id_rsa.pub", publicPem, 0600)
+	} else {
+		println(err)
+	}
+}
+
+func (k Keys) writePrivateKey() {
+	privatePem := pem.EncodeToMemory(
 	    &pem.Block{
 	        Type: "RSA PRIVATE KEY",
 	        Bytes: x509.MarshalPKCS1PrivateKey(k.private),
 	    },
 	)
+	ioutil.WriteFile(k.path + "/id_rsa", privatePem, 0600)
 }
 
 // Checks to see if the keys exist or not
 func (k Keys) exists() bool {
 	if _, err := os.Stat(k.path); os.IsNotExist(err) {
-		return false
+		os.Mkdir(k.path, 0777)
+	}
+	if _, err := os.Stat(k.path + "/id_rsa"); os.IsNotExist(err) {
+		k.writePrivateKey()
+	}
+	if _, err := os.Stat(k.path + "/id_rsa.pub"); os.IsNotExist(err) {
+		k.writePublicKey()
 	}
 	return true
 }

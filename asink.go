@@ -91,6 +91,7 @@ func main() {
                     p = c.String("d")
                 }
                 k := newKeys(p)
+                k.generate()
                 if k.exists() {
                     
                 }
