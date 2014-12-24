@@ -16,8 +16,10 @@ package main
 
 import (
 	"os"
+	"crypto/x509"
 	"crypto/rsa"
 	"crypto/rand"
+	"encoding/pem"
 )
 
 type Keys struct {
@@ -46,8 +48,13 @@ func (k *Keys) generate() {
 }
 
 // Writes key to a file
-func (k Keys) writeTo(filepath string) {
-
+func (k Keys) writeTo(filepath string) []byte {
+	return pem.EncodeToMemory(
+	    &pem.Block{
+	        Type: "RSA PRIVATE KEY",
+	        Bytes: x509.MarshalPKCS1PrivateKey(k.private),
+	    },
+	)
 }
 
 // Checks to see if the keys exist or not
