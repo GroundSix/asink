@@ -17,6 +17,8 @@ package main
 import (
     "os"
     "fmt"
+    "log"
+    "os/user"
     "./asink"
     "io/ioutil"
     "github.com/asink/cli"
@@ -80,7 +82,19 @@ func main() {
             Name: "keygen",
             Usage: "generates public/private key pair",
             Action: func (c *cli.Context) {
-                
+                usr, err := user.Current()
+                if err != nil {
+                    log.Fatal( err )
+                }
+                p := usr.HomeDir + "/.asink"
+                if c.IsSet("d") {
+                    p = c.String("d")
+                }
+                k := newKeys(p)
+                if k.exists() {
+                    
+                }
+
             },
             Flags: []cli.Flag{
                 cli.StringFlag{

@@ -21,15 +21,18 @@ import (
 )
 
 type Keys struct {
+	path    string
 	private *rsa.PrivateKey
 	public  *rsa.PublicKey
 }
 
-func NewKeys() Keys {
-	return Keys{}
+func newKeys(path string) Keys {
+	k := Keys{}
+	k.path = path
+	return k
 }
 
-func (k *Keys) Generate() {
+func (k *Keys) generate() {
 	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 	  panic(err)
@@ -38,20 +41,15 @@ func (k *Keys) Generate() {
 	k.public  = &privateKey.PublicKey
 }
 
-func (k Keys) WriteTo(filepath string) {
-	if pathExists(filepath) == false {
-
-	}
-}
-
-func (k Keys) Exist() {
+func (k Keys) writeTo(filepath string) {
 
 }
 
-func pathExists(path string) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
+func (k Keys) exists() bool {
+	if _, err := os.Stat(k.path); os.IsNotExist(err) {
 		return false
 	}
 	return true
 }
+
 

@@ -48,7 +48,7 @@ func (s Server) Start() {
 // This needs to do a lot more, not just always give success!
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
     b, _ := ioutil.ReadAll(r.Body)
-    println(b)
+    println(string(b))
 
     //k := NewKeys()
 
