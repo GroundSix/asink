@@ -50,16 +50,15 @@ func (k *Keys) generate() {
 
 // Writes key to a file
 func (k Keys) writePublicKey() {
-	publicAsn, err := x509.MarshalPKIXPublicKey(&k.public)
-	println(string(publicAsn))
+	publicAsn, err := x509.MarshalPKIXPublicKey(k.public)
 	if err != nil {
+		panic(err)
+	} else {
 		publicPem := pem.EncodeToMemory(&pem.Block{
 			Type:  "RSA PUBLIC KEY",
 			Bytes: publicAsn,
 		})
 		ioutil.WriteFile(k.path+"/id_rsa.pub", publicPem, 0600)
-	} else {
-		println(err)
 	}
 }
 
