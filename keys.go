@@ -15,12 +15,12 @@
 package main
 
 import (
-	"os"
-	"io/ioutil"
-	"crypto/x509"
-	"crypto/rsa"
 	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/pem"
+	"io/ioutil"
+	"os"
 )
 
 type Keys struct {
@@ -42,21 +42,22 @@ func newKeys(path string) Keys {
 func (k *Keys) generate() {
 	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
-	  panic(err)
+		panic(err)
 	}
 	k.private = privateKey
-	k.public  = &privateKey.PublicKey
+	k.public = &privateKey.PublicKey
 }
 
 // Writes key to a file
 func (k Keys) writePublicKey() {
-	publicAsn, err := x509.MarshalPKIXPublicKey(k.public)
+	publicAsn, err := x509.MarshalPKIXPublicKey(&k.public)
+	println(string(publicAsn))
 	if err != nil {
 		publicPem := pem.EncodeToMemory(&pem.Block{
-		    Type:  "RSA PUBLIC KEY",
-		    Bytes: publicAsn,
+			Type:  "RSA PUBLIC KEY",
+			Bytes: publicAsn,
 		})
-		ioutil.WriteFile(k.path + "/id_rsa.pub", publicPem, 0600)
+		ioutil.WriteFile(k.path+"/id_rsa.pub", publicPem, 0600)
 	} else {
 		println(err)
 	}
@@ -64,12 +65,12 @@ func (k Keys) writePublicKey() {
 
 func (k Keys) writePrivateKey() {
 	privatePem := pem.EncodeToMemory(
-	    &pem.Block{
-	        Type: "RSA PRIVATE KEY",
-	        Bytes: x509.MarshalPKCS1PrivateKey(k.private),
-	    },
+		&pem.Block{
+			Type:  "RSA PRIVATE KEY",
+			Bytes: x509.MarshalPKCS1PrivateKey(k.private),
+		},
 	)
-	ioutil.WriteFile(k.path + "/id_rsa", privatePem, 0600)
+	ioutil.WriteFile(k.path+"/id_rsa", privatePem, 0600)
 }
 
 // Checks to see if the keys exist or not
@@ -85,5 +86,3 @@ func (k Keys) exists() bool {
 	}
 	return true
 }
-
-

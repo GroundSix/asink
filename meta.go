@@ -16,6 +16,6 @@ package main
 
 const appName = "asink"
 const version = "v0.1.1-dev"
-const usage   = "A concurrent task runner written in Go"
-const author  = "Harry Lawrence"
-const email   = "harry.lawrence@groundsix.com"
+const usage = "A concurrent task runner written in Go"
+const author = "Harry Lawrence"
+const email = "harry.lawrence@groundsix.com"

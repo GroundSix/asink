@@ -15,25 +15,25 @@
 package main
 
 import (
-    "github.com/asink/typed"
+	"github.com/asink/typed"
 )
 
 type Json struct {
-    taskMap typed.Typed
+	taskMap typed.Typed
 }
 
 // Parses the JSON into a typed.Typed object
 // which acts as map[string]interface{}
 func (j *Json) parse(body []byte) Parser {
-    mapped, err := typed.Json(body)
-    if (err != nil) {
-        panic(err)
-    }
-    j.taskMap = mapped
-    return j
+	mapped, err := typed.Json(body)
+	if err != nil {
+		panic(err)
+	}
+	j.taskMap = mapped
+	return j
 }
 
 // Returns a map of parsed tasks
 func (j Json) TaskMap() typed.Typed {
-    return j.taskMap
+	return j.taskMap
 }
