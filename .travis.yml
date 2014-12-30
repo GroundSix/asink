@@ -1,9 +1,0 @@
-language: go
-
-go:
-  - 1.2
-  - 1.3
-
-before_script: git submodule foreach git pull origin master
-
-script: make test

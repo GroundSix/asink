@@ -7,8 +7,6 @@ all the functionality from the package itself to help you create and automate ta
 What can it be used for? Loads! You could configure and deploy a project, build / install
 software from source, provision a machine, run one task lots and lots of times, check up on the status of a remote machine and anything you find yourself doing manually time and time again.
 
-[![Build Status](https://travis-ci.org/GroundSix/asink.svg?branch=master)](https://travis-ci.org/GroundSix/asink)
-
 ## Features
 
 * Written in [Go](http://golang.org)

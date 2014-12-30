@@ -28,9 +28,6 @@ uninstall:
 	@rm -f ${INSTALL_PATH}
 	@echo "Uninstalled asink"
 
-test:
-	cd libasink && go test -v
-
 .PHONY: clean
 clean:
 	rm -rf build
