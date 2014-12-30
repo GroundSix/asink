@@ -1,8 +1,8 @@
 ![asink](https://raw.githubusercontent.com/GroundSix/asink/master/images/asink.png)
 
-Asink is both a [Go](http://golang.org) package that allows you to execute
-code and / or commands concurrently and a command line tool that harnesses
-all the functionality from the package itself to help you create and automate tasks.
+Asink is command line tool that harnesses the functionality from 
+[libasink](https://github.com/asink/libasink) to help you create
+and automate tasks.
 
 What can it be used for? Loads! You could configure and deploy a project, build / install
 software from source, provision a machine, run one task lots and lots of times, check up on the status of a remote machine and anything you find yourself doing manually time and time again.
@@ -11,25 +11,17 @@ software from source, provision a machine, run one task lots and lots of times, 
 
 * Written in [Go](http://golang.org)
 * Can automate [SSH sessions](https://github.com/GroundSix/asink#remote-access-ssh)
-* Very easy to get started with
-* Comes with 3 main different ways to use
-  * Via local configuration file
-  * Remote configuration file
-  * Small internal server
+* Very simple to get started with
 * Excellent speed and performance
-* Public API for Go developers
-* Client libraries for other languages
+* Client libraries and support for other languages
 
 ## New in v0.1.1
 
-The main focus for this release is the public Go API for using Asink as part of your own program.
-Due to this, the vast bulk has been compleatly re-written with a much cleaner API for you to
-take advantage of concurrently running tasks or code within your program. Refer to the API usage
-section for more info on this.
-
-In terms of Asink, the program, there has been added support for YAML configuration as appose to
-just JSON, the same command can be ran on multiple remote machines at the same time and
-installing software has become either locally or remotly has become much easier.
+The main focus for v0.1.1 was to have a complete rewrite of the public Go
+API that Asink has internally depended on since the project started. This
+has since been moved over to [asink/libasink](https://github.com/asink/libasink)
+and development will continue on both the independant package and this
+command line tool.
 
 ## Getting Started
 
@@ -45,6 +37,15 @@ $ cd asink
 $ export GOPATH=$PWD/vendor
 $ make
 $ sudo make install
+```
+
+Alternativly Asink can be built using [Docker](https://www.docker.com/):
+
+```bash
+$ git clone https://github.com/GroundSix/asink.git
+$ cd asink
+$ docker build -t asink .
+$ ./scripts/build.sh
 ```
 
 Run `asink version` to check the install, or `asink help` to see a full list of commands.

@@ -18,8 +18,13 @@ deps: vendor/
 .PHONY: asink
 asink:
 	@mkdir -p build
-	go build -v -o ${BIN_PATH} $^
+	go build -v -o ${BIN_PATH}
 	@echo "asink has been built in '${BIN_PATH}'"
+
+cross:
+	@mkdir -p build
+	go build -v -o ${BIN_PATH}-${GOOS}-${GOARCH}${EXT}
+	@echo "asink has been built in '${BIN_PATH}-${GOOS}-${GOARCH}${EXT}'"
 
 install: ${BIN_PATH}
 	@cp ${BIN_PATH} ${INSTALL_PATH}
