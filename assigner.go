@@ -15,7 +15,7 @@
 package main
 
 import (
-	"./asink"
+	"./libasink"
 	"github.com/asink/color"
 	"github.com/asink/typed"
 	"strconv"

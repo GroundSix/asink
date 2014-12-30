@@ -15,7 +15,7 @@
 package main
 
 import (
-	"./asink"
+	"./libasink"
 	"fmt"
 	"github.com/asink/cli"
 	"io/ioutil"

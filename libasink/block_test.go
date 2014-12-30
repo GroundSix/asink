@@ -15,14 +15,13 @@
 package asink
 
 import (
-    "./asink"
     "testing"
     "reflect"
     "fmt"
 )
 
 func TestNewBlock(t *testing.T) {
-    b := asink.NewBlock(func() {
+    b := NewBlock(func() {
         fmt.Println("Hello, World!")
     });
     
@@ -36,7 +35,7 @@ func TestNewBlock(t *testing.T) {
 }
 
 func TestExecBlock(t *testing.T) {
-    b := asink.NewBlock(func() {
+    b := NewBlock(func() {
         fmt.Println("Hello, World!")
     });
     result := b.Exec()

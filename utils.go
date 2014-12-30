@@ -29,7 +29,7 @@
 package main
 
 import (
-	"./asink"
+	"./libasink"
 	"os"
 	"os/user"
 	"strings"

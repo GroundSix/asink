@@ -15,20 +15,19 @@
 package asink
 
 import (
-    "./asink"
     "testing"
     "reflect"
 )
 
 func TestNewApt(t *testing.T) {
-	ai := asink.NewApt("install")
+	ai := NewApt("install")
 
     tmi := reflect.TypeOf(ai).String()
     if tmi != "asink.Apt" {
         t.Error("Expected asink.Apt, got ", tmi)
     }
 
-    au := asink.NewApt("update")
+    au := NewApt("update")
     tmu := reflect.TypeOf(au).String()
     if tmu != "asink.Apt" {
         t.Error("Expected asink.Apt, got ", tmu)

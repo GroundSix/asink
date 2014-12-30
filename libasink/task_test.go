@@ -15,17 +15,16 @@
 package asink
 
 import (
-    "./asink"
     "testing"
     "reflect"
     "fmt"
 )
 
 func TestNewTask(t *testing.T) {
-    c := asink.NewCommand("echo")
+    c := NewCommand("echo")
     c.Args = []string{"'Hello, World!'"}
 
-    ta := asink.NewTask("do-echo", c)
+    ta := NewTask("do-echo", c)
     tp := reflect.TypeOf(ta).String()
     if tp != "asink.Task" {
         t.Error("Expected asink.Task, got ", tp)
@@ -33,10 +32,10 @@ func TestNewTask(t *testing.T) {
 }
 
 func TestExecTask(t *testing.T) {
-    c := asink.NewCommand("echo")
+    c := NewCommand("echo")
     c.Args = []string{"'Hello, World!'"}
 
-    ta := asink.NewTask("do-echo", c)
+    ta := NewTask("do-echo", c)
     result := ta.Exec()
     if result != true {
         t.Error("Expected true, got ", result)
@@ -44,21 +43,21 @@ func TestExecTask(t *testing.T) {
 }
 
 func TextExecTaskMulti(t *testing.T) {
-    c := asink.NewCommand("echo")
+    c := NewCommand("echo")
     c.Args = []string{"'Hello, World!'"}
 
-    tac := asink.NewTask("do-echo", c)
+    tac := NewTask("do-echo", c)
     tac.Require = "do-print"
 
-    b := asink.NewBlock(func() {
+    b := NewBlock(func() {
         fmt.Println("Hello, World!")
     });
 
-    tab := asink.NewTask("do-print", b)
+    tab := NewTask("do-print", b)
 
-    tasks := []asink.Task{tac, tab}
+    tasks := []Task{tac, tab}
 
-    result := asink.ExecMulti(tasks)
+    result := ExecMulti(tasks)
     if result != true {
         t.Error("Expected true, got ", result)
     }

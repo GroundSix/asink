@@ -15,13 +15,12 @@
 package asink
 
 import (
-    "./asink"
     "testing"
     "reflect"
 )
 
 func TestNewCommand(t *testing.T) {
-    c := asink.NewCommand("echo")
+    c := NewCommand("echo")
     c.Args = []string{"'Hello, World!"}
     c.AsyncCount = 1
     c.RelCount   = 1
@@ -34,7 +33,7 @@ func TestNewCommand(t *testing.T) {
 }
 
 func TestExecCommand(t *testing.T) {
-    c := asink.NewCommand("echo")
+    c := NewCommand("echo")
     c.Args = []string{"Hello, World!"}
     result := c.Exec()
     if result != true {

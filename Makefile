@@ -1,8 +1,5 @@
-SHELL := /bin/bash
 BIN_PATH=build/asink
 INSTALL_PATH=/usr/local/bin/asink
-ALL_GO_SRC := $(wildcard *.go)
-GO_SRC := $(filter-out %_test.go, $(ALL_GO_SRC))
 
 all: deps asink
 
@@ -18,9 +15,9 @@ deps: vendor/
 	fi;
 
 .PHONY: asink
-asink: ${GO_SRC}
+asink:
 	@mkdir -p build
-	go build -o ${BIN_PATH} $^
+	go build -v -o ${BIN_PATH} $^
 	@echo "asink has been built in '${BIN_PATH}'"
 
 install: ${BIN_PATH}
@@ -31,12 +28,11 @@ uninstall:
 	@rm -f ${INSTALL_PATH}
 	@echo "Uninstalled asink"
 
-test: command_test.go block_test.go task_test.go module_test.go
-	go test -v $^
+test: command_test.go block_test.go task_test.go apt_test.go
+	cd asink && go test -v
 
 .PHONY: clean
 clean:
-	rm -f ${BIN_PATH}
-	rmdir build
+	rm -rf build
 	rm -f vendor/.deps
 	@echo "Deleting ${BIN_PATH}."
