@@ -28,3 +28,6 @@
 [submodule "vendor/src/github.com/asink/go-jose"]
 	path = vendor/src/github.com/asink/go-jose
 	url = https://github.com/asink/go-jose.git
+[submodule "vendor/src/github.com/asink/libasink"]
+	path = vendor/src/github.com/asink/libasink
+	url = https://github.com/asink/libasink.git
