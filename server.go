@@ -17,9 +17,12 @@ package main
 import (
 	"github.com/asink/mux"
 	"github.com/asink/negroni"
-	"io/ioutil"
+	//"io/ioutil"
 	"net/http"
+	"fmt"
 )
+
+var server Server
 
 type Auth struct {
 	privateKeyPath string
@@ -35,23 +38,22 @@ type Server struct {
 // Starts the asink built in server with a default
 // on port 3000 by default
 func (s Server) Start() {
+	server = s
 	r := mux.NewRouter()
-	r.HandleFunc("/", HandleRequest).
-		Methods("POST")
+	r.HandleFunc("/", HandleRequest).Methods("POST")
 
 	n := negroni.New()
 	n.UseHandler(r)
-	n.Run(":" + s.Port)
+	n.Run(":" + server.Port)
 }
 
 // Request handler for any incoming requests
 // This needs to do a lot more, not just always give success!
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
-	b, _ := ioutil.ReadAll(r.Body)
-	println(string(b))
-
+	//b, _ := ioutil.ReadAll(r.Body)
+	
 	//k := NewKeys()
-
+	//println("res", string(b))
 	//initAsinkWithRequest(b)
-	//fmt.Fprintf(w, "{\"success\" : true}")
+	fmt.Fprintf(w, "{\"success\" : true}")
 }

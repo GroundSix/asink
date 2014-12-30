@@ -40,7 +40,23 @@ func main() {
 			Name:  "start",
 			Usage: "[tasks.yml] pass through your tasks file",
 			Action: func(c *cli.Context) {
-				initAsinkWithFile(os.Args)
+				conn := Connection{}
+				if c.IsSet("r") == false {
+					initAsinkWithFile(os.Args)
+				} else {
+					conn.remote = c.String("r")
+					if c.IsSet("i") {
+						conn.privateKeyPath = c.String("i")
+					}
+					contents, err := ioutil.ReadFile(os.Args[2])
+					if err != nil {
+						panic(err)
+					}
+					conn.loadPrivateKey()
+					conn.signRequest(contents)
+					conn.makeRequest()
+
+				}
 			},
 			Flags: []cli.Flag{
 				cli.StringFlag{
