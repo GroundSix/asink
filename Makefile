@@ -28,8 +28,8 @@ uninstall:
 	@rm -f ${INSTALL_PATH}
 	@echo "Uninstalled asink"
 
-test: command_test.go block_test.go task_test.go apt_test.go
-	cd asink && go test -v
+test:
+	cd libasink && go test -v
 
 .PHONY: clean
 clean:
