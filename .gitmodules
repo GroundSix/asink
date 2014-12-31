@@ -34,3 +34,6 @@
 [submodule "vendor/src/github.com/asink/go-homedir"]
 	path = vendor/src/github.com/asink/go-homedir
 	url = https://github.com/asink/go-homedir.git
+[submodule "scripts"]
+	path = scripts
+	url = https://github.com/asink/scripts.git
