@@ -17,7 +17,7 @@ package main
 import (
 	"github.com/asink/mux"
 	"github.com/asink/negroni"
-	//"io/ioutil"
+	"io/ioutil"
 	"net/http"
 	"fmt"
 )
@@ -50,10 +50,10 @@ func (s Server) Start() {
 // Request handler for any incoming requests
 // This needs to do a lot more, not just always give success!
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
-	//b, _ := ioutil.ReadAll(r.Body)
+	b, _ := ioutil.ReadAll(r.Body)
 	
 	//k := NewKeys()
 	//println("res", string(b))
-	//initAsinkWithRequest(b)
+	initAsinkWithRequest(b)
 	fmt.Fprintf(w, "{\"success\" : true}")
 }
