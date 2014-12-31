@@ -45,7 +45,7 @@ Alternativly Asink can be built using [Docker](https://www.docker.com/):
 $ git clone https://github.com/GroundSix/asink.git
 $ cd asink
 $ docker build -t asink .
-$ ./scripts/build.sh
+$ ./build.sh
 ```
 
 Run `asink version` to check the install, or `asink help` to see a full list of commands.

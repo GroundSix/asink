@@ -4,3 +4,4 @@ vendor/.deps
 build/
 rkt/rootfs/bin/asink
 .DS_Store
+*.aci
