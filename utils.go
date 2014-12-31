@@ -16,8 +16,8 @@ package main
 
 import (
 	"github.com/asink/libasink"
+	"github.com/asink/go-homedir"
 	"os"
-	"os/user"
 	"strings"
 )
 
@@ -34,11 +34,11 @@ func getWorkingDirectory() string {
 // Returns the current user's home directory
 // as a string
 func getHomeDirectory() string {
-	usr, err := user.Current()
+	hd, err := homedir.Dir()
 	if err != nil {
 		panic(err)
 	}
-	return usr.HomeDir
+	return hd
 }
 
 // Corrects a ~ with the users home directory
