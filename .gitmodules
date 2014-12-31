@@ -31,3 +31,6 @@
 [submodule "vendor/src/github.com/asink/libasink"]
 	path = vendor/src/github.com/asink/libasink
 	url = https://github.com/asink/libasink.git
+[submodule "vendor/src/github.com/asink/go-homedir"]
+	path = vendor/src/github.com/asink/go-homedir
+	url = https://github.com/asink/go-homedir.git

@@ -18,10 +18,9 @@ import (
     "fmt"
     "github.com/asink/cli"
     "github.com/asink/libasink"
+    "github.com/asink/go-homedir"
     "io/ioutil"
-    "log"
     "os"
-    "os/user"
 )
 
 // Application entry point
@@ -98,11 +97,11 @@ func main() {
             Name:  "keygen",
             Usage: "generates public/private key pair",
             Action: func(c *cli.Context) {
-                usr, err := user.Current()
+                hd, err := homedir.Dir()
                 if err != nil {
-                    log.Fatal(err)
+                    panic(err)
                 }
-                p := usr.HomeDir + "/.asink"
+                p := hd + "/.asink"
                 if c.IsSet("d") {
                     p = c.String("d")
                 }
