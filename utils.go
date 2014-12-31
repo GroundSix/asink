@@ -15,10 +15,8 @@
 package main
 
 import (
-	"github.com/asink/libasink"
 	"github.com/asink/go-homedir"
 	"os"
-	"strings"
 )
 
 // Returns the current working directory
@@ -39,9 +37,4 @@ func getHomeDirectory() string {
 		panic(err)
 	}
 	return hd
-}
-
-// Corrects a ~ with the users home directory
-func validateDirectoryName(c *asink.Command) {
-	c.Dir = strings.Replace(c.Dir, "~", getHomeDirectory(), -1)
 }
