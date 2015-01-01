@@ -41,7 +41,9 @@ func main() {
             Action: func(c *cli.Context) {
                 conn := Connection{}
                 if c.IsSet("r") == false {
-                    initAsinkWithFile(os.Args)
+                    if err := initAsinkWithFile(os.Args[2]); err != nil {
+                        fmt.Println(err); os.Exit(1)
+                    }
                 } else {
                     conn.remote = c.String("r")
                     if c.IsSet("i") {
@@ -137,19 +139,20 @@ func initAsink(p Parser) {
 // Inits Asink using a file, either JSON or YAML
 // A parser is generated based on the file
 // extension
-func initAsinkWithFile(args []string) {
-    if validateArguments(args) == true {
-        fileName := args[2]
-        p := createParserFromFileType(fileName)
-
-        contents, err := ioutil.ReadFile(fileName)
-        if err != nil {
-            panic(err)
-        }
-        p = p.parse(contents)
-
-        initAsink(p)
+func initAsinkWithFile(filename string) error {
+    p, err := parserFromFileType(filename)
+    if err != nil {
+        return fmt.Errorf(err.Error())
     }
+
+    c, err := ioutil.ReadFile(filename)
+    if err != nil {
+        return fmt.Errorf("File '%s' could not be found", filename)
+    }
+    p = p.parse(c)
+
+    initAsink(p)
+    return nil
 }
 
 // Inits Asink over the HTTP, will accept JSON
@@ -159,15 +162,4 @@ func initAsinkWithRequest(request []byte) {
     p = p.parse(request)
 
     initAsink(p)
-}
-
-// A rough way of validating args passed through
-// when using Asink via CLI
-func validateArguments(args []string) bool {
-    if len(args) == 0 {
-        fmt.Println("Arguments needed, 0 passed")
-        fmt.Println("Use 'asink help' to see list of available commands")
-        return false
-    }
-    return true
 }
