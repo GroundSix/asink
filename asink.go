@@ -36,7 +36,7 @@ func main() {
 
     app.Commands = []cli.Command{
         {
-            Name:  "start",
+            Name:  "run",
             Usage: "[tasks.yml] pass through your tasks file",
             Action: func(c *cli.Context) {
                 conn := Connection{}

@@ -74,7 +74,7 @@ tasks:
 And then once we are all configured, running is as simple as this:
 
 ```bash
-$ asink start config.yml
+$ asink run config.yml
 ```
 
 Let's take a look at a slightly more involved example:
