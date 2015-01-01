@@ -49,10 +49,11 @@ func main() {
                     if c.IsSet("i") {
                         conn.privateKeyPath = c.String("i")
                     }
-                    contents, err := ioutil.ReadFile(os.Args[2])
+                    contents, err := loadTasksFile(os.Args[2])
                     if err != nil {
-                        panic(err)
+                        fmt.Println(err); os.Exit(1)
                     }
+
                     conn.loadPrivateKey()
                     conn.signRequest(contents)
                     conn.makeRequest()
