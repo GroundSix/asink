@@ -140,14 +140,14 @@ func initAsink(p Parser) {
 // A parser is generated based on the file
 // extension
 func initAsinkWithFile(filename string) error {
+    // Loads file contents of task file
+    c, err := loadTasksFile(filename)
+    if err != nil {
+        return err
+    }
     p, err := parserFromFileType(filename)
     if err != nil {
-        return fmt.Errorf(err.Error())
-    }
-
-    c, err := ioutil.ReadFile(filename)
-    if err != nil {
-        return fmt.Errorf("File '%s' could not be found", filename)
+        return err
     }
     p = p.parse(c)
 
@@ -162,4 +162,13 @@ func initAsinkWithRequest(request []byte) {
     p = p.parse(request)
 
     initAsink(p)
+}
+
+// Loads task file from fs to be used to run Asink
+func loadTasksFile(filename string) ([]byte, error) {
+    c, err := ioutil.ReadFile(filename)
+    if err != nil {
+        return []byte{}, fmt.Errorf("File '%s' could not be found", filename)
+    }
+    return c, nil
 }
