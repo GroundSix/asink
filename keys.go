@@ -48,7 +48,7 @@ func (k *Keys) generate() {
 	k.public = &privateKey.PublicKey
 }
 
-// Writes key to a file
+// Writes public key to file system
 func (k Keys) writePublicKey() {
 	publicAsn, err := x509.MarshalPKIXPublicKey(k.public)
 	if err != nil {
@@ -62,6 +62,7 @@ func (k Keys) writePublicKey() {
 	}
 }
 
+// Writes private key to file system
 func (k Keys) writePrivateKey() {
 	privatePem := pem.EncodeToMemory(
 		&pem.Block{
