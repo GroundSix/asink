@@ -1,6 +1,6 @@
 // asink v0.1.1-dev
 //
-// (c) Ground Six
+// (c) Ground Six 2015
 //
 // @package asink
 // @version 0.1.1-dev
