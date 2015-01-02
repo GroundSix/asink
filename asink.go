@@ -45,19 +45,21 @@ func main() {
                         fmt.Println(err); os.Exit(1)
                     }
                 } else {
-                    conn.remote = c.String("r")
-                    if c.IsSet("i") {
-                        conn.privateKeyPath = c.String("i")
-                    }
                     contents, err := loadTasksFile(os.Args[2])
                     if err != nil {
                         fmt.Println(err); os.Exit(1)
                     }
 
-                    conn.loadPrivateKey()
-                    conn.signRequest(contents)
-                    conn.makeRequest()
-
+                    conn.remote = c.String("r")
+                    if c.IsSet("i") {
+                        conn.privateKeyPath = c.String("i")
+                        conn.loadPrivateKey()
+                        conn.signRequest(contents)
+                        conn.makeRequest()
+                    } else {
+                        fmt.Println("No private key specified for creating a signed request")
+                        fmt.Println("Use -i to specify the path to your key")
+                    }
                 }
             },
             Flags: []cli.Flag{
@@ -77,8 +79,9 @@ func main() {
             Action: func(c *cli.Context) {
                 s := Server{}
                 s.Port = "3000"
+                s.AuthorizedKeyPath = ""
                 if c.IsSet("a") {
-                    s.AuthorizedKeysPath = c.String("a")
+                    s.AuthorizedKeyPath = c.String("a")
                 }
                 if c.IsSet("p") {
                     s.Port = c.String("p")

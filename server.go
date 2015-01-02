@@ -17,22 +17,21 @@ package main
 import (
 	"github.com/asink/mux"
 	"github.com/asink/negroni"
+	"github.com/asink/go-jose"
+	"encoding/pem"
+	"crypto/x509"
 	"io/ioutil"
 	"net/http"
 	"fmt"
+	"log"
 )
 
 var server Server
 
-type Auth struct {
-	privateKeyPath string
-	publicKeyPath  string
-}
-
 type Server struct {
-	Auth
-	Port               string
-	AuthorizedKeysPath string
+	Port              string
+	AuthorizedKeyPath string
+	RequestBody       string
 }
 
 // Starts the asink built in server with a default
@@ -50,10 +49,55 @@ func (s Server) Start() {
 // Request handler for any incoming requests
 // This needs to do a lot more, not just always give success!
 func HandleRequest(w http.ResponseWriter, r *http.Request) {
-	b, _ := ioutil.ReadAll(r.Body)
+	b, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		panic(err)
+	}
 	
-	//k := NewKeys()
-	//println("res", string(b))
+	if server.AuthorizedKeyPath != "" {
+		server.RequestBody = string(b)
+		b = server.verifyRequest()
+	}
 	initAsinkWithRequest(b)
 	fmt.Fprintf(w, "{\"success\" : true}")
+}
+
+// Verifies the signed request and returns the
+// tasks configuration as a string
+func (s Server) verifyRequest() []byte {
+	pemData, err := ioutil.ReadFile(s.AuthorizedKeyPath)
+	if err != nil {
+		panic(err)
+	}
+	block, _ := pem.Decode(pemData)
+
+    if block == nil {
+        log.Fatalf("bad key data: %s", "not PEM-encoded")
+    }
+    if got, want := block.Type, "RSA PUBLIC KEY"; got != want {
+        log.Fatalf("unknown key type %q, want %q", got, want)
+    }
+
+    pub, err := x509.ParsePKIXPublicKey(block.Bytes)
+    if err != nil {
+        log.Fatalf("bad private key: %s", err)
+    }
+
+	verifier, err := jose.NewVerifier(pub)
+	if err != nil {
+		panic(err)
+	}
+
+	object, err := jose.ParseSigned(s.RequestBody)
+	if err != nil {
+		panic(err)
+	}
+
+	output, err := verifier.Verify(object)
+	if err != nil {
+		panic(err)
+	}
+
+	return output
 }
