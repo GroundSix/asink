@@ -34,11 +34,13 @@ func main() {
     app.Author = author
     app.Email = email
 
+    setEnvVars()
+
     app.Commands = []cli.Command{
         {
             Name:  "run",
             Usage: "[tasks.yml] pass through your tasks file",
-            Action: func(c *cli.Context) {
+            Action: func(c *cli.Context) {                
                 conn := Connection{}
                 if c.IsSet("r") == false {
                     if err := initAsinkWithFile(os.Args[2]); err != nil {
@@ -175,4 +177,10 @@ func loadTasksFile(filename string) ([]byte, error) {
         return []byte{}, fmt.Errorf("File '%s' could not be found", filename)
     }
     return c, nil
+}
+
+func setEnvVars() {
+    hd, _ := homedir.Dir()
+    os.Setenv("HOME", hd)
+    os.Setenv("PWD", getWorkingDirectory())
 }

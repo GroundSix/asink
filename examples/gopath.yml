@@ -1,0 +1,23 @@
+#gopath.yml
+
+# This single task shows how to correctly
+# make use of env vars within an Asink
+# task
+---
+tasks:
+  echo-gopath:
+    # An array of env vars can be set here
+    # They are always set before the command
+    # is executed and are persistant until the
+    # program has finished executing all tasks
+    env:
+      - NAME=Harry
+
+    command: echo
+    args:
+      - "Gopath is set to:"
+      # We can access some things that have
+      # already been set by us before
+      # running the program
+      - $GOPATH
+      - "\nAlso, my name is $NAME"

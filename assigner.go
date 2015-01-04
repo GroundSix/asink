@@ -49,6 +49,7 @@ func (a *Assigner) assignTasks() *Assigner {
 			c.Dir = task.StringOr("dir", ".")
 			c.Dir, _ = homedir.Expand(c.Dir)
 			c.Args = task.StringsOr("args", []string{})
+			c.Env  = task.StringsOr("env", []string{})
 
 			// Set a default callback as we don't know if this will
 			// be ran on a remote machine yet or not

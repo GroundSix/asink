@@ -1,0 +1,23 @@
+# asink.yml
+
+# This example will clone Asink from Github
+# and built the binary from source, providing
+# you have the dependencies require pre-installed
+---
+tasks:
+  clone-asink:
+    command: git
+    args:
+      - clone
+      - https://github.com/groundsix/asink
+      - asink-src
+
+  build-asink:
+    dir: asink-src
+    command: make
+    require: clone-asink
+    # GOPATH needs to be set for 'go build'
+    # env vars are set after Asink has
+    # changed into your chosen directory
+    env:
+      - GOPATH=$PWD/asink-src/vendor
