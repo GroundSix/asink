@@ -7,7 +7,7 @@
 //
 // @author Harry Lawrence <http://github.com/hazbo>
 //
-// License: MIT
+// License: GNU GPL v2.0
 //
 // For the full copyright and license information, please view the LICENSE
 // file that was distributed with this source code.
@@ -81,7 +81,7 @@ func (s Server) verifyRequest() []byte {
 
     pub, err := x509.ParsePKIXPublicKey(block.Bytes)
     if err != nil {
-        log.Fatalf("bad private key: %s", err)
+        log.Fatalf("bad public key: %s", err)
     }
 
 	verifier, err := jose.NewVerifier(pub)
