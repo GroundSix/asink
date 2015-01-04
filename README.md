@@ -222,3 +222,7 @@ it is being ran on as it will be highlighted blue and show the name of
 the remote.
 
 More to come...
+
+### License
+
+GNU GPL v2.0
