@@ -77,7 +77,7 @@ And then once we are all configured, running is as simple as this:
 $ asink run config.yml
 ```
 
-You can find more information and examples [on the wiki](https://github.com/GroundSix/asink/wiki/Basic-Usage)
+You can find more information and examples [on the wiki](https://github.com/GroundSix/asink/wiki/Basic-Usage).
 
 ### License
 
