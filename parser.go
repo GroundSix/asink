@@ -1,6 +1,6 @@
 // asink v0.1.1-dev
 //
-// (c) Ground Six
+// (c) Ground Six 2015
 //
 // @package asink
 // @version 0.1.1-dev
@@ -16,7 +16,8 @@ package main
 
 import (
 	"github.com/asink/typed"
-	"strings"
+	"path/filepath"
+	"fmt"
 )
 
 type Parser interface {
@@ -27,13 +28,15 @@ type Parser interface {
 // Creates a parser using the file extension
 // as a way of determining what parser is
 // needed
-func createParserFromFileType(fileName string) Parser {
-	if strings.Contains(fileName, "yml") || strings.Contains(fileName, "yaml") {
-		return new(Yaml)
+func parserFromFileType(filename string) (Parser, error) {
+	ext := filepath.Ext(filename)
+	if (ext == ".json") {
+		return new(Json), nil
 	}
-
-	// Fall back to JSON if all else fails
-	return new(Json)
+	if (ext == ".yml" || ext == ".yaml") {
+		return new(Yaml), nil
+	}
+	return nil, fmt.Errorf("Could not recognize file type with extension '%s'", ext)
 }
 
 // Returns a new instance of the JSON parser

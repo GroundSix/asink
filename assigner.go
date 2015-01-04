@@ -1,6 +1,6 @@
 // asink v0.1.1-dev
 //
-// (c) Ground Six
+// (c) Ground Six 2015
 //
 // @package asink
 // @version 0.1.1-dev
@@ -18,6 +18,7 @@ import (
 	"github.com/asink/color"
 	"github.com/asink/libasink"
 	"github.com/asink/typed"
+	"github.com/asink/go-homedir"
 	"strconv"
 )
 
@@ -46,6 +47,7 @@ func (a *Assigner) assignTasks() *Assigner {
 			c.AsyncCount = task.IntsOr("count", []int{1, 1})[0]
 			c.RelCount = task.IntsOr("count", []int{1, 1})[1]
 			c.Dir = task.StringOr("dir", ".")
+			c.Dir, _ = homedir.Expand(c.Dir)
 			c.Args = task.StringsOr("args", []string{})
 
 			// Set a default callback as we don't know if this will

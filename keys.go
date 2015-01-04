@@ -1,6 +1,6 @@
 // asink v0.1.1-dev
 //
-// (c) Ground Six
+// (c) Ground Six 2015
 //
 // @package asink
 // @version 0.1.1-dev
@@ -48,21 +48,21 @@ func (k *Keys) generate() {
 	k.public = &privateKey.PublicKey
 }
 
-// Writes key to a file
+// Writes public key to file system
 func (k Keys) writePublicKey() {
-	publicAsn, err := x509.MarshalPKIXPublicKey(&k.public)
-	println(string(publicAsn))
+	publicAsn, err := x509.MarshalPKIXPublicKey(k.public)
 	if err != nil {
+		panic(err)
+	} else {
 		publicPem := pem.EncodeToMemory(&pem.Block{
 			Type:  "RSA PUBLIC KEY",
 			Bytes: publicAsn,
 		})
 		ioutil.WriteFile(k.path+"/id_rsa.pub", publicPem, 0600)
-	} else {
-		println(err)
 	}
 }
 
+// Writes private key to file system
 func (k Keys) writePrivateKey() {
 	privatePem := pem.EncodeToMemory(
 		&pem.Block{

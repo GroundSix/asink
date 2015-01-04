@@ -1,6 +1,6 @@
 // asink v0.1.1-dev
 //
-// (c) Ground Six
+// (c) Ground Six 2015
 //
 // @package asink
 // @version 0.1.1-dev
@@ -15,10 +15,8 @@
 package main
 
 import (
-	"github.com/asink/libasink"
+	"github.com/asink/go-homedir"
 	"os"
-	"os/user"
-	"strings"
 )
 
 // Returns the current working directory
@@ -34,14 +32,9 @@ func getWorkingDirectory() string {
 // Returns the current user's home directory
 // as a string
 func getHomeDirectory() string {
-	usr, err := user.Current()
+	hd, err := homedir.Dir()
 	if err != nil {
 		panic(err)
 	}
-	return usr.HomeDir
-}
-
-// Corrects a ~ with the users home directory
-func validateDirectoryName(c *asink.Command) {
-	c.Dir = strings.Replace(c.Dir, "~", getHomeDirectory(), -1)
+	return hd
 }
