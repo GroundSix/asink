@@ -1,5 +1,7 @@
 ![asink](https://raw.githubusercontent.com/GroundSix/asink/master/images/asink.png)
 
+[![MIT](https://img.shields.io/badge/license-GPL%20v2.0-ff69b4.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
+
 Asink is command line tool that harnesses the functionality from 
 [libasink](https://github.com/asink/libasink) to help you create
 and automate tasks.
