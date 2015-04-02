@@ -1,4 +1,4 @@
-box: google/golang
+box: wercker/default
 
 # Build definition
 build:
@@ -10,19 +10,9 @@ build:
     - setup-go-workspace
 
     - script:
-        name: git submodule init
+        name: export GOPATH
         code: |
-            git submodule init
-
-    - script:
-        name: git submodule update
-        code: |
-            git submodule update
-
-    - script:
-        name: git submodule foreach git pull origin master
-        code: |
-            git submodule foreach git pull origin master ;
+            export GOPATH=$(pwd)/vendor
 
     - script:
         name: go build
