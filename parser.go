@@ -15,9 +15,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/asink/typed"
 	"path/filepath"
-	"fmt"
 )
 
 type Parser interface {
@@ -30,10 +30,10 @@ type Parser interface {
 // needed
 func parserFromFileType(filename string) (Parser, error) {
 	ext := filepath.Ext(filename)
-	if (ext == ".json") {
+	if ext == ".json" {
 		return new(Json), nil
 	}
-	if (ext == ".yml" || ext == ".yaml") {
+	if ext == ".yml" || ext == ".yaml" {
 		return new(Yaml), nil
 	}
 	return nil, fmt.Errorf("Could not recognize file type with extension '%s'", ext)
